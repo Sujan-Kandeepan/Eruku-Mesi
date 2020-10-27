@@ -1,3 +1,8 @@
+/**
+ * Please note that the code here was auto generated from react native expo
+ * For more information: https://reactnative.dev/docs/environment-setup
+ */
+
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
