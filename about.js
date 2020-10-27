@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import { Text, Divider } from "react-native-elements";
+import { Text } from "react-native-elements";
 
 /**
  * This is the default construct for a class.
@@ -37,7 +37,7 @@ export default class About extends React.Component {
           </Text>
 
           <Text h3 style={styles.baseText}>
-            PREAMBLE AND OBJECTIVES WHEREAS,
+            PREAMBLE AND OBJECTIVES
           </Text>
           <Text style={styles.innerText}>
             We, indigenes of the City of Eruku, Kwara State, Nigeria residing in
@@ -46,7 +46,38 @@ export default class About extends React.Component {
             development of our dear town, Eruku, hereby agree to form Eruku
             Progressive Union, (EPU) North America Inc.
           </Text>
-          <Divider style={{ backgroundColor: "green" }} />
+          <Text style={styles.innerText}>
+            The said Eruku Community, North America shall be established solely
+            as a non-profit organization for purposes and objectives which shall
+            include the following:
+          </Text>
+          <Text style={styles.innerText}>
+            To promote dialogue, understanding and cooperation for social and
+            economic developments that further the well-being of all its
+            members;
+          </Text>
+          <Text style={styles.innerText}>
+            To assist members achieve their goals in their chosen fields of
+            endeavor;
+          </Text>
+          <Text style={styles.innerText}>
+            To explore areas of investment opportunities from the United states
+            of America and Canada that can be beneficial to the City of Eruku
+            and her indigenes.
+          </Text>
+          <Text style={styles.innerText}>
+            To facilitate dialogue and implementation efforts between investors
+            and Eruku Community;
+          </Text>
+          <Text style={styles.innerText}>
+            To strengthen the age-long unity among Eruku indigenes and their
+            families living in North America;
+          </Text>
+          <Text style={styles.innerText}>
+            To engage in such other activities or programs that are intended to
+            promote and advance any of the goals and objectives of Eruku
+            Community in North America;
+          </Text>
         </ScrollView>
       </View>
     );
@@ -65,7 +96,7 @@ const styles = StyleSheet.create({
   },
   view: {
     padding: 15,
-    flex: 1
+    flex: 1,
   },
   divider: {
     height: 3,
