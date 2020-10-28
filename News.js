@@ -7,7 +7,7 @@ import { Text } from "react-native-elements";
  * Code based off of: https://reactjs.org/docs/react-component.html
  */
 
-export default class About extends React.Component {
+export default class News extends React.Component {
   constructor(props) {
     super(props);
   }
