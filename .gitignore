@@ -1,15 +1,15 @@
-node_modules/**/*
-.expo/*
-npm-debug.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
+**/node_modules/**/*
+**/.expo/*
+**/npm-debug.*
+**/*.jks
+**/*.p8
+**/*.p12
+**/*.key
+**/*.mobileprovision
+**/*.orig.*
+**/web-build/
 
-# macOS
-.DS_Store
+**/# macOS
+**/.DS_Store
 
-package.json.orig
+**/package.json.orig
