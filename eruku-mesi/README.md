@@ -24,3 +24,4 @@ and then run
 
 ![Alt text](assets/sample-postman2.PNG?raw=true "Add a record")
 
+Reference: https://codingthesmartway.com/the-mern-stack-tutorial-building-a-react-crud-application-from-start-to-finish-part-1/
