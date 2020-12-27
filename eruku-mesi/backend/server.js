@@ -38,7 +38,7 @@ expressRoutes.route('/update/:id').post(function(req, res) {
         if (!account)
             res.status(404).send("data is not found");
         else
-            account.account_description = req.body.account_description;
+            account.account_id = req.body.account_id;
             account.account_username = req.body.account_username;
             account.account_email = req.body.account_email;
             account.account_firstname = req.body.account_firstname;
