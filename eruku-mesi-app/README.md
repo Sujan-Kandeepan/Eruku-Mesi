@@ -7,10 +7,14 @@ Run your mongodb instance locally. Run `use accounts`.
 
 ## Available Scripts
 
-In the backend directory, you can run:
+In the project directory, you can run:
 
 ### `npm install`
-and then
+
+In the `backend` directory, you can run:
+
+### `npm install`
+and then run
 ### `nodemon server`
 
 ### Add a new record using Postman
