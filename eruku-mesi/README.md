@@ -1,8 +1,5 @@
 # Getting Started with Eruku Mesi App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-
 Start your mongodb instance locally. Create a new database with the name `accounts` by running `use accounts` in the mongodb command line. 
 
 ## Available Scripts
@@ -10,6 +7,8 @@ Start your mongodb instance locally. Create a new database with the name `accoun
 In the project directory, you can run:
 
 ### `npm install`
+
+### `expo` commands
 
 In the `backend` directory, you can run:
 
