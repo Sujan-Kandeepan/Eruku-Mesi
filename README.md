@@ -5,15 +5,18 @@ Start your mongodb instance locally. Create a new database with the name `accoun
 ## Available Scripts
 
 In the project directory, you can run:
-> `npm install`
+
+`npm install`
 
 ### `expo` commands
 
 In the `backend` directory, you can run:
-> `npm install`
+
+`npm install`
 
 and then run
-> `nodemon server`
+
+`nodemon server`
 
 ### Add a new record using Postman (Examples)
 
