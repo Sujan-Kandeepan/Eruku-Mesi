@@ -14,7 +14,7 @@ const connection = mongoose.connection;
 
 connection.once('open', function() {
     console.log("MongoDB database connection established successfully");
-})
+});
 
 expressRoutes.route('/').get(function(req, res) {
     Account.find(function(err, accounts) {
@@ -35,9 +35,10 @@ expressRoutes.route('/:id').get(function(req, res) {
 
 expressRoutes.route('/update/:id').post(function(req, res) {
     Account.findById(req.params.id, function(err, account) {
-        if (!account)
-            res.status(404).send("data is not found");
-        else
+        if (!account) {
+            res.status(404).send("Data is not found");
+        } else {
+            // if it works, we can use account = { ...account, ...req.body }
             account.account_id = req.body.account_id;
             account.account_username = req.body.account_username;
             account.account_email = req.body.account_email;
@@ -46,11 +47,12 @@ expressRoutes.route('/update/:id').post(function(req, res) {
             account.account_password = req.body.account_password;
             account.account_location = req.body.account_location;
             account.save().then(account => {
-                res.json('Account updated!');
+                res.json('Account updated');
             })
             .catch(err => {
                 res.status(400).send("Update not possible");
             });
+        }
     });
 });
 
@@ -58,14 +60,14 @@ expressRoutes.route('/add').post(function(req, res) {
     let account = new Account(req.body);
     account.save()
         .then(account => {
-            res.status(200).json({'account': 'account added successfully'});
+            res.status(200).json({'account': 'Account added successfully'});
         })
         .catch(err => {
-            res.status(400).send('adding new account failed');
+            res.status(400).send('Adding new account failed');
         });
 });
 
 app.use('/accounts', expressRoutes);
 app.listen(PORT, function() {
-    console.log("Server is running on Port: " + PORT);
+    console.log("Server is running on port: " + PORT);
 });
