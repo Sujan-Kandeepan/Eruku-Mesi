@@ -21,9 +21,16 @@ const AppPage = ({ navigation, title }) => (
     <Stack.Navigator>
       <Stack.Screen name={title} options={{
         headerLeft: () =>
-          <Icon name='menu' color='black' style={{ paddingLeft: 25 }}
-            onPress={() => navigation.openDrawer()}
-          /> }}>
+          // Display hamburger icon with workaround for padding bug in library
+          <View>
+            <Text style={{ fontSize: 4 }}></Text>
+            <Text>
+              {"       "}
+              <Icon name='menu' color='black' style={{ paddingTop: 5 }}
+                onPress={() => navigation.openDrawer()}
+              />
+            </Text>
+          </View> }}>
         {/* Display title centered on page for now */}
         {() => <View style={styles.container}><Text>{title}</Text></View>}
       </Stack.Screen>
