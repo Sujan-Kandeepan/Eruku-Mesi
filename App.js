@@ -13,9 +13,6 @@ const admin = true;
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-// Display basic text for route name in app pages not yet implemented
-const SimpleText = ({ route }) => <View style={styles.container}><Text>{route.name}</Text></View>;
-
 // Common layout/logic for all app pages
 const AppPage = ({ children, navigation, route }) => (
   // Workaround for displaying header within drawer nav (framework limitation):
@@ -41,51 +38,26 @@ const AppPage = ({ children, navigation, route }) => (
   </NavigationContainer>
 );
 
+// Display basic text for route name in app pages not yet implemented
+const EmptyPage = (props) =>
+  <AppPage {...props}>
+    <View style={styles.container}>
+      <Text>{props.route.name}</Text>
+    </View>
+  </AppPage>;
+
 // Quickly define pages/forms, refactor into separate modules later
-const NewsAndEventsPage = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const EventsCalendar = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const MessagesPage = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const MediaContentPage = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const EventForm = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const NewsStoryForm = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const MediaContentForm = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const SettingsPage = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const FeedbackForm = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const EventNotificationFormat = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
-const AuthenticationForm = (props) =>
-  <AppPage {...props}>
-    <SimpleText {...props} />
-  </AppPage>;
+const NewsAndEventsPage = EmptyPage;
+const EventsCalendar = EmptyPage;
+const MessagesPage = EmptyPage;
+const MediaContentPage = EmptyPage;
+const EventForm = EmptyPage;
+const NewsStoryForm = EmptyPage;
+const MediaContentForm = EmptyPage;
+const SettingsPage = EmptyPage;
+const FeedbackForm = EmptyPage;
+const EventNotificationFormat = EmptyPage;
+const AuthenticationForm = EmptyPage;
 
 export default function App() {
   return (
