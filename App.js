@@ -25,12 +25,12 @@ const AppPage = ({ navigation, title }) => (
           <View>
             <Text style={{ fontSize: 4 }}></Text>
             <Text>
-              {"       "}
+              {'       '}
               <Icon name='menu' color='black' style={{ paddingTop: 5 }}
-                onPress={() => navigation.openDrawer()}
-              />
+                onPress={() => navigation.openDrawer()} />
             </Text>
-          </View> }}>
+          </View>
+      }}>
         {/* Display title centered on page for now */}
         {() => <View style={styles.container}><Text>{title}</Text></View>}
       </Stack.Screen>
@@ -39,38 +39,38 @@ const AppPage = ({ navigation, title }) => (
 );
 
 // Quickly define pages/forms, refactor into separate modules later
-const NewsAndEventsPage = (props) => <AppPage {...props} title="News and Events" />;
-const EventsCalendar = (props) => <AppPage {...props} title="Events Calendar" />;
-const MessagesPage = (props) => <AppPage {...props} title="Messages" />;
-const MediaContentPage = (props) => <AppPage {...props} title="Media Content" />;
-const EventForm = (props) => <AppPage {...props} title="Event Form" />;
-const NewsStoryForm = (props) => <AppPage {...props} title="News Story Form" />;
-const MediaContentForm = (props) => <AppPage {...props} title="Media Content Form" />;
-const SettingsPage = (props) => <AppPage {...props} title="Settings" />;
-const FeedbackForm = (props) => <AppPage {...props} title="Feedback" />;
-const EventNotificationFormat = (props) => <AppPage {...props} title="Event Notification" />;
-const AuthenticationForm = (props) => <AppPage {...props} title="Authentication" />;
+const NewsAndEventsPage = (props) => <AppPage {...props} title='News and Events' />;
+const EventsCalendar = (props) => <AppPage {...props} title='Events Calendar' />;
+const MessagesPage = (props) => <AppPage {...props} title='Messages' />;
+const MediaContentPage = (props) => <AppPage {...props} title='Media Content' />;
+const EventForm = (props) => <AppPage {...props} title='Event Form' />;
+const NewsStoryForm = (props) => <AppPage {...props} title='News Story Form' />;
+const MediaContentForm = (props) => <AppPage {...props} title='Media Content Form' />;
+const SettingsPage = (props) => <AppPage {...props} title='Settings' />;
+const FeedbackForm = (props) => <AppPage {...props} title='Feedback' />;
+const EventNotificationFormat = (props) => <AppPage {...props} title='Event Notification' />;
+const AuthenticationForm = (props) => <AppPage {...props} title='Authentication' />;
 
 export default function App() {
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Navigator initialRouteName='Home'>
         {/* Section: Content and Communication */}
-        <Drawer.Screen name="News and Events" component={NewsAndEventsPage} />
-        <Drawer.Screen name="Events Calendar" component={EventsCalendar} />
-        <Drawer.Screen name="Messages" component={MessagesPage} />
-        <Drawer.Screen name="Media Content" component={MediaContentPage} />
+        <Drawer.Screen name='News and Events' component={NewsAndEventsPage} />
+        <Drawer.Screen name='Events Calendar' component={EventsCalendar} />
+        <Drawer.Screen name='Messages' component={MessagesPage} />
+        <Drawer.Screen name='Media Content' component={MediaContentPage} />
         {/* Section: Manage Content */}
         {admin &&
           <>
-            <Drawer.Screen name="Event Form" component={EventForm} />
-            <Drawer.Screen name="News Story Form" component={NewsStoryForm} />
-            <Drawer.Screen name="Media Content Form" component={MediaContentForm} />
+            <Drawer.Screen name='Event Form' component={EventForm} />
+            <Drawer.Screen name='News Story Form' component={NewsStoryForm} />
+            <Drawer.Screen name='Media Content Form' component={MediaContentForm} />
           </>}
         {/* Section: Other Functions */}
-        <Drawer.Screen name="Settings" component={SettingsPage} />
-        <Drawer.Screen name="Feedback" component={FeedbackForm} />
+        <Drawer.Screen name='Settings' component={SettingsPage} />
+        <Drawer.Screen name='Feedback' component={FeedbackForm} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
