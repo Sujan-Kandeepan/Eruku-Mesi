@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { Icon } from 'react-native-elements';
 
 // Temporary flag for admin vs. standard user
 const admin = true;
@@ -13,12 +14,16 @@ const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 // Common layout/logic for all app pages
-const AppPage = ({ title }) => (
+const AppPage = ({ navigation, title }) => (
   // Workaround for displaying header within drawer nav (framework limitation):
   // https://github.com/react-navigation/react-navigation/issues/1632#issuecomment-305291994
   <NavigationContainer style={styles.container} independent>
     <Stack.Navigator>
-      <Stack.Screen name={title}>
+      <Stack.Screen name={title} options={{
+        headerLeft: () =>
+          <Icon name='menu' color='black' style={{ paddingLeft: 25 }}
+            onPress={() => navigation.openDrawer()}
+          /> }}>
         {/* Display title centered on page for now */}
         {() => <View style={styles.container}><Text>{title}</Text></View>}
       </Stack.Screen>
@@ -27,17 +32,17 @@ const AppPage = ({ title }) => (
 );
 
 // Quickly define pages/forms, refactor into separate modules later
-const NewsAndEventsPage = () => <AppPage title="News and Events" />;
-const EventsCalendar = () => <AppPage title="Events Calendar" />;
-const MessagesPage = () => <AppPage title="Messages" />;
-const MediaContentPage = () => <AppPage title="Media Content" />;
-const EventForm = () => <AppPage title="Event Form" />;
-const NewsStoryForm = () => <AppPage title="News Story Form" />;
-const MediaContentForm = () => <AppPage title="Media Content Form" />;
-const SettingsPage = () => <AppPage title="Settings" />;
-const FeedbackForm = () => <AppPage title="Feedback" />;
-const EventNotificationFormat = () => <AppPage title="Event Notification" />;
-const AuthenticationForm = () => <AppPage title="Authentication" />;
+const NewsAndEventsPage = (props) => <AppPage {...props} title="News and Events" />;
+const EventsCalendar = (props) => <AppPage {...props} title="Events Calendar" />;
+const MessagesPage = (props) => <AppPage {...props} title="Messages" />;
+const MediaContentPage = (props) => <AppPage {...props} title="Media Content" />;
+const EventForm = (props) => <AppPage {...props} title="Event Form" />;
+const NewsStoryForm = (props) => <AppPage {...props} title="News Story Form" />;
+const MediaContentForm = (props) => <AppPage {...props} title="Media Content Form" />;
+const SettingsPage = (props) => <AppPage {...props} title="Settings" />;
+const FeedbackForm = (props) => <AppPage {...props} title="Feedback" />;
+const EventNotificationFormat = (props) => <AppPage {...props} title="Event Notification" />;
+const AuthenticationForm = (props) => <AppPage {...props} title="Authentication" />;
 
 export default function App() {
   return (
