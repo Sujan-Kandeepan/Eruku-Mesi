@@ -13,8 +13,11 @@ const admin = true;
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+// Display basic text in app app pages not yet implemented
+const SimpleText = ({ text }) => <View style={styles.container}><Text>{text}</Text></View>;
+
 // Common layout/logic for all app pages
-const AppPage = ({ navigation, title }) => (
+const AppPage = ({ children, navigation, title }) => (
   // Workaround for displaying header within drawer nav (framework limitation):
   // https://github.com/react-navigation/react-navigation/issues/1632#issuecomment-305291994
   <NavigationContainer style={styles.container} independent>
@@ -31,25 +34,58 @@ const AppPage = ({ navigation, title }) => (
             </Text>
           </View>
       }}>
-        {/* Display title centered on page for now */}
-        {() => <View style={styles.container}><Text>{title}</Text></View>}
+        {/* Display component children */}
+        {() => children}
       </Stack.Screen>
     </Stack.Navigator>
   </NavigationContainer>
 );
 
 // Quickly define pages/forms, refactor into separate modules later
-const NewsAndEventsPage = (props) => <AppPage {...props} title='News and Events' />;
-const EventsCalendar = (props) => <AppPage {...props} title='Events Calendar' />;
-const MessagesPage = (props) => <AppPage {...props} title='Messages' />;
-const MediaContentPage = (props) => <AppPage {...props} title='Media Content' />;
-const EventForm = (props) => <AppPage {...props} title='Event Form' />;
-const NewsStoryForm = (props) => <AppPage {...props} title='News Story Form' />;
-const MediaContentForm = (props) => <AppPage {...props} title='Media Content Form' />;
-const SettingsPage = (props) => <AppPage {...props} title='Settings' />;
-const FeedbackForm = (props) => <AppPage {...props} title='Feedback' />;
-const EventNotificationFormat = (props) => <AppPage {...props} title='Event Notification' />;
-const AuthenticationForm = (props) => <AppPage {...props} title='Authentication' />;
+const NewsAndEventsPage = (props) =>
+  <AppPage {...props} title='News and Events'>
+    <SimpleText text='News and Events' />
+  </AppPage>;
+const EventsCalendar = (props) =>
+  <AppPage {...props} title='Events Calendar'>
+    <SimpleText text='Events Calendar' />
+  </AppPage>;
+const MessagesPage = (props) =>
+  <AppPage {...props} title='Messages'>
+    <SimpleText text='Messages' />
+  </AppPage>;
+const MediaContentPage = (props) =>
+  <AppPage {...props} title='Media Content'>
+    <SimpleText text='Media Content' />
+  </AppPage>;
+const EventForm = (props) =>
+  <AppPage {...props} title='Manage Events'>
+    <SimpleText text='Manage Events' />
+  </AppPage>;
+const NewsStoryForm = (props) =>
+  <AppPage {...props} title='Manage News Stories'>
+    <SimpleText text='Manage News Stories' />
+  </AppPage>;
+const MediaContentForm = (props) =>
+  <AppPage {...props} title='Manage Media Content'>
+    <SimpleText text='Manage Media Content' />
+  </AppPage>;
+const SettingsPage = (props) =>
+  <AppPage {...props} title='Settings'>
+    <SimpleText text='Settings' />
+  </AppPage>;
+const FeedbackForm = (props) =>
+  <AppPage {...props} title='Feedback'>
+    <SimpleText text='Feedback' />
+  </AppPage>;
+const EventNotificationFormat = (props) =>
+  <AppPage {...props} title='Event Notification'>
+    <SimpleText text='Event Notification' />
+  </AppPage>;
+const AuthenticationForm = (props) =>
+  <AppPage {...props} title='Authentication'>
+    <SimpleText text='Authentication' />
+  </AppPage>;
 
 export default function App() {
   return (
@@ -64,9 +100,9 @@ export default function App() {
         {/* Section: Manage Content */}
         {admin &&
           <>
-            <Drawer.Screen name='Event Form' component={EventForm} />
-            <Drawer.Screen name='News Story Form' component={NewsStoryForm} />
-            <Drawer.Screen name='Media Content Form' component={MediaContentForm} />
+            <Drawer.Screen name='Manage Events' component={EventForm} />
+            <Drawer.Screen name='Manage News Stories' component={NewsStoryForm} />
+            <Drawer.Screen name='Manage Media Content' component={MediaContentForm} />
           </>}
         {/* Section: Other Functions */}
         <Drawer.Screen name='Settings' component={SettingsPage} />
