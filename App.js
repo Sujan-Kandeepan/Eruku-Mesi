@@ -2,33 +2,42 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 // Temporary flag for admin vs. standard user
 const admin = true;
 
-// Initialize drawer navigator
+// Initialize drawer/stack navigators
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
-// Basic text on all pages for now
-const SimpleText = ({ text }) => (
-  <View style={styles.container}>
-    <Text>{text}</Text>
-  </View>
+// Common layout/logic for all app pages
+const AppPage = ({ title }) => (
+  // Workaround for displaying header within drawer nav (framework limitation):
+  // https://github.com/react-navigation/react-navigation/issues/1632#issuecomment-305291994
+  <NavigationContainer style={styles.container} independent>
+    <Stack.Navigator>
+      <Stack.Screen name={title}>
+        {/* Display title centered on page for now */}
+        {() => <View style={styles.container}><Text>{title}</Text></View>}
+      </Stack.Screen>
+    </Stack.Navigator>
+  </NavigationContainer>
 );
 
 // Quickly define pages/forms, refactor into separate modules later
-const NewsAndEventsPage = () => <SimpleText text="News and Events" />;
-const EventsCalendar = () => <SimpleText text="Events Calendar" />;
-const MessagesPage = () => <SimpleText text="Messages" />;
-const MediaContentPage = () => <SimpleText text="Media Content" />;
-const EventForm = () => <SimpleText text="Event Form" />;
-const NewsStoryForm = () => <SimpleText text="News Story Form" />;
-const MediaContentForm = () => <SimpleText text="Media Content Form" />;
-const SettingsPage = () => <SimpleText text="Settings" />;
-const FeedbackForm = () => <SimpleText text="Feedback" />;
-const EventNotificationFormat = () => <SimpleText text="Event Notification" />;
-const AuthenticationForm = () => <SimpleText text="Authentication" />;
+const NewsAndEventsPage = () => <AppPage title="News and Events" />;
+const EventsCalendar = () => <AppPage title="Events Calendar" />;
+const MessagesPage = () => <AppPage title="Messages" />;
+const MediaContentPage = () => <AppPage title="Media Content" />;
+const EventForm = () => <AppPage title="Event Form" />;
+const NewsStoryForm = () => <AppPage title="News Story Form" />;
+const MediaContentForm = () => <AppPage title="Media Content Form" />;
+const SettingsPage = () => <AppPage title="Settings" />;
+const FeedbackForm = () => <AppPage title="Feedback" />;
+const EventNotificationFormat = () => <AppPage title="Event Notification" />;
+const AuthenticationForm = () => <AppPage title="Authentication" />;
 
 export default function App() {
   return (
