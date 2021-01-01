@@ -80,14 +80,18 @@ const CustomDrawerItem = ({ action, navigation, state, text }) =>
 // Library documentation: https://callstack.github.io/react-native-paper/drawer-section.html
 // Additional reference: https://github.com/itzpradip/react-navigation-v5-mix/blob/master/screens/DrawerContent.js
 const CustomDrawerContent = (props) =>
-  <DrawerContentScrollView {...props}>
-    <CustomDrawer.Section>
+  <DrawerContentScrollView {...props}
+    contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+    {/* Force section to take up remaining height to push rest to bottom */}
+    <CustomDrawer.Section style={{ flex: 1 }}>
       <CustomDrawerItem {...props} text='News and Events' />
       <CustomDrawerItem {...props} text='Events Calendar' />
       <CustomDrawerItem {...props} text='Messages' />
       <CustomDrawerItem {...props} text='Media Content' />
     </CustomDrawer.Section>
-    <CustomDrawer.Section>
+    {/* Add divider above bottom section by creating empty section */}
+    <CustomDrawer.Section />
+    <CustomDrawer.Section style={{ marginBottom: 0 }}>
       <CustomDrawerItem {...props} text='Settings' />
       <CustomDrawerItem {...props} text='Feedback' />
       <CustomDrawerItem {...props} text='Log Out'
