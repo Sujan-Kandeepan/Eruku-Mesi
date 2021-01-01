@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { DefaultTheme, Drawer as CustomDrawer, Provider } from 'react-native-paper';
+import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
@@ -12,6 +13,17 @@ const admin = true;
 // Initialize drawer/stack navigators
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
+
+// Custom drawer theme, just a few properties modified from default
+// Reference: https://callstack.github.io/react-native-paper/theming.html
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'green',
+    accent: 'darkgreen',
+  },
+};
 
 // Common layout/logic for all app pages
 const AppPage = ({ children, navigation, route }) => (
@@ -51,39 +63,59 @@ const NewsAndEventsPage = EmptyPage;
 const EventsCalendar = EmptyPage;
 const MessagesPage = EmptyPage;
 const MediaContentPage = EmptyPage;
-const EventForm = EmptyPage;
-const NewsStoryForm = EmptyPage;
-const MediaContentForm = EmptyPage;
 const SettingsPage = EmptyPage;
 const FeedbackForm = EmptyPage;
-const EventNotificationFormat = EmptyPage;
+const NewsStoryForm = EmptyPage;
+const EventForm = EmptyPage;
+const MediaContentForm = EmptyPage;
 const AuthenticationForm = EmptyPage;
+const EventNotificationFormat = EmptyPage;
 
+// Repeated logic for custom drawer items
+const CustomDrawerItem = ({ action, navigation, state, text }) =>
+  <CustomDrawer.Item label={text} active={text === state.routeNames[state.index]}
+    onPress={() => action ? action() : navigation.navigate(text)} />;
+
+// Custom drawer layout with sections and optional custom actions
+// Library documentation: https://callstack.github.io/react-native-paper/drawer-section.html
+// Additional reference: https://github.com/itzpradip/react-navigation-v5-mix/blob/master/screens/DrawerContent.js
+const CustomDrawerContent = (props) =>
+  <DrawerContentScrollView {...props}>
+    <CustomDrawer.Section>
+      <CustomDrawerItem {...props} text='News and Events' />
+      <CustomDrawerItem {...props} text='Events Calendar' />
+      <CustomDrawerItem {...props} text='Messages' />
+      <CustomDrawerItem {...props} text='Media Content' />
+    </CustomDrawer.Section>
+    <CustomDrawer.Section>
+      <CustomDrawerItem {...props} text='Settings' />
+      <CustomDrawerItem {...props} text='Feedback' />
+      <CustomDrawerItem {...props} text='Log Out'
+        action={() => props.navigation.closeDrawer()} />
+    </CustomDrawer.Section>
+  </DrawerContentScrollView>;
+
+// Main interface enclosed by drawer navigation into different components
 export default function App() {
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName='News and Events'>
-        {/* Section: Content and Communication */}
-        <Drawer.Screen name='News and Events' component={NewsAndEventsPage} />
-        <Drawer.Screen name='Events Calendar' component={EventsCalendar} />
-        <Drawer.Screen name='Messages' component={MessagesPage} />
-        <Drawer.Screen name='Media Content' component={MediaContentPage} />
-        {/* Section: Manage Content */}
-        {admin &&
-          <>
-            <Drawer.Screen name='Manage Events' component={EventForm} />
-            <Drawer.Screen name='Manage News Stories' component={NewsStoryForm} />
-            <Drawer.Screen name='Manage Media Content' component={MediaContentForm} />
-          </>}
-        {/* Section: Other Functions */}
-        <Drawer.Screen name='Settings' component={SettingsPage} />
-        <Drawer.Screen name='Feedback' component={FeedbackForm} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Provider theme={theme}>
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName='News and Events'
+          drawerContent={props => <CustomDrawerContent {...props} />}>
+          <Drawer.Screen name='News and Events' component={NewsAndEventsPage} />
+          <Drawer.Screen name='Events Calendar' component={EventsCalendar} />
+          <Drawer.Screen name='Messages' component={MessagesPage} />
+          <Drawer.Screen name='Media Content' component={MediaContentPage} />
+          <Drawer.Screen name='Settings' component={SettingsPage} />
+          <Drawer.Screen name='Feedback' component={FeedbackForm} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
+// Repeated-use style declarations
 const styles = StyleSheet.create({
   container: {
     flex: 1,
