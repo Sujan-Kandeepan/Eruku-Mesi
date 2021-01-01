@@ -38,7 +38,7 @@ const AppPage = ({ children, navigation, route }) => (
             <Text style={{ fontSize: 4 }}></Text>
             <Text>
               {'       '}
-              <Icon name='menu' color='black' style={{ paddingTop: 5 }}
+              <Icon name='menu' color='grey' style={{ paddingTop: 5 }}
                 onPress={() => navigation.openDrawer()} />
             </Text>
           </View>
@@ -84,7 +84,7 @@ const CustomDrawerItem = ({ action, icon, name, navigation, source, state }) =>
 const CustomDrawerContent = (props) =>
   <DrawerContentScrollView {...props}
     contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
-    <CustomDrawer.Section style={{ flexDirection: 'row', margin: 15 }}>
+    <CustomDrawer.Section style={{ flexDirection: 'row', marginHorizontal: 15, marginVertical: 5 }}>
       <Avatar.Image source={{ // For local image: source={require('./assets/image.jpg')}
           uri: 'https://pbs.twimg.com/profile_images/3378852260/ea07b725a6331c3255c6283ae7ad97d0_400x400.jpeg'
         }} size={50} style={{ alignSelf: 'center' }} />
@@ -135,6 +135,7 @@ export default function App() {
           <Drawer.Screen name='Feedback' component={FeedbackForm} />
         </Drawer.Navigator>
       </NavigationContainer>
+      <StatusBar backgroundColor='lightgrey' />
     </Provider>
   );
 }
