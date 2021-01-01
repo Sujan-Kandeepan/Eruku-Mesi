@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { DefaultTheme, Drawer as CustomDrawer, Provider } from 'react-native-paper';
+import { Avatar, Caption, DefaultTheme, Drawer as CustomDrawer, Provider, Title } from 'react-native-paper';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -78,12 +78,23 @@ const CustomDrawerItem = ({ action, icon, name, navigation, source, state }) =>
     icon={() => <Icon name={icon} type={source} color='green' style={{ width: 25 }} />}
     onPress={() => action ? action() : navigation.navigate(name)} />;
 
-// Custom drawer layout with sections and optional custom actions
+// Custom drawer layout to override default drawer navigation screen list
 // Documentation: https://callstack.github.io/react-native-paper/drawer-section.html
 // Reference: https://github.com/itzpradip/react-navigation-v5-mix/blob/master/screens/DrawerContent.js
 const CustomDrawerContent = (props) =>
   <DrawerContentScrollView {...props}
     contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+    <CustomDrawer.Section style={{ flexDirection: 'row', margin: 15 }}>
+      <Avatar.Image source={{ // For local image: source={require('./assets/image.jpg')}
+          uri: 'https://pbs.twimg.com/profile_images/3378852260/ea07b725a6331c3255c6283ae7ad97d0_400x400.jpeg'
+        }} size={50} style={{ alignSelf: 'center' }} />
+      <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
+        <Title style={styles.title}>DoodleBob</Title>
+        <Caption style={styles.caption}>@mehoyminoy</Caption>
+      </View>
+    </CustomDrawer.Section>
+    {/* Add divider above first section by creating empty section */}
+    <CustomDrawer.Section />
     {/* Force section to take up remaining height to push rest to bottom */}
     <CustomDrawer.Section style={{ flex: 1 }}>
       <CustomDrawerItem {...props} name='News and Events'
@@ -95,7 +106,7 @@ const CustomDrawerContent = (props) =>
       <CustomDrawerItem {...props} name='Media Content'
         icon='photo-camera-back' source='material' />
     </CustomDrawer.Section>
-    {/* Add divider above bottom section by creating empty section */}
+    {/* Add divider above second section by creating empty section */}
     <CustomDrawer.Section />
     <CustomDrawer.Section style={{ marginBottom: 0 }}>
       <CustomDrawerItem {...props} name='Settings'
