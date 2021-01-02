@@ -1,35 +1,57 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Avatar, Caption, DefaultTheme, Drawer as CustomDrawer, Provider, Title } from 'react-native-paper';
+import { Avatar, Caption, DarkTheme as DarkDrawerTheme, DefaultTheme as LightDrawerTheme,
+  Drawer as CustomDrawer, Provider, Title, useTheme } from 'react-native-paper';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme as LightTheme, NavigationContainer } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
-
-// Temporary flag for admin vs. standard user
-const admin = true;
 
 // Initialize drawer/stack navigators
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-// Custom drawer theme, just a few properties modified from default
+// Custom light app/drawer theme, inherit defaults and modify few properties
 // Reference: https://callstack.github.io/react-native-paper/theming.html
-const theme = {
-  ...DefaultTheme,
+const lightTheme = {
+  ...LightTheme,
+  ...LightDrawerTheme,
   colors: {
-    ...DefaultTheme.colors,
+    ...LightTheme.colors,
+    ...LightDrawerTheme.colors,
     primary: 'green',
     accent: 'darkgreen',
-  },
+    background: LightTheme.colors.background,
+    drawer: LightTheme.colors.surface,
+    statusBarText: 'dark',
+    statusBarBackground: LightDrawerTheme.colors.background,
+    text: 'black'
+  }
+};
+
+// Custom dark app/drawer theme, similar to above
+const darkTheme = {
+  ...DarkTheme,
+  ...DarkDrawerTheme,
+  colors: {
+    ...DarkTheme.colors,
+    ...DarkDrawerTheme.colors,
+    primary: 'green',
+    accent: 'darkgreen',
+    background: DarkTheme.colors.background,
+    drawer: DarkTheme.colors.background,
+    statusBarText: 'light',
+    statusBarBackground: DarkTheme.colors.background,
+    text: 'lightgrey'
+  }
 };
 
 // Common layout/logic for all app pages
-const AppPage = ({ children, navigation, route }) => (
+const AppPage = ({ children, navigation, route, theme }) => (
   // Workaround for displaying header within drawer nav (framework limitation):
   // https://github.com/react-navigation/react-navigation/issues/1632#issuecomment-305291994
-  <NavigationContainer style={styles.container} independent>
+  <NavigationContainer style={styles.container} theme={theme} independent>
     <Stack.Navigator>
       <Stack.Screen name={route.name} options={{
         headerLeft: () =>
@@ -54,7 +76,7 @@ const AppPage = ({ children, navigation, route }) => (
 const EmptyPage = (props) =>
   <AppPage {...props}>
     <View style={styles.container}>
-      <Text>{props.route.name}</Text>
+      <Text style={{ color: props.theme.colors.text }}>{props.route.name}</Text>
     </View>
   </AppPage>;
 
@@ -83,14 +105,15 @@ const CustomDrawerItem = ({ action, icon, name, navigation, source, state }) =>
 // Reference: https://github.com/itzpradip/react-navigation-v5-mix/blob/master/screens/DrawerContent.js
 const CustomDrawerContent = (props) =>
   <DrawerContentScrollView {...props}
-    contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+    contentContainerStyle={{ backgroundColor: props.theme.colors.drawer,
+      flex: 1, justifyContent: 'space-between' }}>
     <CustomDrawer.Section style={{ flexDirection: 'row', marginHorizontal: 15, marginVertical: 5 }}>
       <Avatar.Image source={{ // For local image: source={require('./assets/image.jpg')}
           uri: 'https://pbs.twimg.com/profile_images/3378852260/ea07b725a6331c3255c6283ae7ad97d0_400x400.jpeg'
         }} size={50} style={{ alignSelf: 'center' }} />
       <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
-        <Title style={styles.title}>DoodleBob</Title>
-        <Caption style={styles.caption}>@mehoyminoy</Caption>
+        <Title>DoodleBob</Title>
+        <Caption>@mehoyminoy</Caption>
       </View>
     </CustomDrawer.Section>
     {/* Add divider above first section by creating empty section */}
@@ -115,27 +138,43 @@ const CustomDrawerContent = (props) =>
         icon='feedback' source='material' />
       <CustomDrawerItem {...props} name='Log Out'
         icon='logout' source='material'
-        action={() => props.navigation.closeDrawer()} />
+        action={() => { props.toggleTheme(); props.navigation.closeDrawer() }} />
     </CustomDrawer.Section>
   </DrawerContentScrollView>;
 
 // Main interface enclosed by drawer navigation into different components
 export default function App() {
+  // Temporary flag for admin vs. standard user
+  let [admin, setAdmin] = React.useState(true);
+
+  // Set and toggle between light/dark themes defined globally using state
+  // Reference: https://callstack.github.io/react-native-paper/theming-with-react-navigation.html
+  let [theme, setTheme] = React.useState(lightTheme);
+  const toggleTheme = () => setTheme(theme === darkTheme ? lightTheme : darkTheme);
+
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
-      <NavigationContainer>
+      <NavigationContainer theme={theme}>
         <Drawer.Navigator initialRouteName='News and Events'
-          drawerContent={props => <CustomDrawerContent {...props} />}>
-          <Drawer.Screen name='News and Events' component={NewsAndEventsPage} />
-          <Drawer.Screen name='Events Calendar' component={EventsCalendar} />
-          <Drawer.Screen name='Messages' component={MessagesPage} />
-          <Drawer.Screen name='Media Content' component={MediaContentPage} />
-          <Drawer.Screen name='Settings' component={SettingsPage} />
-          <Drawer.Screen name='Feedback' component={FeedbackForm} />
+          drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
+          drawerContent={props => <CustomDrawerContent {...props} theme={theme} toggleTheme={toggleTheme} />}>
+          <Drawer.Screen name='News and Events'
+            children={(props) => <NewsAndEventsPage {...props} theme={theme} />} />
+          <Drawer.Screen name='Events Calendar'
+            children={(props) => <EventsCalendar {...props} theme={theme} />} />
+          <Drawer.Screen name='Messages'
+            children={(props) => <MessagesPage {...props} theme={theme} />} />
+          <Drawer.Screen name='Media Content'
+            children={(props) => <MediaContentPage {...props} theme={theme} />} />
+          <Drawer.Screen name='Settings'
+            children={(props) => <SettingsPage {...props} theme={theme} />} />
+          <Drawer.Screen name='Feedback'
+            children={(props) => <FeedbackForm {...props} theme={theme} />} />
         </Drawer.Navigator>
       </NavigationContainer>
-      <StatusBar backgroundColor='lightgrey' />
+      <StatusBar style={theme.colors.statusBarText}
+        backgroundColor={theme.colors.statusBarBackground} />
     </Provider>
   );
 }
@@ -144,7 +183,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
