@@ -1,12 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Avatar, Caption, DarkTheme as DarkDrawerTheme, DefaultTheme as LightDrawerTheme,
   Drawer as CustomDrawer, Provider, Title, useTheme } from 'react-native-paper';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DarkTheme, DefaultTheme as LightTheme, NavigationContainer } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
+
+import EmptyPage from './components/EmptyPage';
+import SettingsPage from './components/SettingsPage';
 
 // Initialize drawer/stack navigators
 const Drawer = createDrawerNavigator();
@@ -47,45 +50,11 @@ const darkTheme = {
   }
 };
 
-// Common layout/logic for all app pages
-const AppPage = ({ children, navigation, route, theme }) => (
-  // Workaround for displaying header within drawer nav (framework limitation):
-  // https://github.com/react-navigation/react-navigation/issues/1632#issuecomment-305291994
-  <NavigationContainer style={styles.container} theme={theme} independent>
-    <Stack.Navigator>
-      <Stack.Screen name={route.name} options={{
-        headerLeft: () =>
-          // Display hamburger icon with workaround for padding bug in library
-          <View>
-            <Text style={{ fontSize: 4 }}></Text>
-            <Text>
-              {'       '}
-              <Icon name='menu' color='grey' style={{ paddingTop: 5 }}
-                onPress={() => navigation.openDrawer()} />
-            </Text>
-          </View>
-      }}>
-        {/* Display component children */}
-        {() => children}
-      </Stack.Screen>
-    </Stack.Navigator>
-  </NavigationContainer>
-);
-
-// Display basic text for route name in app pages not yet implemented
-const EmptyPage = (props) =>
-  <AppPage {...props}>
-    <View style={styles.container}>
-      <Text style={{ color: props.theme.colors.text }}>{props.route.name}</Text>
-    </View>
-  </AppPage>;
-
 // Quickly define pages/forms, refactor into separate modules later
 const NewsAndEventsPage = EmptyPage;
 const EventsCalendar = EmptyPage;
 const MessagesPage = EmptyPage;
 const MediaContentPage = EmptyPage;
-const SettingsPage = EmptyPage;
 const FeedbackForm = EmptyPage;
 const NewsStoryForm = EmptyPage;
 const EventForm = EmptyPage;
@@ -136,9 +105,6 @@ const CustomDrawerContent = (props) =>
         icon='settings' source='material' />
       <CustomDrawerItem {...props} name='Feedback'
         icon='feedback' source='material' />
-      <CustomDrawerItem {...props} name='Log Out'
-        icon='logout' source='material'
-        action={() => { props.toggleTheme(); props.navigation.closeDrawer() }} />
     </CustomDrawer.Section>
   </DrawerContentScrollView>;
 
@@ -146,6 +112,10 @@ const CustomDrawerContent = (props) =>
 export default function App() {
   // Temporary flag for admin vs. standard user
   let [admin, setAdmin] = React.useState(true);
+
+  let [receiveNotifications, setReceiveNotifications] = React.useState(true);
+  const toggleNotifications = () => console.log('Receiving notifications:', !receiveNotifications)
+    || setReceiveNotifications(!receiveNotifications);
 
   // Set and toggle between light/dark themes defined globally using state
   // Reference: https://callstack.github.io/react-native-paper/theming-with-react-navigation.html
@@ -158,7 +128,7 @@ export default function App() {
       <NavigationContainer theme={theme}>
         <Drawer.Navigator initialRouteName='News and Events'
           drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
-          drawerContent={props => <CustomDrawerContent {...props} theme={theme} toggleTheme={toggleTheme} />}>
+          drawerContent={props => <CustomDrawerContent {...props} theme={theme} />}>
           <Drawer.Screen name='News and Events'
             children={(props) => <NewsAndEventsPage {...props} theme={theme} />} />
           <Drawer.Screen name='Events Calendar'
@@ -168,7 +138,8 @@ export default function App() {
           <Drawer.Screen name='Media Content'
             children={(props) => <MediaContentPage {...props} theme={theme} />} />
           <Drawer.Screen name='Settings'
-            children={(props) => <SettingsPage {...props} theme={theme} />} />
+            children={(props) => <SettingsPage {...props} theme={theme} toggleTheme={toggleTheme}
+            receiveNotifications={receiveNotifications} toggleNotifications={toggleNotifications} />} />
           <Drawer.Screen name='Feedback'
             children={(props) => <FeedbackForm {...props} theme={theme} />} />
         </Drawer.Navigator>
@@ -178,12 +149,3 @@ export default function App() {
     </Provider>
   );
 }
-
-// Repeated-use style declarations
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
