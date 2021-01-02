@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 
-import styles from '../shared/styles';
+import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
@@ -15,7 +15,7 @@ export default function AppPage({ children, navigation, route, theme }) {
     // Workaround for displaying header within drawer nav (framework
     // limitation):
     // https://github.com/react-navigation/react-navigation/issues/1632#issuecomment-305291994
-    <NavigationContainer style={styles.container} theme={theme} independent>
+    <NavigationContainer style={SharedStyles.container} theme={theme} independent>
       <Stack.Navigator>
         <Stack.Screen name={route.name} options={{
           headerLeft: () =>
