@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View } from 'react-native';
+import { Alert, ToastAndroid, Platform, View } from 'react-native';
 import { Avatar, Caption, DarkTheme as DarkDrawerTheme, DefaultTheme as LightDrawerTheme,
   Drawer as CustomDrawer, Provider, Title, useTheme } from 'react-native-paper';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
@@ -49,6 +49,22 @@ const darkTheme = {
     text: 'lightgrey'
   }
 };
+
+// Display toast/alert with given message
+// Reference: https://stackoverflow.com/questions/57624787/how-to-display-toast-message-in-react-native
+const popup = (message) => {
+  switch (Platform.OS) {
+    case 'android':
+      ToastAndroid.show(message, ToastAndroid.SHORT);
+      break;
+    case 'ios':
+      Alert.alert(message);
+      break;
+    default:
+      alert(message);
+      break;
+  }
+}
 
 // Quickly define pages/forms, refactor into separate modules later
 const NewsAndEventsPage = EmptyPage;
@@ -113,9 +129,12 @@ export default function App() {
   // Temporary flag for admin vs. standard user
   let [admin, setAdmin] = React.useState(true);
 
+  // Toggle event notifications and display popup message on change
   let [receiveNotifications, setReceiveNotifications] = React.useState(true);
-  const toggleNotifications = () => console.log('Receiving notifications:', !receiveNotifications)
-    || setReceiveNotifications(!receiveNotifications);
+  const toggleNotifications = () => {
+    popup(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
+    setReceiveNotifications(!receiveNotifications);
+  }
 
   // Set and toggle between light/dark themes defined globally using state
   // Reference: https://callstack.github.io/react-native-paper/theming-with-react-navigation.html
