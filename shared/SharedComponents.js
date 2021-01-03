@@ -26,6 +26,7 @@ export const Toggle = (props) =>
     {/* Reference: https://reactnative.dev/docs/switch */}
     <Switch style={{ alignSelf: 'flex-end', marginTop: -22.5 }}
       thumbColor={props.value ? props.theme.colors.primary : props.theme.colors.text}
+      activeThumbColor={props.theme.colors.primary}
       trackColor={{ false: props.theme.colors.disabled, true: props.theme.colors.accent }}
       value={props.value} onValueChange={props.onValueChange} />
   </Card>;
