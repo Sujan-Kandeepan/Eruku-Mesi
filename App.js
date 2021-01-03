@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Alert, ToastAndroid, Platform, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { Avatar, Caption, DarkTheme as DarkDrawerTheme, DefaultTheme as LightDrawerTheme,
-  Drawer as CustomDrawer, Provider, Title, useTheme } from 'react-native-paper';
+  Drawer as CustomDrawer, Provider, Snackbar, Title, useTheme } from 'react-native-paper';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DarkTheme, DefaultTheme as LightTheme, NavigationContainer } from '@react-navigation/native';
-import { Icon } from 'react-native-elements';
 
 import EmptyPage from './components/EmptyPage';
 import SettingsPage from './components/SettingsPage';
@@ -49,22 +49,6 @@ const darkTheme = {
     text: 'lightgrey'
   }
 };
-
-// Display toast/alert with given message
-// Reference: https://stackoverflow.com/questions/57624787/how-to-display-toast-message-in-react-native
-const popup = (message) => {
-  switch (Platform.OS) {
-    case 'android':
-      ToastAndroid.show(message, ToastAndroid.SHORT);
-      break;
-    case 'ios':
-      Alert.alert(message);
-      break;
-    default:
-      alert(message);
-      break;
-  }
-}
 
 // Quickly define pages/forms, refactor into separate modules later
 const NewsAndEventsPage = EmptyPage;
@@ -126,13 +110,27 @@ const CustomDrawerContent = (props) =>
 
 // Main interface enclosed by drawer navigation into different components
 export default function App() {
+  // Display snackbar with given message, define helper functions
+  // Reference: https://callstack.github.io/react-native-paper/snackbar.html
+  const [snackbarText, setSnackbarText] = React.useState('');
+  const [snackbarVisible, setSnackbarVisible] = React.useState(false);
+  const [snackbarWidth, setSnackbarWidth] = React.useState(0);
+  const onDismissSnackbar = () => setSnackbarVisible(false);
+  const snackbar = (text, width) => {
+    setSnackbarVisible(false);
+    setSnackbarText(text);
+    setSnackbarWidth(width);
+    setSnackbarVisible(true);
+  }
+
   // Temporary flag for admin vs. standard user
   let [admin, setAdmin] = React.useState(true);
 
-  // Toggle event notifications and display popup message on change
+  // Toggle event notifications and display snackbar message on change
   let [receiveNotifications, setReceiveNotifications] = React.useState(true);
   const toggleNotifications = () => {
-    popup(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
+    snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`,
+      receiveNotifications ? 272 : 240);
     setReceiveNotifications(!receiveNotifications);
   }
 
@@ -156,15 +154,21 @@ export default function App() {
             children={(props) => <MessagesPage {...props} theme={theme} />} />
           <Drawer.Screen name='Media Content'
             children={(props) => <MediaContentPage {...props} theme={theme} />} />
-          <Drawer.Screen name='Settings'
-            children={(props) => <SettingsPage {...props} theme={theme} toggleTheme={toggleTheme}
-            receiveNotifications={receiveNotifications} toggleNotifications={toggleNotifications} />} />
+          <Drawer.Screen name='Settings' children={(props) =>
+            <SettingsPage {...props} theme={theme} toggleTheme={toggleTheme} snackbar={snackbar}
+              receiveNotifications={receiveNotifications} toggleNotifications={toggleNotifications} />} />
           <Drawer.Screen name='Feedback'
             children={(props) => <FeedbackForm {...props} theme={theme} />} />
         </Drawer.Navigator>
       </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
+      <Snackbar visible={snackbarVisible} duration={3000}
+        style={{ alignSelf: 'center', flexDirection: 'row', margin: 50, width: snackbarWidth || 'auto' }}
+        theme={{ colors: { onSurface: theme.colors.card, surface: theme.colors.text } }}
+        onDismiss={onDismissSnackbar}>
+        <Text adjustsFontSizeToFit={true}>{snackbarText}</Text>
+      </Snackbar>
     </Provider>
   );
 }
