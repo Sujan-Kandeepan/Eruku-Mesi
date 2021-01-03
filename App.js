@@ -8,6 +8,7 @@ import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigatio
 import { DarkTheme, DefaultTheme as LightTheme, NavigationContainer } from '@react-navigation/native';
 
 import EmptyPage from './components/EmptyPage';
+import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 
 // Initialize drawer navigator
@@ -51,7 +52,6 @@ const NewsAndEventsPage = EmptyPage;
 const EventsCalendar = EmptyPage;
 const MessagesPage = EmptyPage;
 const MediaContentPage = EmptyPage;
-const InformationPage = EmptyPage;
 const FeedbackForm = EmptyPage;
 const NewsStoryForm = EmptyPage;
 const EventForm = EmptyPage;

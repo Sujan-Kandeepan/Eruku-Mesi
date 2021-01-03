@@ -13,7 +13,7 @@ export const Button = (props) =>
   <TouchableOpacity onPress={props.onPress}>
     <Card containerStyle={{ backgroundColor: props.theme.colors.surface, borderColor: props.theme.colors.border }}
       style={{ justifyContent: 'center' }}>
-      <Text style={{ ...props.textStyle, alignSelf: 'center' }}>{props.text}</Text>
+      <Text style={{ color: props.theme.colors.text, alignSelf: 'center', ...props.textStyle }}>{props.text}</Text>
     </Card>
   </TouchableOpacity>;
 
