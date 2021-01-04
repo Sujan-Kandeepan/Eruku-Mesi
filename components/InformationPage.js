@@ -35,7 +35,7 @@ export default function InformationPage(props) {
                       color: props.theme.colors.text, flex: 1, height: 50,
                       marginBottom: 0, marginLeft: 15, marginTop: 15, textAlign: 'center'
                     }} value={editText} onChangeText={value => setEditText(value)} />
-                    <View style={{ marginRight: -15 }}>
+                    <Text style={{ marginHorizontal: 10 }}>
                       <TouchableOpacity style={styles.icon} onPress={() => {
                         setPages(pages.map(page => page === originalText ? editText : page));
                         setOriginalText('');
@@ -43,13 +43,13 @@ export default function InformationPage(props) {
                       }}>
                         <Icon name='check' type='material' color={props.theme.colors.accent} />
                       </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity style={styles.icon} onPress={() => {
-                      setOriginalText('');
-                      setEditText('');
-                    }}>
-                      <Icon name='undo' type='material' color={props.theme.colors.placeholder} />
-                    </TouchableOpacity>
+                      <TouchableOpacity style={styles.icon} onPress={() => {
+                        setOriginalText('');
+                        setEditText('');
+                      }}>
+                        <Icon name='undo' type='material' color={props.theme.colors.placeholder} />
+                      </TouchableOpacity>
+                    </Text>
                   </View> :
                   <Button {...props} {...localProps} text={item}
                     onPress={() => localProps.navigation.push(item)}
@@ -84,8 +84,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 50,
     justifyContent: 'center',
-    marginRight: 5,
-    marginTop: 15,
-    padding: 15
+    marginHorizontal: 10,
+    marginTop: 15
   }
 });
