@@ -13,6 +13,7 @@ import EventsCalendar from './components/EventsCalendar';
 import MediaContentPage from './components/MediaContentPage';
 import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
+import FeedbackForm from './components/FeedbackForm';
 
 // Initialize drawer navigator
 const Drawer = createDrawerNavigator();
@@ -52,7 +53,6 @@ const darkTheme = {
 
 // Quickly define pages/forms, refactor into separate modules later
 const MessagesPage = EmptyPage;
-const FeedbackForm = EmptyPage;
 const AuthenticationForm = EmptyPage;
 const EventNotificationFormat = EmptyPage;
 
@@ -166,7 +166,7 @@ export default function App() {
             <SettingsPage {...props} theme={theme} toggleTheme={toggleTheme} snackbar={snackbar}
               receiveNotifications={receiveNotifications} toggleNotifications={toggleNotifications} />} />
           <Drawer.Screen name={pages.feedback}
-            children={(props) => <FeedbackForm {...props} theme={theme} />} />
+            children={(props) => <FeedbackForm {...props} theme={theme} snackbar={snackbar} />} />
         </Drawer.Navigator>
       </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}

@@ -11,9 +11,12 @@ export const Header = (props) =>
 
 export const Button = (props) =>
   <TouchableOpacity onPress={props.onPress}>
-    <Card containerStyle={{ backgroundColor: props.theme.colors.surface, borderColor: props.theme.colors.border }}
-      style={{ justifyContent: 'center' }}>
-      <Text style={{ color: props.theme.colors.text, alignSelf: 'center', ...props.textStyle }}>{props.text}</Text>
+    <Card containerStyle={{
+        backgroundColor: props.accent ? props.theme.colors.accent : props.theme.colors.surface,
+        borderColor: props.theme.colors.border
+      }} style={{ justifyContent: 'center' }}>
+      <Text style={{ alignSelf: 'center', color: props.accent ? 'white' : props.theme.colors.text,
+        ...props.textStyle }} children={props.text} />
     </Card>
   </TouchableOpacity>;
 
