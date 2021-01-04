@@ -10,7 +10,7 @@ export const Header = (props) =>
   }}>{props.text}</Text>;
 
 export const Button = (props) =>
-  <TouchableOpacity onPress={props.onPress}>
+  <TouchableOpacity onPress={props.onPress} onLongPress={props.onLongPress}>
     <Card containerStyle={{
         backgroundColor: props.accent ? props.theme.colors.accent : props.theme.colors.surface,
         borderColor: props.theme.colors.border
