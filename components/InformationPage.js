@@ -1,5 +1,6 @@
 import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -7,7 +8,7 @@ import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import { Button } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
@@ -28,25 +29,27 @@ export default function InformationPage(props) {
                 </Text>}
               <FlatList data={pages} renderItem={({ item }) =>
                 item === originalText ?
-                  <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                  <View style={{ flexDirection: 'row', marginBottom: 1, justifyContent: 'center' }}>
                     <TextInput style={{
                       backgroundColor: props.theme.colors.card,
-                      color: props.theme.colors.text, flex: 1,
+                      color: props.theme.colors.text, flex: 1, height: 50,
                       marginBottom: 0, marginLeft: 15, marginTop: 15, textAlign: 'center'
                     }} value={editText} onChangeText={value => setEditText(value)} />
                     <View style={{ marginRight: -15 }}>
-                      <Button {...props} {...localProps} text='Save'
-                        onPress={() => {
-                          setPages(pages.map(page => page === originalText ? editText : page));
-                          setOriginalText('');
-                          setEditText('');
-                        }} />
-                    </View>
-                    <Button {...props} {...localProps} text='Cancel'
-                      onPress={() => {
+                      <TouchableOpacity style={styles.icon} onPress={() => {
+                        setPages(pages.map(page => page === originalText ? editText : page));
                         setOriginalText('');
                         setEditText('');
-                      }} />
+                      }}>
+                        <Icon name='check' type='material' color={props.theme.colors.accent} />
+                      </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity style={styles.icon} onPress={() => {
+                      setOriginalText('');
+                      setEditText('');
+                    }}>
+                      <Icon name='undo' type='material' color={props.theme.colors.placeholder} />
+                    </TouchableOpacity>
                   </View> :
                   <Button {...props} {...localProps} text={item}
                     onPress={() => localProps.navigation.push(item)}
@@ -75,3 +78,14 @@ export default function InformationPage(props) {
     </AppPage>
   );
 };
+
+const styles = StyleSheet.create({
+  icon: {
+    alignSelf: 'center',
+    height: 50,
+    justifyContent: 'center',
+    marginRight: 5,
+    marginTop: 15,
+    padding: 15
+  }
+});
