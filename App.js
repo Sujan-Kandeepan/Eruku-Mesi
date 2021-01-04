@@ -8,6 +8,9 @@ import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigatio
 import { DarkTheme, DefaultTheme as LightTheme, NavigationContainer } from '@react-navigation/native';
 
 import EmptyPage from './components/EmptyPage';
+import NewsAndEventsPage from './components/NewsAndEventsPage';
+import EventsCalendar from './components/EventsCalendar';
+import MediaContentPage from './components/MediaContentPage';
 import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 
@@ -48,14 +51,8 @@ const darkTheme = {
 };
 
 // Quickly define pages/forms, refactor into separate modules later
-const NewsAndEventsPage = EmptyPage;
-const EventsCalendar = EmptyPage;
 const MessagesPage = EmptyPage;
-const MediaContentPage = EmptyPage;
 const FeedbackForm = EmptyPage;
-const NewsStoryForm = EmptyPage;
-const EventForm = EmptyPage;
-const MediaContentForm = EmptyPage;
 const AuthenticationForm = EmptyPage;
 const EventNotificationFormat = EmptyPage;
 
@@ -156,13 +153,13 @@ export default function App() {
           drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
           drawerContent={props => <CustomDrawerContent {...props} theme={theme} />}>
           <Drawer.Screen name={pages.newsAndEvents}
-            children={(props) => <NewsAndEventsPage {...props} theme={theme} />} />
+            children={(props) => <NewsAndEventsPage {...props} theme={theme} admin={admin} />} />
           <Drawer.Screen name={pages.eventsCalendar}
-            children={(props) => <EventsCalendar {...props} theme={theme} />} />
+            children={(props) => <EventsCalendar {...props} theme={theme} admin={admin} />} />
           <Drawer.Screen name={pages.messages}
             children={(props) => <MessagesPage {...props} theme={theme} />} />
           <Drawer.Screen name={pages.mediaContent}
-            children={(props) => <MediaContentPage {...props} theme={theme} />} />
+            children={(props) => <MediaContentPage {...props} theme={theme} admin={admin} />} />
           <Drawer.Screen name={pages.information}
             children={(props) => <InformationPage {...props} theme={theme} admin={admin} />} />
           <Drawer.Screen name={pages.settings} children={(props) =>

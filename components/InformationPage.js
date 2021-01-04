@@ -18,9 +18,9 @@ export default function InformationPage(props) {
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Home Page' children={(localProps) =>
+          <Stack.Screen name='Selection Page' children={(localProps) =>
             <FlatList data={pages} renderItem={({ item }) =>
-              <Button {...props} text={item}
+              <Button {...props} {...localProps} text={item}
                 onPress={() => localProps.navigation.push(item)} />}
               keyExtractor={item => item} />} />
           {pages.map(page =>
