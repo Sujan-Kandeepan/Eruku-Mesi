@@ -22,18 +22,14 @@ export default function InformationPage(props) {
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='Selection Page' children={(localProps) =>
-            <>
-              {props.admin &&
-                <Text style={{ color: props.theme.colors.placeholder, marginTop: 15, textAlign: 'center' }}>
-                  Press and hold a button to edit its name.
-                </Text>}
-              <FlatList data={pages} renderItem={({ item }) =>
-                item === originalText ?
-                  <View style={{ flexDirection: 'row', marginBottom: 1, justifyContent: 'center' }}>
+            <FlatList data={pages} renderItem={({ item }) =>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                {item === originalText ?
+                  <>
                     <TextInput style={{
                       backgroundColor: props.theme.colors.card,
                       color: props.theme.colors.text, flex: 1, height: 50,
-                      marginBottom: 0, marginLeft: 15, marginTop: 15, textAlign: 'center'
+                      marginBottom: 1, marginLeft: 15, marginTop: 15, textAlign: 'center'
                     }} value={editText} onChangeText={value => setEditText(value)} />
                     <Text style={{ marginHorizontal: 10 }}>
                       <TouchableOpacity style={styles.icon} onPress={() => {
@@ -50,16 +46,26 @@ export default function InformationPage(props) {
                         <Icon name='undo' type='material' color={props.theme.colors.placeholder} />
                       </TouchableOpacity>
                     </Text>
-                  </View> :
-                  <Button {...props} {...localProps} text={item}
-                    onPress={() => localProps.navigation.push(item)}
-                    onLongPress={() => {
-                      if (!props.admin) return;
-                      setOriginalText(item);
-                      setEditText(item);
-                    }} />}
-                keyExtractor={item => item} />
-            </>} />
+                  </> :
+                  <>
+                    <View style={{ flex: 1, marginRight: props.admin ? -15 : 'auto' }}>
+                      <Button {...props} {...localProps} text={item}
+                        onPress={() => localProps.navigation.push(item)} />
+                    </View>
+                    {props.admin &&
+                      <Text style={{ marginHorizontal: 10 }}>
+                        <TouchableOpacity style={styles.icon} onPress={() => {
+                          setOriginalText(item);
+                          setEditText(item);
+                        }}>
+                          <Icon name='edit' type='material' color={props.theme.colors.placeholder} />
+                        </TouchableOpacity>
+                      </Text>}
+                  </>}
+              </View>}
+              keyExtractor={item => `${item} ${item === originalText}`}
+              // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
+              extraData={{ originalText, editText }} />} />
           {pages.map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
