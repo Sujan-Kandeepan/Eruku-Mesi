@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { Icon } from 'react-native-elements';
 
 import { Button } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';

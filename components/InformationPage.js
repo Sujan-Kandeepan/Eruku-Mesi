@@ -1,9 +1,9 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View, YellowBox } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 
 import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
