@@ -11,7 +11,7 @@ import SharedStyles from '../shared/SharedStyles';
 // Initialize stack navigator
 const Stack = createStackNavigator();
 
-export default function EventsCalendar(props) {
+export default function UpcomingEventsPage(props) {
   const pages = {
     createEvent: 'Create Event'
   };
@@ -19,7 +19,7 @@ export default function EventsCalendar(props) {
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Events Calendar' children={(localProps) =>
+          <Stack.Screen name={props.route.name} children={(localProps) =>
             <>
               {props.admin &&
                 <Button {...props} {...localProps} text={pages.createEvent}

@@ -27,7 +27,7 @@ export default function InformationPage(props) {
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Selection Page' children={(localProps) =>
+          <Stack.Screen name={props.route.name} children={(localProps) =>
             // Without scroll view, bug exists where mobile keyboard closes if input field is too low
             // Ideally no nested scroll views (performance hit), but for small lists this is fine
             // Implementation with no warnings (bug persists which is fixed by nested scroll views):

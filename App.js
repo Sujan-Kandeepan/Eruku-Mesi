@@ -8,8 +8,8 @@ import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigatio
 import { DarkTheme, DefaultTheme as LightTheme, NavigationContainer } from '@react-navigation/native';
 
 import EmptyPage from './components/EmptyPage';
-import NewsAndEventsPage from './components/NewsAndEventsPage';
-import EventsCalendar from './components/EventsCalendar';
+import NewsFeedPage from './components/NewsFeedPage';
+import UpcomingEventsPage from './components/UpcomingEventsPage';
 import MediaContentPage from './components/MediaContentPage';
 import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
@@ -58,8 +58,8 @@ const EventNotificationFormat = EmptyPage;
 
 // Names of drawer items/pages
 const pages = {
-  newsAndEvents: 'News and Events',
-  eventsCalendar: 'Events Calendar',
+  newsFeed: 'News Feed',
+  upcomingEvents: 'Upcoming Events',
   messages: 'Messages',
   mediaContent: 'Media Content',
   information: 'Information',
@@ -93,9 +93,9 @@ const CustomDrawerContent = (props) =>
     <CustomDrawer.Section />
     {/* Force section to take up remaining height to push rest to bottom */}
     <CustomDrawer.Section style={{ flex: 1 }}>
-      <CustomDrawerItem {...props} name={pages.newsAndEvents}
+      <CustomDrawerItem {...props} name={pages.newsFeed}
         icon='newspaper-variant-outline' source='material-community' />
-      <CustomDrawerItem {...props} name={pages.eventsCalendar}
+      <CustomDrawerItem {...props} name={pages.upcomingEvents}
         icon='calendar-star' source='material-community' />
       <CustomDrawerItem {...props} name={pages.messages}
         icon='message-text-outline' source='material-community' />
@@ -149,13 +149,13 @@ export default function App() {
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
       <NavigationContainer theme={theme}>
-        <Drawer.Navigator initialRouteName={pages.newsAndEvents}
+        <Drawer.Navigator initialRouteName={pages.newsFeed}
           drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
           drawerContent={props => <CustomDrawerContent {...props} theme={theme} />}>
-          <Drawer.Screen name={pages.newsAndEvents}
-            children={(props) => <NewsAndEventsPage {...props} theme={theme} admin={admin} />} />
-          <Drawer.Screen name={pages.eventsCalendar}
-            children={(props) => <EventsCalendar {...props} theme={theme} admin={admin} />} />
+          <Drawer.Screen name={pages.newsFeed}
+            children={(props) => <NewsFeedPage {...props} theme={theme} admin={admin} />} />
+          <Drawer.Screen name={pages.upcomingEvents}
+            children={(props) => <UpcomingEventsPage {...props} theme={theme} admin={admin} />} />
           <Drawer.Screen name={pages.messages}
             children={(props) => <MessagesPage {...props} theme={theme} />} />
           <Drawer.Screen name={pages.mediaContent}

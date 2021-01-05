@@ -12,23 +12,19 @@ import SharedStyles from '../shared/SharedStyles';
 // Initialize stack navigator
 const Stack = createStackNavigator();
 
-export default function NewsAndEventsPage(props) {
+export default function NewsFeedPage(props) {
   const pages = {
-    createNewsStory: 'Create News Story',
-    createEvent: 'Create Event'
+    createNewsStory: 'Create News Story'
   };
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='News and Events Feed' children={(localProps) =>
+          <Stack.Screen name={props.route.name} children={(localProps) =>
             <>
               {props.admin &&
                 <Button {...props} {...localProps} text={pages.createNewsStory}
                   onPress={() => localProps.navigation.push(pages.createNewsStory)} />}
-              {props.admin &&
-                <Button {...props} {...localProps} text={pages.createEvent}
-                  onPress={() => localProps.navigation.push(pages.createEvent)} />}
               <View style={SharedStyles.container}>
                 <Text style={{ color: props.theme.colors.text }}>{props.route.name}</Text>
               </View>
@@ -36,9 +32,6 @@ export default function NewsAndEventsPage(props) {
           {props.admin &&
             <Stack.Screen name={pages.createNewsStory} children={(localProps) =>
               <NewsStoryForm {...props} {...localProps} />} />}
-          {props.admin &&
-            <Stack.Screen name={pages.createEvent} children={(localProps) =>
-              <EventForm {...props} {...localProps} />} />}
         </Stack.Navigator>
       </NavigationContainer>
     </AppPage>

@@ -19,7 +19,7 @@ export default function MediaContentPage(props) {
     postMediaContent: 'Post Media Content',
     viewMediaContent: id => `View Media Content Post ${id}`,
     editMediaContent: id => `Edit Media Content Post ${id}`,
-    deleteMediaContent: id => `Delete Media Content Post ${id}`,
+    deleteMediaContent: id => `Delete Media Content Post ${id}`
   };
   const posts = [...Array(10).keys()].map(n =>
     ({ id: n + 1, title: `Post ${n + 1}`, description: `Post ${n + 1} description` }));
@@ -27,7 +27,7 @@ export default function MediaContentPage(props) {
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Media Content Feed' children={(localProps) =>
+          <Stack.Screen name={props.route.name} children={(localProps) =>
             <FlatList data={posts} renderItem={({ item }) =>
               <TouchableOpacity onPress={() => localProps.navigation.push(pages.viewMediaContent(item.id))}>
                 <Card containerStyle={{
