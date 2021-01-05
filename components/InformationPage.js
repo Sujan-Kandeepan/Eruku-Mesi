@@ -1,14 +1,14 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View, YellowBox } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 
 import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import { Button } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
@@ -18,13 +18,22 @@ export default function InformationPage(props) {
   const [originalText, setOriginalText] = React.useState('');
   const [editText, setEditText] = React.useState('');
   const newSection = 'New Section';
+  // Ignore warnings about nested ScrollViews (small list, not to worry) and YellowBox itself
+  React.useEffect(() => YellowBox.ignoreWarnings([
+    'VirtualizedLists should never be nested',
+    'YellowBox has been replaced with LogBox'
+  ]), []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='Selection Page' children={(localProps) =>
-            <View>
-              <FlatList data={pages} renderItem={({ item }) =>
+            // Without scroll view, bug exists where mobile keyboard closes if input field is too low
+            // Ideally no nested scroll views (performance hit), but for small lists this is fine
+            // Implementation with no warnings (bug persists which is fixed by nested scroll views):
+            // https://nyxo.app/fixing-virtualizedlists-should-never-be-nested-inside-plain-scrollviews
+            <ScrollView>
+              <FlatList scrollEnabled={false} data={pages} renderItem={({ item }) =>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   {item === originalText ?
                     <>
@@ -35,7 +44,7 @@ export default function InformationPage(props) {
                       }} value={editText} onChangeText={value => setEditText(value)} />
                       <Text style={{ marginHorizontal: 10 }}>
                         <TouchableOpacity style={styles.icon} onPress={() => {
-                          if (pages.includes(editText)) {
+                          if (pages.includes(editText) && originalText !== editText) {
                             props.snackbar('Duplicate sections not allowed', 224);
                             return;
                           }
@@ -80,7 +89,7 @@ export default function InformationPage(props) {
                 // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
                 extraData={{ originalText, editText }} />
                 {props.admin &&
-                  <View>
+                  <View style={{ marginBottom: 15 }}>
                     <Button {...props} text='Add Section'
                       onPress={() => {
                         if (pages.includes(newSection)) {
@@ -92,7 +101,7 @@ export default function InformationPage(props) {
                         setEditText(newSection);
                       }} />
                     </View>}
-              </View>} />
+              </ScrollView>} />
           {pages.map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
