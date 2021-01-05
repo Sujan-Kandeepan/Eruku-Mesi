@@ -1,13 +1,12 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, YellowBox } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { FlatList, Text, View, YellowBox } from 'react-native';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
-import { Button } from '../shared/SharedComponents';
+import { Button, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -37,13 +36,13 @@ export default function InformationPage(props) {
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   {item === originalText ?
                     <>
-                      <TextInput autoFocus style={{
+                      <TextInput autoFocus autoCapitalize='words' style={{
                         backgroundColor: props.theme.colors.card,
                         color: props.theme.colors.text, flex: 1, height: 50,
                         marginBottom: 1, marginLeft: 15, marginTop: 15, textAlign: 'center'
                       }} value={editText} onChangeText={value => setEditText(value)} />
                       <Text style={{ marginHorizontal: 10 }}>
-                        <TouchableOpacity style={styles.icon} onPress={() => {
+                        <IconButton style={SharedStyles.icon} onPress={() => {
                           if (pages.includes(editText) && originalText !== editText) {
                             props.snackbar('Duplicate sections not allowed', 224);
                             return;
@@ -51,15 +50,11 @@ export default function InformationPage(props) {
                           setPages(pages.map(page => page === originalText ? editText : page));
                           setOriginalText('');
                           setEditText('');
-                        }}>
-                          <Icon name='check' type='material' color={props.theme.colors.accent} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.icon} onPress={() => {
+                        }} name='check' type='material' color={props.theme.colors.accent} />
+                        <IconButton style={SharedStyles.icon} onPress={() => {
                           setOriginalText('');
                           setEditText('');
-                        }}>
-                          <Icon name='undo' type='material' color={props.theme.colors.placeholder} />
-                        </TouchableOpacity>
+                        }} name='undo' type='material' color={props.theme.colors.placeholder} />
                       </Text>
                     </> :
                     <>
@@ -69,19 +64,15 @@ export default function InformationPage(props) {
                       </View>
                       {props.admin &&
                         <Text style={{ marginHorizontal: 10 }}>
-                          <TouchableOpacity style={styles.icon} onPress={() => {
+                          <IconButton style={SharedStyles.icon} onPress={() => {
                             setOriginalText(item);
                             setEditText(item);
-                          }}>
-                            <Icon name='edit' type='material' color={props.theme.colors.placeholder} />
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.icon}
+                          }} name='edit' type='material' color={props.theme.colors.placeholder} />
+                          <IconButton style={SharedStyles.icon}
                             onPress={() => props.snackbar('Press and hold to delete', 183)}
                             onLongPress={() => {
                               setPages(pages.filter(page => page !== item));
-                            }}>
-                            <Icon name='delete' type='material' color='darkred' />
-                          </TouchableOpacity>
+                          }} name='delete' type='material' color='darkred' />
                         </Text>}
                     </>}
                 </View>}
@@ -93,7 +84,7 @@ export default function InformationPage(props) {
                     <Button {...props} text='Add Section'
                       onPress={() => {
                         if (pages.includes(newSection)) {
-                          props.snackbar('Attempting to add multiple new sections', 284);
+                          props.snackbar('Rename the previous new section first', 269);
                           return;
                         }
                         setPages([...pages, newSection]);
@@ -120,13 +111,3 @@ export default function InformationPage(props) {
     </AppPage>
   );
 };
-
-const styles = StyleSheet.create({
-  icon: {
-    alignSelf: 'center',
-    height: 50,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    marginTop: 15
-  }
-});

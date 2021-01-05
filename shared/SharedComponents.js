@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Card, Icon } from 'react-native-elements';
 import { Switch, TouchableOpacity } from 'react-native-gesture-handler';
 
 export const Header = (props) =>
@@ -19,6 +19,11 @@ export const Button = (props) =>
         ...props.textStyle }} children={props.text} />
     </Card>
   </TouchableOpacity>;
+
+export const IconButton = (props) =>
+  <TouchableOpacity style={props.style} onPress={props.onPress} onLongPress={props.onLongPress}>
+    <Icon name={props.name} type={props.type} color={props.color} />
+  </TouchableOpacity>
 
 export const Toggle = (props) =>
   <Card containerStyle={{ backgroundColor: props.theme.colors.surface, borderColor: props.theme.colors.border }}

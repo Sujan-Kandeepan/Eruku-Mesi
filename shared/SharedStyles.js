@@ -7,4 +7,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  icon: {
+    alignSelf: 'center',
+    height: 50,
+    justifyContent: 'center',
+    marginHorizontal: 10,
+    marginTop: 15
+  }
 });
