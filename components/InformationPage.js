@@ -1,6 +1,7 @@
 import React from 'react';
-import { FlatList, Text, View, YellowBox } from 'react-native';
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, View, YellowBox } from 'react-native';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -32,8 +33,15 @@ export default function InformationPage(props) {
             // Implementation with no warnings (bug persists which is fixed by nested scroll views):
             // https://nyxo.app/fixing-virtualizedlists-should-never-be-nested-inside-plain-scrollviews
             <ScrollView>
-              <FlatList scrollEnabled={false} data={pages} renderItem={({ item }) =>
+              {/* Reference: https://github.com/computerjazz/react-native-draggable-flatlist */}
+              <DraggableFlatList scrollEnabled={false} data={pages} renderItem={({ drag, item }) =>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                  {props.admin &&
+                    <Text style={{ marginLeft: 5, marginRight: -15 }}>
+                      <IconButton style={SharedStyles.icon} onLongPress={drag}
+                        onPress={() => props.snackbar('Hold and drag to reorder list', 207)}
+                        name='unfold-more' type='material' color={props.theme.colors.placeholder} />
+                    </Text>}
                   {item === originalText ?
                     <>
                       <TextInput autoFocus autoCapitalize='words' style={{
@@ -77,6 +85,7 @@ export default function InformationPage(props) {
                     </>}
                 </View>}
                 keyExtractor={item => `${item} ${item === originalText}`}
+                onDragEnd={({ data }) => setPages(data)}
                 // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
                 extraData={{ originalText, editText }} />
                 {props.admin &&
