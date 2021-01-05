@@ -31,7 +31,7 @@ export default function FeedbackForm(props) {
           Report bugs or share feedback about the app below.
         </Text>
         {/* Reference: https://reactnative.dev/docs/textinput */}
-        <TextInput multiline editable spellCheck maxLength={maxLength}
+        <TextInput autoFocus multiline editable spellCheck maxLength={maxLength}
           style={{ backgroundColor: props.theme.colors.card,
             color: props.theme.colors.text, flex: 1, marginHorizontal: 25,
             padding: 20, textAlignVertical: 'top', width }}

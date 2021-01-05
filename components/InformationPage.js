@@ -23,18 +23,22 @@ export default function InformationPage(props) {
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='Selection Page' children={(localProps) =>
-            <>
+            <View>
               <FlatList data={pages} renderItem={({ item }) =>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   {item === originalText ?
                     <>
-                      <TextInput style={{
+                      <TextInput autoFocus style={{
                         backgroundColor: props.theme.colors.card,
                         color: props.theme.colors.text, flex: 1, height: 50,
                         marginBottom: 1, marginLeft: 15, marginTop: 15, textAlign: 'center'
                       }} value={editText} onChangeText={value => setEditText(value)} />
                       <Text style={{ marginHorizontal: 10 }}>
                         <TouchableOpacity style={styles.icon} onPress={() => {
+                          if (pages.includes(editText)) {
+                            props.snackbar('Duplicate sections not allowed', 224);
+                            return;
+                          }
                           setPages(pages.map(page => page === originalText ? editText : page));
                           setOriginalText('');
                           setEditText('');
@@ -76,14 +80,19 @@ export default function InformationPage(props) {
                 // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
                 extraData={{ originalText, editText }} />
                 {props.admin &&
-                  <Button {...props} text='Add Section'
-                    style={{ marginBottom: 15 }} onPress={() => {
-                      if (pages.includes(newSection)) return;
-                      setPages([...pages, newSection]);
-                      setOriginalText(newSection);
-                      setEditText(newSection);
-                    }} />}
-              </>} />
+                  <View>
+                    <Button {...props} text='Add Section'
+                      onPress={() => {
+                        if (pages.includes(newSection)) {
+                          props.snackbar('Attempting to add multiple new sections', 284);
+                          return;
+                        }
+                        setPages([...pages, newSection]);
+                        setOriginalText(newSection);
+                        setEditText(newSection);
+                      }} />
+                    </View>}
+              </View>} />
           {pages.map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
