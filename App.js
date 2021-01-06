@@ -7,9 +7,9 @@ import { Avatar, Caption, DarkTheme as DarkDrawerTheme, DefaultTheme as LightDra
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { DarkTheme, DefaultTheme as LightTheme, NavigationContainer } from '@react-navigation/native';
 
-import EmptyPage from './components/EmptyPage';
 import NewsFeedPage from './components/NewsFeedPage';
 import UpcomingEventsPage from './components/UpcomingEventsPage';
+import MessagesPage from './components/MessagesPage';
 import MediaContentPage from './components/MediaContentPage';
 import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
@@ -28,6 +28,8 @@ const lightTheme = {
     ...LightDrawerTheme.colors,
     primary: 'green',
     accent: 'darkgreen',
+    danger: 'darkred',
+    dangerText: 'crimson',
     background: LightTheme.colors.background,
     statusBarText: 'dark',
     statusBarBackground: LightDrawerTheme.colors.background,
@@ -44,17 +46,14 @@ const darkTheme = {
     ...DarkDrawerTheme.colors,
     primary: 'green',
     accent: 'darkgreen',
+    danger: 'darkred',
+    dangerText: 'crimson',
     background: DarkTheme.colors.background,
     statusBarText: 'light',
     statusBarBackground: DarkTheme.colors.background,
     text: 'lightgrey'
   }
 };
-
-// Quickly define pages/forms, refactor into separate modules later
-const MessagesPage = EmptyPage;
-const AuthenticationForm = EmptyPage;
-const EventNotificationFormat = EmptyPage;
 
 // Names of drawer items/pages
 const pages = {

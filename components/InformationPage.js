@@ -80,7 +80,7 @@ export default function InformationPage(props) {
                             onPress={() => props.snackbar('Press and hold to delete', 183)}
                             onLongPress={() => {
                               setPages(pages.filter(page => page !== item));
-                          }} name='delete' type='material' color='darkred' />
+                          }} name='delete' type='material' color={props.theme.colors.danger} />
                         </Text>}
                     </>}
                 </View>}

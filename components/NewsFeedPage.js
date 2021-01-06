@@ -22,7 +22,7 @@ export default function NewsFeedPage(props) {
     deleteNewsStory: id => `Delete News Story ${id}`
   };
   const stories = [...Array(10).keys()].map(n =>
-    ({ id: n + 1, title: `Post ${n + 1}`, description: `Post ${n + 1} description` }));
+    ({ id: n + 1, title: `News Story ${n + 1}`, description: `News Story ${n + 1} description` }));
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
