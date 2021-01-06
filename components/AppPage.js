@@ -11,7 +11,7 @@ import SharedStyles from '../shared/SharedStyles';
 const Stack = createStackNavigator();
 
 // Common layout/logic for all app pages
-export default function AppPage({ cancel, children, navigation, nested, route, tab, theme }) {
+export default function AppPage({ cancel, children, navigation, nested, onReturn, route, tab, theme }) {
     return (
     // Workaround for displaying header within drawer nav (framework limitation):
     // https://github.com/react-navigation/react-navigation/issues/1632#issuecomment-305291994
@@ -32,7 +32,7 @@ export default function AppPage({ cancel, children, navigation, nested, route, t
             <>
               {nested && !tab &&
                 <Button theme={theme} text={cancel ? 'Cancel' : 'Go Back'}
-                  onPress={() => navigation.pop()} />}
+                  onPress={() => { navigation.pop(); if (onReturn) onReturn(); }} />}
               {children}
             </>} />
       </Stack.Navigator>

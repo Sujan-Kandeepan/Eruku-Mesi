@@ -1,23 +1,44 @@
 import React from 'react';
 import { Text, View, YellowBox } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import EmptyPage from './EmptyPage';
 import { Button, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
 
+// Generate temporary lorem ipsum content for now
+// Reference: https://reactnative.dev/docs/network
+const filler = async () => {
+  try {
+    const response = await fetch('https://baconipsum.com/api/?type=meat-and-filler');
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    return console.error(error);
+  }
+}
+
 export default function InformationPage(props) {
   const [pages, setPages] = React.useState(['General', 'About Us', 'History', 'Contact']);
+  const [data, setData] = React.useState([]);
   const [originalText, setOriginalText] = React.useState('');
   const [editText, setEditText] = React.useState('');
   const newSection = 'New Section';
+  // Reference: https://stackoverflow.com/a/59875773
+  const [width, setWidth] = React.useState('99%');
+  React.useEffect(() => setWidth('auto'));
+  // Initial load of data by calling useEffect with [] as second param to run once
+  React.useEffect(() => pages.forEach((page, index) => filler().then(content => {
+    let newData = data;
+    newData[index] = { title: page, content }
+    setData(newData);
+  })), []);
   // Ignore warnings about nested ScrollViews (small list, not to worry) and YellowBox itself
   React.useEffect(() => YellowBox.ignoreWarnings([
     'VirtualizedLists should never be nested',
@@ -56,6 +77,8 @@ export default function InformationPage(props) {
                             return;
                           }
                           setPages(pages.map(page => page === originalText ? editText : page));
+                          setData(data.map(entry =>
+                            entry.title === originalText ? { ...entry, title: editText } : entry));
                           setOriginalText('');
                           setEditText('');
                         }} name='check' type='material' color={props.theme.colors.accent} />
@@ -80,6 +103,7 @@ export default function InformationPage(props) {
                             onPress={() => props.snackbar('Press and hold to delete', 183)}
                             onLongPress={() => {
                               setPages(pages.filter(page => page !== item));
+                              setData(data.filter(entry => entry.title !== item));
                           }} name='delete' type='material' color={props.theme.colors.danger} />
                         </Text>}
                     </>}
@@ -97,6 +121,7 @@ export default function InformationPage(props) {
                           return;
                         }
                         setPages([...pages, newSection]);
+                        setData([...data, { title: newSection, content: [] }]);
                         setOriginalText(newSection);
                         setEditText(newSection);
                       }} />
@@ -107,14 +132,43 @@ export default function InformationPage(props) {
               <AppPage {...props} {...localProps} nested>
                 {props.admin &&
                   <Button {...props} {...localProps} text='Edit'
-                    onPress={() => localProps.navigation.push(`Edit ${page}`)} />}
-                <View style={SharedStyles.container}>
-                  <Text style={{ color: props.theme.colors.text }}>{localProps.route.name}</Text>
-                </View>
+                    onPress={() => {
+                      setEditText(data.find(entry => entry.title === page).content.join('\n\n'));
+                      localProps.navigation.push(`Edit ${page}`);
+                    }} />}
+                <FlatList data={data.find(entry => entry.title === page).content} renderItem={({ item }) =>
+                  <Text style={{ color: props.theme.colors.text, margin: 15, marginTop: 0 }}>{item}</Text>
+                } keyExtractor={item => item} ListHeaderComponent={
+                  <Text style={{ color: props.theme.colors.text,
+                    fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10,
+                    textAlign: 'center', textDecorationLine: 'underline' }}>
+                    {data.find(item => item.title === page).title}
+                  </Text>
+                } />
               </AppPage>} />)}
           {props.admin && pages.map(page => `Edit ${page}`).map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
-              <EmptyPage {...props} {...localProps} nested cancel />} />)}
+              <AppPage {...props} {...localProps} nested cancel onReturn={() => setEditText('')}>
+                <View style={{ flex: 1 }}>
+                  {/* Reference: https://reactnative.dev/docs/textinput */}
+                  <TextInput autoFocus multiline editable spellCheck style={{
+                    backgroundColor: props.theme.colors.card,
+                    color: props.theme.colors.text, flex: 1, margin: 15,
+                    padding: 20, textAlignVertical: 'top', width
+                  }} value={editText} onChangeText={(value) => setEditText(value)} />
+                  <View style={{ marginBottom: 15, marginTop: -15 }}>
+                    <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
+                      text='Save' onPress={() => {
+                        setData(data.map(entry =>
+                          page.includes(entry.title)
+                            ? { ...entry, content: editText.split('\n').filter(s => s !== '').map(s => s.trim()) }
+                            : entry));
+                        setEditText('');
+                        localProps.navigation.pop();
+                      }} />
+                  </View>
+                </View>
+              </AppPage>} />)}
         </Stack.Navigator>
       </NavigationContainer>
     </AppPage>

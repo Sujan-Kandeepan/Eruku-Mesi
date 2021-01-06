@@ -8,8 +8,8 @@ export default function FeedbackForm(props) {
   const [text, setText] = React.useState('');
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
-  const maxLength = 2000;
   React.useEffect(() => setWidth('auto'));
+  const maxLength = 2000;
   const textChanged = (value) => {
     if (value.length >= maxLength)
       props.snackbar('Feedback message is too long', 222);
