@@ -5,10 +5,27 @@ import { FlatList, TextInput } from 'react-native-gesture-handler';
 import AppPage from './AppPage';
 import { IconButton } from '../shared/SharedComponents';
 
+// Generate temporary lorem ipsum messages for now
+// Reference: https://reactnative.dev/docs/network
+const sentence = async () => {
+  try {
+    const response = await fetch('https://baconipsum.com/api/?type=all-meat&sentences=1');
+    const json = await response.json();
+    return json[0];
+  } catch (error) {
+    return console.error(error);
+  }
+}
+
 export default function MessagesPage(props) {
   const [newMessage, setNewMessage] = React.useState('');
   const [messages, setMessages] = React.useState([...Array(20).keys()].map(n => 19 - n).map(n =>
-    ({ id: n, sender: 'You', content: `Message ${n + 1}` })));
+    ({ id: n, sender: 'You', content: '' })));
+  React.useEffect(() => messages.forEach(message => sentence().then(content => {
+    let newMessages = messages;
+    newMessages.find(m => m.id === message.id).content = content;
+    setMessages(newMessages);
+  })), []);
   return (
     <AppPage {...props}>
       {/* Reference: https://stackoverflow.com/a/61980218 */}
@@ -38,6 +55,10 @@ export default function MessagesPage(props) {
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <IconButton {...props} style={{ marginLeft: 15 }} name='send' type='material'
               color={props.theme.colors.accent} onPress={() => {
+                if (newMessage.trim() === '') {
+                  props.snackbar('Message is empty', 146);
+                  return;
+                }
                 setMessages([{
                   id: messages.length,
                   sender: 'You',

@@ -156,7 +156,7 @@ export default function App() {
           <Drawer.Screen name={pages.upcomingEvents}
             children={(props) => <UpcomingEventsPage {...props} theme={theme} admin={admin} />} />
           <Drawer.Screen name={pages.messages}
-            children={(props) => <MessagesPage {...props} theme={theme} />} />
+            children={(props) => <MessagesPage {...props} theme={theme} snackbar={snackbar} />} />
           <Drawer.Screen name={pages.mediaContent}
             children={(props) => <MediaContentPage {...props} theme={theme} admin={admin} />} />
           <Drawer.Screen name={pages.information}

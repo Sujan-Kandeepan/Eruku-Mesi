@@ -16,7 +16,7 @@ export default function FeedbackForm(props) {
     setText(value);
   };
   const handleSubmit = () => {
-    if (text.length === 0) {
+    if (text.trim() === '') {
       props.snackbar('Feedback message is empty', 210);
     } else {
       console.log(`Feedback submitted:\n${'-'.repeat(20)}\n${text}\n${'-'.repeat(20)}\n`);
