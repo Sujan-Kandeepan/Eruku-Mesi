@@ -9,7 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import EventForm from './EventForm';
-import { Button } from '../shared/SharedComponents';
+import { Button, Feed } from '../shared/SharedComponents';
 import { get } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
@@ -58,27 +58,18 @@ export default function UpcomingEventsPage(props) {
                   fontSize: 14, margin: 15, textAlignVertical: 'center'
                 }}}>
                   <Tab.Screen name={pages.listView} children={() =>
-                    <FlatList data={events} renderItem={({ item }) =>
-                      <TouchableOpacity onPress={() =>
-                        localProps.navigation.push(pages.viewEvent(item && item.id))}>
-                        <Card containerStyle={{
-                          borderColor: props.theme.colors.border,
-                          backgroundColor: props.theme.colors.card
-                        }}>
+                    <Feed {...props} fetched={fetched} data={events} loadingText='Loading events...'
+                      onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
+                      keyExtractor={(item, index) => item ? item.title : index}
+                      cardContent={item =>
+                        <>
                           <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
                             {item && item.title}
                           </Text>
                           <Text style={{ color: props.theme.colors.text }}>
                             {item && item.description}
                           </Text>
-                        </Card>
-                      </TouchableOpacity>
-                    } keyExtractor={(item, index) => item ? item.title : index}
-                      ListHeaderComponent={!fetched &&
-                        <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
-                          Loading events...
-                        </Text>}
-                      ListFooterComponent={<View style={{ height: 15 }} extraData={fetched} />} />} />
+                        </>} />} />
                   <Tab.Screen name={pages.calendarView} children={(localProps) =>
                     <EmptyPage {...props} {...localProps} nested tab />} />
                 </Tab.Navigator>

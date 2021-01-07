@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
-import { Switch, TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList, Switch, TouchableOpacity } from 'react-native-gesture-handler';
 import debounce from 'lodash/debounce';
 
 // Function wrapper to prevent multiple triggers
@@ -45,3 +45,20 @@ export const Toggle = (props) =>
       trackColor={{ false: props.theme.colors.disabled, true: props.theme.colors.accent }}
       value={props.value} onValueChange={props.onValueChange} />
   </Card>;
+
+export const Feed = (props) =>
+  <FlatList data={props.data} renderItem={({ item }) =>
+    <TouchableOpacity onPress={() => props.onItemPress(item)}>
+      <Card containerStyle={{
+        borderColor: props.theme.colors.border,
+        backgroundColor: props.theme.colors.card
+      }}>
+        {props.cardContent(item)}
+      </Card>
+    </TouchableOpacity>
+  } keyExtractor={props.keyExtractor}
+    ListHeaderComponent={!props.fetched &&
+      <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+        {props.loadingText}
+      </Text>}
+    ListFooterComponent={<View style={{ height: 15 }} />} extraData={props.fetched} />

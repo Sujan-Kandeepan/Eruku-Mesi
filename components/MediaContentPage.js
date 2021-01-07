@@ -8,7 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import MediaContentForm from './MediaContentForm';
-import { Button } from '../shared/SharedComponents';
+import { Button, Feed } from '../shared/SharedComponents';
 import { get } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
@@ -48,28 +48,19 @@ export default function MediaContentPage(props) {
               {props.admin &&
                 <Button {...props} {...localProps} text={pages.postMediaContent}
                   onPress={() => localProps.navigation.push(pages.postMediaContent)} />}
-              <FlatList data={posts} renderItem={({ item }) =>
-                <TouchableOpacity onPress={() =>
-                  localProps.navigation.push(pages.viewMediaContent(item && item.id))}>
-                  <Card containerStyle={{
-                    borderColor: props.theme.colors.border,
-                    backgroundColor: props.theme.colors.card
-                  }}>
+              <Feed {...props} fetched={fetched} data={posts} loadingText='Loading media content...'
+                onItemPress={item => localProps.navigation.push(pages.viewMediaContent(item && item.id))}
+                keyExtractor={(item, index) => item ? item.title : index}
+                cardContent={item =>
+                  <>
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
                       {item && item.title}
                     </Text>
                     <Text style={{ color: props.theme.colors.text }}>
                       {item && item.description}
                     </Text>
-                  </Card>
-                </TouchableOpacity>
-              } keyExtractor={(item, index) => item ? item.title : index}
-                ListHeaderComponent={!fetched &&
-                  <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
-                    Loading media content...
-                  </Text>}
-                ListFooterComponent={<View style={{ height: 15 }} />} extraData={fetched} />
-              </>} />
+                  </>} />
+            </>} />
           {props.admin &&
             <Stack.Screen name={pages.postMediaContent} children={(localProps) =>
               <MediaContentForm {...props} {...localProps} />} />}
