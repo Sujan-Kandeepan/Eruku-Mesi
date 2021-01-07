@@ -32,7 +32,7 @@ export default function AppPage({ cancel, children, navigation, nested, onReturn
             <>
               {nested && !tab &&
                 <Button theme={theme} text={cancel ? 'Cancel' : 'Go Back'}
-                  onPress={() => { navigation.pop(); if (onReturn) onReturn(); }} />}
+                  onPress={(...args) => { navigation.pop(); if (onReturn) onReturn(...args); }} />}
               {children}
             </>} />
       </Stack.Navigator>
