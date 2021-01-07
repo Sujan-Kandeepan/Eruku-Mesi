@@ -4,18 +4,7 @@ import { FlatList, TextInput } from 'react-native-gesture-handler';
 
 import AppPage from './AppPage';
 import { IconButton } from '../shared/SharedComponents';
-
-// Generate temporary lorem ipsum messages for now
-// Reference: https://reactnative.dev/docs/network
-const sentence = async () => {
-  try {
-    const response = await fetch('https://baconipsum.com/api/?type=all-meat&sentences=1');
-    const json = await response.json();
-    return json[0];
-  } catch (error) {
-    return console.error(error);
-  }
-}
+import { get } from '../shared/SharedFunctions';
 
 export default function MessagesPage(props) {
   const [newMessage, setNewMessage] = React.useState('');
@@ -31,11 +20,12 @@ export default function MessagesPage(props) {
   React.useEffect(() => {
     // Wait for all messages and trigger update to list by setting flag
     const populate = async () => {
-      await Promise.all(messages.map(message => sentence().then(content => {
-        let newMessages = messages;
-        newMessages.find(m => m.id === message.id).content = content;
-        setMessages(newMessages);
-      })));
+      await Promise.all(messages.map(message =>
+        get('https://baconipsum.com/api/?type=all-meat&sentences=1').then(content => {
+          let newMessages = messages;
+          newMessages.find(m => m.id === message.id).content = content;
+          setMessages(newMessages);
+        })));
       setFetched(true);
     };
     populate();

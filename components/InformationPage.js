@@ -8,21 +8,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import { Button, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
+import { get } from '../shared/SharedFunctions';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
-
-// Generate temporary lorem ipsum content for now
-// Reference: https://reactnative.dev/docs/network
-const filler = async () => {
-  try {
-    const response = await fetch('https://baconipsum.com/api/?type=meat-and-filler');
-    const json = await response.json();
-    return json;
-  } catch (error) {
-    return console.error(error);
-  }
-}
 
 export default function InformationPage(props) {
   const [pages, setPages] = React.useState(['General', 'About Us', 'History', 'Contact']);
@@ -38,11 +27,12 @@ export default function InformationPage(props) {
   React.useEffect(() => {
     // Wait for all content and trigger update to list by setting flag
     const populate = async () => {
-      await Promise.all(pages.map((page, index) => filler().then(content => {
-        let newData = data;
-        newData[index] = { title: page, content }
-        setData(newData);
-      })));
+      await Promise.all(pages.map((page, index) =>
+        get('https://baconipsum.com/api/?type=meat-and-filler').then(content => {
+          let newData = data;
+          newData[index] = { title: page, content }
+          setData(newData);
+        })));
       setFetched(true);
     };
     populate();
