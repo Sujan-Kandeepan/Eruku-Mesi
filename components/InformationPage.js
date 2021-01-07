@@ -26,19 +26,27 @@ const filler = async () => {
 
 export default function InformationPage(props) {
   const [pages, setPages] = React.useState(['General', 'About Us', 'History', 'Contact']);
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState(pages.map(page => ({ title: page, content: ['Loading...'] })));
   const [originalText, setOriginalText] = React.useState('');
   const [editText, setEditText] = React.useState('');
+  const [fetched, setFetched] = React.useState(false);
   const newSection = 'New Section';
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
   // Initial load of data by calling useEffect with [] as second param to run once
-  React.useEffect(() => pages.forEach((page, index) => filler().then(content => {
-    let newData = data;
-    newData[index] = { title: page, content }
-    setData(newData);
-  })), []);
+  React.useEffect(() => {
+    // Wait for all content and trigger update to list by setting flag
+    const populate = async () => {
+      await Promise.all(pages.map((page, index) => filler().then(content => {
+        let newData = data;
+        newData[index] = { title: page, content }
+        setData(newData);
+      })));
+      setFetched(true);
+    };
+    populate();
+  }, []);
   // Ignore warnings about nested ScrollViews (small list, not to worry) and YellowBox itself
   React.useEffect(() => YellowBox.ignoreWarnings([
     'VirtualizedLists should never be nested',
@@ -144,7 +152,7 @@ export default function InformationPage(props) {
                     textAlign: 'center', textDecorationLine: 'underline' }}>
                     {data.find(item => item.title === page).title}
                   </Text>
-                } />
+                } extraData={fetched} />
               </AppPage>} />)}
           {props.admin && pages.map(page => `Edit ${page}`).map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>

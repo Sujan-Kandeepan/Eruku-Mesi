@@ -21,11 +21,20 @@ export default function MessagesPage(props) {
   const [newMessage, setNewMessage] = React.useState('');
   const [messages, setMessages] = React.useState([...Array(20).keys()].map(n => 19 - n).map(n =>
     ({ id: n, sender: 'You', content: '' })));
-  React.useEffect(() => messages.forEach(message => sentence().then(content => {
-    let newMessages = messages;
-    newMessages.find(m => m.id === message.id).content = content;
-    setMessages(newMessages);
-  })), []);
+  const [fetched, setFetched] = React.useState(false);
+  // Initial load of messages by calling useEffect with [] as second param to run once
+  React.useEffect(() => {
+    // Wait for all messages and trigger update to list by setting flag
+    const populate = async () => {
+      await Promise.all(messages.map(message => sentence().then(content => {
+        let newMessages = messages;
+        newMessages.find(m => m.id === message.id).content = content;
+        setMessages(newMessages);
+      })));
+      setFetched(true);
+    };
+    populate();
+  }, []);
   return (
     <AppPage {...props}>
       {/* Reference: https://stackoverflow.com/a/61980218 */}
@@ -43,7 +52,7 @@ export default function MessagesPage(props) {
               <Text style={{ color: props.theme.colors.text }}>
                 {item.content}
               </Text>
-            </View>} keyExtractor={item => item.id.toString()} inverted />
+            </View>} keyExtractor={item => item.id.toString()} extraData={fetched} inverted />
         </View>
         <View style={{ flexDirection: 'row', margin: 15 }}>
           <TextInput autoFocus multiline editable spellCheck style={{
