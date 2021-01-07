@@ -1,7 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Card } from 'react-native-elements';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,8 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import EventForm from './EventForm';
-import { Button, Feed } from '../shared/SharedComponents';
-import { get } from '../shared/SharedFunctions';
+import { Button, Content, Feed } from '../shared/SharedComponents';
+import { get, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
@@ -34,7 +32,7 @@ export default function UpcomingEventsPage(props) {
     const populate = async () => {
       // Using lorem ipsum data for now with 10 events
       await Promise.all([...Array(10).keys()].map(index =>
-        get('https://baconipsum.com/api/?type=all-meat&sentences=1').then(description => {
+        get('https://baconipsum.com/api/?type=all-meat&paras=2').then(description => {
           let newEvents = events;
           newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, description };
           setEvents(newEvents);
@@ -67,7 +65,7 @@ export default function UpcomingEventsPage(props) {
                             {item && item.title}
                           </Text>
                           <Text style={{ color: props.theme.colors.text }}>
-                            {item && item.description}
+                            {item && truncate(item.description[0], 10)}
                           </Text>
                         </>} />} />
                   <Tab.Screen name={pages.calendarView} children={(localProps) =>
@@ -87,9 +85,8 @@ export default function UpcomingEventsPage(props) {
                 {props.admin &&
                   <Button {...props} {...localProps} text='Delete'
                     onPress={() => localProps.navigation.push(pages.deleteEvent(event.id))} />}
-                <View style={SharedStyles.container}>
-                  <Text style={{ color: props.theme.colors.text }}>{localProps.route.name}</Text>
-                </View>
+                <Content {...props} {...localProps} title={event.title}
+                  content={event.description} extraData={fetched} />
               </AppPage>} />)}
           {events.map(event =>
             <Stack.Screen key={event.id} name={pages.editEvent(event.id)} children={(localProps) =>

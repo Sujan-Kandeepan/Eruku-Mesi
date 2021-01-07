@@ -1,15 +1,13 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Card } from 'react-native-elements';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import NewsStoryForm from './NewsStoryForm';
-import { Button, Feed } from '../shared/SharedComponents';
-import { get } from '../shared/SharedFunctions';
+import { Button, Content, Feed } from '../shared/SharedComponents';
+import { get, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -30,9 +28,9 @@ export default function NewsFeedPage(props) {
     const populate = async () => {
       // Using lorem ipsum data for now with 10 new stories
       await Promise.all([...Array(10).keys()].map(index =>
-        get('https://baconipsum.com/api/?type=all-meat&sentences=1').then(description => {
+        get('https://baconipsum.com/api/?type=meat-and-filler&paras=7').then(content => {
           let newStories = stories;
-          newStories[index] = { id: index + 1, title: `News Story ${index + 1}`, description };
+          newStories[index] = { id: index + 1, title: `News Story ${index + 1}`, content };
           setStories(newStories);
         })));
       setFetched(true);
@@ -57,7 +55,7 @@ export default function NewsFeedPage(props) {
                       {item && item.title}
                     </Text>
                     <Text style={{ color: props.theme.colors.text }}>
-                      {item && item.description}
+                      {item && truncate(item.content[0], 25)}
                     </Text>
                   </>} />
             </>} />
@@ -73,9 +71,8 @@ export default function NewsFeedPage(props) {
                 {props.admin &&
                   <Button {...props} {...localProps} text='Delete'
                     onPress={() => localProps.navigation.push(pages.deleteNewsStory(story.id))} />}
-                <View style={SharedStyles.container}>
-                  <Text style={{ color: props.theme.colors.text }}>{localProps.route.name}</Text>
-                </View>
+                <Content {...props} {...localProps} title={story.title}
+                  content={story.content} extraData={fetched} />
               </AppPage>} />)}
           {stories.map(story =>
             <Stack.Screen key={story.id} name={pages.editNewsStory(story.id)} children={(localProps) =>

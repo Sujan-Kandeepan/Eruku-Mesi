@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View, YellowBox } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import { Button, IconButton } from '../shared/SharedComponents';
+import { Button, Content, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
 import { get } from '../shared/SharedFunctions';
 
@@ -134,15 +134,8 @@ export default function InformationPage(props) {
                       setEditText(data.find(entry => entry.title === page).content.join('\n\n'));
                       localProps.navigation.push(`Edit ${page}`);
                     }} />}
-                <FlatList data={data.find(entry => entry.title === page).content} renderItem={({ item }) =>
-                  <Text style={{ color: props.theme.colors.text, margin: 15, marginTop: 0 }}>{item}</Text>
-                } keyExtractor={item => item} ListHeaderComponent={
-                  <Text style={{ color: props.theme.colors.text,
-                    fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10,
-                    textAlign: 'center', textDecorationLine: 'underline' }}>
-                    {data.find(item => item.title === page).title}
-                  </Text>
-                } extraData={fetched} />
+                <Content {...props} {...localProps} title={data.find(item => item.title === page).title}
+                  content={data.find(entry => entry.title === page).content} extraData={fetched} />
               </AppPage>} />)}
           {props.admin && pages.map(page => `Edit ${page}`).map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>

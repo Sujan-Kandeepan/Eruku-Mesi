@@ -62,3 +62,16 @@ export const Feed = (props) =>
         {props.loadingText}
       </Text>}
     ListFooterComponent={<View style={{ height: 15 }} />} extraData={props.fetched} />
+
+export const Content = (props) =>
+  <FlatList data={props.content} renderItem={({ item }) =>
+    <Text style={{ color: props.theme.colors.text, margin: 15, marginTop: 0 }}>{item}</Text>
+  } keyExtractor={item => item} ListHeaderComponent={
+    <Text style={{
+      color: props.theme.colors.text,
+      fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10,
+      textAlign: 'center', textDecorationLine: 'underline'
+    }}>
+      {props.title}
+    </Text>
+  } extraData={props.fetched} />
