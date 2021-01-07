@@ -2,6 +2,11 @@ import React from 'react';
 import { Text } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { Switch, TouchableOpacity } from 'react-native-gesture-handler';
+import debounce from 'lodash/debounce';
+
+// Function wrapper to prevent multiple triggers
+// Reference: https://stackoverflow.com/a/47229486
+const noRepeat = f => f && debounce(f, 500, { leading: true, trailing: false });
 
 export const Header = (props) =>
   <Text style={{
@@ -10,7 +15,7 @@ export const Header = (props) =>
   }}>{props.text}</Text>;
 
 export const Button = (props) =>
-  <TouchableOpacity onPress={props.onPress} onLongPress={props.onLongPress}
+  <TouchableOpacity onPress={noRepeat(props.onPress)} onLongPress={noRepeat(props.onLongPress)}
     delayLongPress={props.delayLongPress}>
     <Card containerStyle={{
         backgroundColor: props.accent ? props.theme.colors.accent : props.theme.colors.surface,
@@ -22,8 +27,8 @@ export const Button = (props) =>
   </TouchableOpacity>;
 
 export const IconButton = (props) =>
-  <TouchableOpacity style={props.style} onPress={props.onPress}
-    onLongPress={props.onLongPress} delayLongPress={props.delayLongPress}>
+  <TouchableOpacity style={props.style} onPress={noRepeat(props.onPress)}
+    onLongPress={noRepeat(props.onLongPress)} delayLongPress={props.delayLongPress}>
     <Icon name={props.name} type={props.type} color={props.color} />
   </TouchableOpacity>
 
