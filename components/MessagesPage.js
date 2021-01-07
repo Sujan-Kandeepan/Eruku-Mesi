@@ -19,9 +19,14 @@ const sentence = async () => {
 
 export default function MessagesPage(props) {
   const [newMessage, setNewMessage] = React.useState('');
-  const [messages, setMessages] = React.useState([...Array(20).keys()].map(n => 19 - n).map(n =>
-    ({ id: n, sender: 'You', content: '' })));
+  const [messages, setMessages] = React.useState([...Array(20).keys()].map(n =>
+    ({ id: n, sender: 'You', content: ' ' })));
+  // Get reference to messages list to handle scrolling
+  const [list, setList] = React.useState(<></>);
+  // Status flag for fetching message history
   const [fetched, setFetched] = React.useState(false);
+  // Reference:  https://stackoverflow.com/a/48050291
+  const scroll = () => list.scrollToEnd({ animated: fetched });
   // Initial load of messages by calling useEffect with [] as second param to run once
   React.useEffect(() => {
     // Wait for all messages and trigger update to list by setting flag
@@ -52,7 +57,9 @@ export default function MessagesPage(props) {
               <Text style={{ color: props.theme.colors.text }}>
                 {item.content}
               </Text>
-            </View>} keyExtractor={item => item.id.toString()} extraData={fetched} inverted />
+            </View>} keyExtractor={item => item.id.toString()} extraData={fetched}
+            // Set reference and automatically scroll to bottom when list populates
+            ref={ref => setList(ref)} onContentSizeChange={scroll} onLayout={scroll} />
         </View>
         <View style={{ flexDirection: 'row', margin: 15 }}>
           <TextInput autoFocus multiline editable spellCheck style={{
@@ -68,11 +75,11 @@ export default function MessagesPage(props) {
                   props.snackbar('Message is empty', 146);
                   return;
                 }
-                setMessages([{
+                setMessages([...messages, {
                   id: messages.length,
                   sender: 'You',
                   content: newMessage
-                }, ...messages]);
+                }]);
                 setNewMessage('');
               }} />
           </View>
