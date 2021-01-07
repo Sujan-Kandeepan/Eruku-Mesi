@@ -9,6 +9,7 @@ import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import NewsStoryForm from './NewsStoryForm';
 import { Button } from '../shared/SharedComponents';
+import { get } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -21,32 +22,54 @@ export default function NewsFeedPage(props) {
     editNewsStory: id => `Edit News Story ${id}`,
     deleteNewsStory: id => `Delete News Story ${id}`
   };
-  const stories = [...Array(10).keys()].map(n =>
-    ({ id: n + 1, title: `News Story ${n + 1}`, description: `News Story ${n + 1} description` }));
+  const [stories, setStories] = React.useState([]);
+  const [fetched, setFetched] = React.useState(false);
+  // Initial load of new stories by calling useEffect with [] as second param to run once
+  React.useEffect(() => {
+    // Wait for all new stories and trigger update to list by setting flag
+    const populate = async () => {
+      // Using lorem ipsum data for now with 10 new stories
+      await Promise.all([...Array(10).keys()].map(index =>
+        get('https://baconipsum.com/api/?type=all-meat&sentences=1').then(description => {
+          let newStories = stories;
+          newStories[index] = { id: index + 1, title: `News Story ${index + 1}`, description };
+          setStories(newStories);
+        })));
+      setFetched(true);
+    };
+    populate();
+  }, []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={props.route.name} children={(localProps) =>
-            <FlatList data={stories} renderItem={({ item }) =>
-              <TouchableOpacity onPress={() => localProps.navigation.push(pages.viewNewsStory(item.id))}>
-                <Card containerStyle={{
-                  borderColor: props.theme.colors.border,
-                  backgroundColor: props.theme.colors.card
-                }}>
-                  <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
-                    {item.title}
-                  </Text>
-                  <Text style={{ color: props.theme.colors.text }}>
-                    {item.description}
-                  </Text>
-                </Card>
-              </TouchableOpacity>
-            } keyExtractor={item => item.title}
-              ListHeaderComponent={props.admin &&
+            <>
+              {props.admin &&
                 <Button {...props} {...localProps} text={pages.createNewsStory}
                   onPress={() => localProps.navigation.push(pages.createNewsStory)} />}
-              ListFooterComponent={<View style={{ height: 15 }} />} />} />
+              <FlatList data={stories} renderItem={({ item }) =>
+                <TouchableOpacity onPress={() =>
+                  localProps.navigation.push(pages.viewNewsStory(item && item.id))}>
+                  <Card containerStyle={{
+                    borderColor: props.theme.colors.border,
+                    backgroundColor: props.theme.colors.card
+                  }}>
+                    <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
+                      {item && item.title}
+                    </Text>
+                    <Text style={{ color: props.theme.colors.text }}>
+                      {item && item.description}
+                    </Text>
+                  </Card>
+                </TouchableOpacity>
+              } keyExtractor={(item, index) => item ? item.title : index}
+                ListHeaderComponent={!fetched &&
+                  <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+                    Loading news stories...
+                  </Text>}
+                ListFooterComponent={<View style={{ height: 15 }} />} extraData={fetched} />
+            </>} />
           {props.admin &&
             <Stack.Screen name={pages.createNewsStory} children={(localProps) =>
               <NewsStoryForm {...props} {...localProps} />} />}

@@ -10,6 +10,7 @@ import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import EventForm from './EventForm';
 import { Button } from '../shared/SharedComponents';
+import { get } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
@@ -25,8 +26,23 @@ export default function UpcomingEventsPage(props) {
     listView: 'List View',
     calendarView: 'Calendar View'
   };
-  const events = [...Array(10).keys()].map(n =>
-    ({ id: n + 1, title: `Event ${n + 1}`, description: `Event ${n + 1} description` }));
+  const [events, setEvents] = React.useState([]);
+  const [fetched, setFetched] = React.useState(false);
+  // Initial load of events by calling useEffect with [] as second param to run once
+  React.useEffect(() => {
+    // Wait for all events and trigger update to list by setting flag
+    const populate = async () => {
+      // Using lorem ipsum data for now with 10 events
+      await Promise.all([...Array(10).keys()].map(index =>
+        get('https://baconipsum.com/api/?type=all-meat&sentences=1').then(description => {
+          let newEvents = events;
+          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, description };
+          setEvents(newEvents);
+        })));
+      setFetched(true);
+    };
+    populate();
+  }, []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
@@ -43,21 +59,26 @@ export default function UpcomingEventsPage(props) {
                 }}}>
                   <Tab.Screen name={pages.listView} children={() =>
                     <FlatList data={events} renderItem={({ item }) =>
-                      <TouchableOpacity onPress={() => localProps.navigation.push(pages.viewEvent(item.id))}>
+                      <TouchableOpacity onPress={() =>
+                        localProps.navigation.push(pages.viewEvent(item && item.id))}>
                         <Card containerStyle={{
                           borderColor: props.theme.colors.border,
                           backgroundColor: props.theme.colors.card
                         }}>
                           <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
-                            {item.title}
+                            {item && item.title}
                           </Text>
                           <Text style={{ color: props.theme.colors.text }}>
-                            {item.description}
+                            {item && item.description}
                           </Text>
                         </Card>
                       </TouchableOpacity>
-                    } keyExtractor={item => item.title}
-                      ListFooterComponent={<View style={{ height: 15 }} />} />} />
+                    } keyExtractor={(item, index) => item ? item.title : index}
+                      ListHeaderComponent={!fetched &&
+                        <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+                          Loading events...
+                        </Text>}
+                      ListFooterComponent={<View style={{ height: 15 }} extraData={fetched} />} />} />
                   <Tab.Screen name={pages.calendarView} children={(localProps) =>
                     <EmptyPage {...props} {...localProps} nested tab />} />
                 </Tab.Navigator>
