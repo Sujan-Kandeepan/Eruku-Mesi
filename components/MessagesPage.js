@@ -14,7 +14,9 @@ export default function MessagesPage(props) {
   // Status flag for fetching message history
   const [fetched, setFetched] = React.useState(false);
   // Reference:  https://stackoverflow.com/a/48050291
-  const scroll = () => list.scrollToEnd({ animated: fetched });
+  const [needsToScroll, setNeedsToScroll] = React.useState(true);
+  const scroll = () => needsToScroll && list.scrollToEnd({ animated: true });
+  const stopScroll = () => setTimeout(() => setNeedsToScroll(false), 1000);
   // Initial load of messages by calling useEffect with [] as second param to run once
   React.useEffect(() => {
     // Wait for all messages and trigger update to list by setting flag
@@ -51,9 +53,9 @@ export default function MessagesPage(props) {
               <Text style={{ color: props.theme.colors.text }}>
                 {item.content}
               </Text>
-            </View>} keyExtractor={item => item.id.toString()} extraData={fetched}
+            </View>} keyExtractor={item => item && item.id.toString()} extraData={fetched}
             // Set reference and automatically scroll to bottom when list populates
-            ref={ref => setList(ref)} onContentSizeChange={scroll} onLayout={scroll} />
+            ref={ref => setList(ref)} onContentSizeChange={scroll} onLayout={scroll} onEndReached={stopScroll} />
         </View>
         <View style={{ flexDirection: 'row', margin: 15 }}>
           <TextInput autoFocus multiline editable spellCheck style={{
@@ -75,6 +77,7 @@ export default function MessagesPage(props) {
                   content: newMessage
                 }]);
                 setNewMessage('');
+                setTimeout(() => list.scrollToEnd({ animated: true }), 250);
               }} />
           </View>
         </View>
