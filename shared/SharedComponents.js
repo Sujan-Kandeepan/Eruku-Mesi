@@ -10,7 +10,8 @@ export const Header = (props) =>
   }}>{props.text}</Text>;
 
 export const Button = (props) =>
-  <TouchableOpacity onPress={props.onPress}>
+  <TouchableOpacity onPress={props.onPress} onLongPress={props.onLongPress}
+    delayLongPress={props.delayLongPress}>
     <Card containerStyle={{
         backgroundColor: props.accent ? props.theme.colors.accent : props.theme.colors.surface,
         borderColor: props.theme.colors.border
@@ -21,7 +22,8 @@ export const Button = (props) =>
   </TouchableOpacity>;
 
 export const IconButton = (props) =>
-  <TouchableOpacity style={props.style} onPress={props.onPress} onLongPress={props.onLongPress}>
+  <TouchableOpacity style={props.style} onPress={props.onPress}
+    onLongPress={props.onLongPress} delayLongPress={props.delayLongPress}>
     <Icon name={props.name} type={props.type} color={props.color} />
   </TouchableOpacity>
 

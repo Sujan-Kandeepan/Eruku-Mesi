@@ -101,7 +101,7 @@ export default function InformationPage(props) {
                           }} name='edit' type='material' color={props.theme.colors.placeholder} />
                           <IconButton style={SharedStyles.icon}
                             onPress={() => props.snackbar('Press and hold to delete', 183)}
-                            onLongPress={() => {
+                            delayLongPress={3000} onLongPress={() => {
                               setPages(pages.filter(page => page !== item));
                               setData(data.filter(entry => entry.title !== item));
                           }} name='delete' type='material' color={props.theme.colors.danger} />
