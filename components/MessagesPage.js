@@ -8,8 +8,7 @@ import { get } from '../shared/SharedFunctions';
 
 export default function MessagesPage(props) {
   const [newMessage, setNewMessage] = React.useState('');
-  const [messages, setMessages] = React.useState([...Array(20).keys()].map(n =>
-    ({ id: n, sender: 'You', content: ' ' })));
+  const [messages, setMessages] = React.useState([]);
   // Get reference to messages list to handle scrolling
   const [list, setList] = React.useState(<></>);
   // Status flag for fetching message history
@@ -20,10 +19,11 @@ export default function MessagesPage(props) {
   React.useEffect(() => {
     // Wait for all messages and trigger update to list by setting flag
     const populate = async () => {
-      await Promise.all(messages.map(message =>
+      // Using lorem ipsum data for now with 20 messages
+      await Promise.all([...Array(20).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&sentences=1').then(content => {
           let newMessages = messages;
-          newMessages.find(m => m.id === message.id).content = content;
+          newMessages[index] = { id: index, sender: 'You', content };
           setMessages(newMessages);
         })));
       setFetched(true);
@@ -35,6 +35,10 @@ export default function MessagesPage(props) {
       {/* Reference: https://stackoverflow.com/a/61980218 */}
       <View style={{ height: Platform.OS === 'web' ? Dimensions.get('window').height - 65 : '100%' }}>
         <View style={{ flex: 1 }}>
+          {!fetched &&
+            <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+              Loading messages...
+            </Text>}
           <FlatList data={messages} renderItem={({ item }) =>
             <View style={{
               borderColor: props.theme.colors.border, borderBottomWidth: 1,
