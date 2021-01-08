@@ -1,6 +1,6 @@
 # Getting Started with Eruku Mesi App
 
-Start your mongodb instance locally. Create a new database with the name `accounts` by running `use accounts` in the mongodb command line.
+Create a `.env` file in the project directory and replace `<password>` and `<dbname>`. Apply environment variables from the .env file (with OS-specific command). 
 
 ## Available Scripts
 
