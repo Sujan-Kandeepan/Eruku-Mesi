@@ -30,7 +30,8 @@ export default function MediaContentPage(props) {
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&sentences=3').then(description => {
           let newPosts = posts;
-          newPosts[index] = { id: index + 1, title: `Post ${index + 1}`, description };
+          if (!newPosts[index])
+            newPosts[index] = { id: index + 1, title: `Post ${index + 1}`, description };
           setPosts(newPosts);
         })));
       setFetched(true);
