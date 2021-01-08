@@ -48,7 +48,7 @@ export default function NewsFeedPage(props) {
                   onPress={() => localProps.navigation.push(pages.createNewsStory)} />}
               <Feed {...props} fetched={fetched} data={stories} loadingText='Loading news stories...'
                 onItemPress={item => localProps.navigation.push(pages.viewNewsStory(item && item.id))}
-                keyExtractor={(item, index) => item ? item.title : index}
+                keyExtractor={(item, index) => item ? item.title : index.toString()}
                 cardContent={item =>
                   <>
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
@@ -79,7 +79,13 @@ export default function NewsFeedPage(props) {
               <NewsStoryForm {...props} {...localProps} />} />)}
           {stories.map(story =>
             <Stack.Screen key={story.id} name={pages.deleteNewsStory(story.id)} children={(localProps) =>
-              <EmptyPage {...props} {...localProps} nested cancel />} />)}
+              <AppPage {...props} {...localProps} nested cancel>
+                <Button {...props} {...localProps} text='Confirm' accent
+                  onPress={() => setStories(stories.filter(s => s.id !== story.id))} />
+                <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+                  Are you sure you want to delete {story.title}?
+                </Text>
+              </AppPage>} />)}
         </Stack.Navigator>
       </NavigationContainer>
     </AppPage>

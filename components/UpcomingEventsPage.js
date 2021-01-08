@@ -58,7 +58,7 @@ export default function UpcomingEventsPage(props) {
                   <Tab.Screen name={pages.listView} children={() =>
                     <Feed {...props} fetched={fetched} data={events} loadingText='Loading events...'
                       onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
-                      keyExtractor={(item, index) => item ? item.title : index}
+                      keyExtractor={(item, index) => item ? item.title : index.toString()}
                       cardContent={item =>
                         <>
                           <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
@@ -93,7 +93,13 @@ export default function UpcomingEventsPage(props) {
               <EventForm {...props} {...localProps} />} />)}
           {events.map(event =>
             <Stack.Screen key={event.id} name={pages.deleteEvent(event.id)} children={(localProps) =>
-              <EmptyPage {...props} {...localProps} nested cancel />} />)}
+              <AppPage {...props} {...localProps} nested cancel>
+                <Button {...props} {...localProps} text='Confirm' accent
+                  onPress={() => setEvents(events.filter(e => e.id !== event.id))} />
+                <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+                  Are you sure you want to delete {event.title}?
+                </Text>
+              </AppPage>} />)}
         </Stack.Navigator>
       </NavigationContainer>
     </AppPage>

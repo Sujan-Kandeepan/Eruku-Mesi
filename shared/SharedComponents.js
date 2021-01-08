@@ -57,10 +57,14 @@ export const Feed = (props) =>
       </Card>
     </TouchableOpacity>
   } keyExtractor={props.keyExtractor}
-    ListHeaderComponent={!props.fetched &&
+    ListHeaderComponent={!props.fetched ?
       <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
         {props.loadingText}
-      </Text>}
+      </Text> :
+      props.data.length === 0 &&
+        <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+          Nothing to display at this time.
+        </Text>}
     ListFooterComponent={<View style={{ height: 15 }} />} extraData={props.fetched} />
 
 export const Content = (props) =>
