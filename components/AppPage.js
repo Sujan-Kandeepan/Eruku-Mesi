@@ -1,11 +1,10 @@
 import React from 'react';
-import { Keyboard, Text, View } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Keyboard } from 'react-native';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { Button } from '../shared/SharedComponents';
+import { Button, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -24,15 +23,8 @@ export default function AppPage({ cancel, children, navigation, nested, onReturn
       <Stack.Navigator screenOptions={{ headerShown: !nested }}>
         <Stack.Screen name={route.name} options={{
           headerLeft: () =>
-            // Display hamburger icon with workaround for padding bug in library
-            <View>
-              <Text style={{ fontSize: 4 }}></Text>
-              <Text>
-                {'       '}
-                <Icon name='menu' color='grey' style={{ paddingTop: 5 }}
-                  onPress={() => navigation.openDrawer()} />
-              </Text>
-            </View>
+            <IconButton name='menu' color={theme.colors.text} containerStyle={{ marginLeft: 25 }}
+              onPress={() => navigation.openDrawer()} />
         }} children={() => // Display back button if nested, then children
           <>
             {nested && !tab &&

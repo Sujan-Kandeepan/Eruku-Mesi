@@ -29,7 +29,7 @@ export const Button = (props) =>
 export const IconButton = (props) =>
   <TouchableOpacity style={props.style} onPress={noRepeat(props.onPress)}
     onLongPress={noRepeat(props.onLongPress)} delayLongPress={props.delayLongPress}>
-    <Icon name={props.name} type={props.type} color={props.color} />
+    <Icon name={props.name} type={props.type} color={props.color} containerStyle={props.containerStyle} />
   </TouchableOpacity>
 
 export const Toggle = (props) =>
