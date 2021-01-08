@@ -43,9 +43,11 @@ export default function NewsFeedPage(props) {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={props.route.name} children={(localProps) =>
             <>
+              {/* Post news story (navigate to form) */}
               {props.admin &&
                 <Button {...props} {...localProps} text={pages.createNewsStory}
                   onPress={() => localProps.navigation.push(pages.createNewsStory)} />}
+              {/* Display news stories as individual cards in scrolling feed */}
               <Feed {...props} fetched={fetched} data={stories} loadingText='Loading news stories...'
                 onItemPress={item => localProps.navigation.push(pages.viewNewsStory(item && item.id))}
                 keyExtractor={(item, index) => item ? item.title : index.toString()}
@@ -59,9 +61,11 @@ export default function NewsFeedPage(props) {
                     </Text>
                   </>} />
             </>} />
+          {/* Static page route for creating news story */}
           {props.admin &&
             <Stack.Screen name={pages.createNewsStory} children={(localProps) =>
               <NewsStoryForm {...props} {...localProps} />} />}
+          {/* Generated page routes for viewing news stories */}
           {stories.map(story =>
             <Stack.Screen key={story.id} name={pages.viewNewsStory(story.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
@@ -74,10 +78,12 @@ export default function NewsFeedPage(props) {
                 <Content {...props} {...localProps} title={story.title}
                   content={story.content} extraData={fetched} />
               </AppPage>} />)}
-          {stories.map(story =>
+          {/* Generated page routes for editing news stories */}
+          {props.admin && stories.map(story =>
             <Stack.Screen key={story.id} name={pages.editNewsStory(story.id)} children={(localProps) =>
               <NewsStoryForm {...props} {...localProps} />} />)}
-          {stories.map(story =>
+          {/* Generated page routes for deleting news stories */}
+          {props.admin && stories.map(story =>
             <Stack.Screen key={story.id} name={pages.deleteNewsStory(story.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 <Button {...props} {...localProps} text='Confirm' accent

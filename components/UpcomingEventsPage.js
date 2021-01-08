@@ -47,9 +47,11 @@ export default function UpcomingEventsPage(props) {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={props.route.name} children={(localProps) =>
             <>
+              {/* Post event (navigate to form) */}
               {props.admin &&
                 <Button {...props} {...localProps} text={pages.createEvent}
                   onPress={() => localProps.navigation.push(pages.createEvent)} />}
+              {/* Display events as individual cards in scrolling feed */}
               <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
                 {/* Reference: https://reactnavigation.org/docs/bottom-tab-navigator */}
                 <Tab.Navigator tabBarOptions={{ labelStyle: {
@@ -73,9 +75,11 @@ export default function UpcomingEventsPage(props) {
                 </Tab.Navigator>
               </NavigationContainer>
             </>} />
+          {/* Static page route for creating event */}
           {props.admin &&
             <Stack.Screen name={pages.createEvent} children={(localProps) =>
               <EventForm {...props} {...localProps} />} />}
+          {/* Generated page routes for viewing events */}
           {events.map(event =>
             <Stack.Screen key={event.id} name={pages.viewEvent(event.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
@@ -88,10 +92,12 @@ export default function UpcomingEventsPage(props) {
                 <Content {...props} {...localProps} title={event.title}
                   content={event.description} extraData={fetched} />
               </AppPage>} />)}
-          {events.map(event =>
+          {/* Generated page routes for editing events */}
+          {props.admin && events.map(event =>
             <Stack.Screen key={event.id} name={pages.editEvent(event.id)} children={(localProps) =>
               <EventForm {...props} {...localProps} />} />)}
-          {events.map(event =>
+          {/* Generated page routes for deleting events */}
+          {props.admin && events.map(event =>
             <Stack.Screen key={event.id} name={pages.deleteEvent(event.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 <Button {...props} {...localProps} text='Confirm' accent

@@ -43,9 +43,11 @@ export default function MediaContentPage(props) {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={props.route.name} children={(localProps) =>
             <>
+              {/* Post media content (navigate to form) */}
               {props.admin &&
                 <Button {...props} {...localProps} text={pages.postMediaContent}
                   onPress={() => localProps.navigation.push(pages.postMediaContent)} />}
+              {/* Display posts as individual cards in scrolling feed */}
               <Feed {...props} fetched={fetched} data={posts} loadingText='Loading media content...'
                 onItemPress={item => localProps.navigation.push(pages.viewMediaContent(item && item.id))}
                 keyExtractor={(item, index) => item ? item.title : index.toString()}
@@ -59,9 +61,11 @@ export default function MediaContentPage(props) {
                     </Text>
                   </>} />
             </>} />
+          {/* Static page route for posting media content */}
           {props.admin &&
             <Stack.Screen name={pages.postMediaContent} children={(localProps) =>
               <MediaContentForm {...props} {...localProps} />} />}
+          {/* Generated page routes for viewing media content */}
           {posts.map(post => 
             <Stack.Screen key={post.id} name={pages.viewMediaContent(post.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
@@ -74,10 +78,12 @@ export default function MediaContentPage(props) {
                 <Content {...props} {...localProps} title={post.title}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
-          {posts.map(post =>
+          {/* Generated page routes for editing media content */}
+          {props.admin && posts.map(post =>
             <Stack.Screen key={post.id} name={pages.editMediaContent(post.id)} children={(localProps) =>
               <MediaContentForm {...props} {...localProps} />} />)}
-          {posts.map(post =>
+          {/* Generated page routes for deleting media content */}
+          {props.admin && posts.map(post =>
             <Stack.Screen key={post.id} name={pages.deleteMediaContent(post.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 <Button {...props} {...localProps} text='Confirm' accent

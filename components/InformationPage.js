@@ -61,14 +61,17 @@ export default function InformationPage(props) {
                         onPress={() => props.snackbar('Hold and drag to reorder list', 207)}
                         name='unfold-more' type='material' color={props.theme.colors.placeholder} />
                     </Text>}
+                  {/* Inline edit interface for section name */}
                   {item === originalText ?
                     <>
+                      {/* Text input for new section name */}
                       <TextInput autoFocus autoCapitalize='words' style={{
                         backgroundColor: props.theme.colors.card,
                         color: props.theme.colors.text, flex: 1, height: 50,
                         marginBottom: 1, marginLeft: 15, marginTop: 15, textAlign: 'center'
                       }} value={editText} onChangeText={value => setEditText(value)} />
                       <Text style={{ marginHorizontal: 10 }}>
+                        {/* Save changes and update state/data */}
                         <IconButton style={SharedStyles.icon} onPress={() => {
                           if (pages.includes(editText) && originalText !== editText) {
                             props.snackbar('Duplicate sections not allowed', 224);
@@ -80,6 +83,7 @@ export default function InformationPage(props) {
                           setOriginalText('');
                           setEditText('');
                         }} name='check' type='material' color={props.theme.colors.accent} />
+                        {/* Discard changes and collapse edit interface */}
                         <IconButton style={SharedStyles.icon} onPress={() => {
                           setOriginalText('');
                           setEditText('');
@@ -87,16 +91,19 @@ export default function InformationPage(props) {
                       </Text>
                     </> :
                     <>
+                      {/* Button to open section and view content, stretch to fill */}
                       <View style={{ flex: 1, marginRight: props.admin ? -15 : 'auto' }}>
                         <Button {...props} {...localProps} text={item}
                           onPress={() => localProps.navigation.push(item)} />
                       </View>
                       {props.admin &&
                         <Text style={{ marginHorizontal: 10 }}>
+                          {/* Open edit interface implemented above */}
                           <IconButton style={SharedStyles.icon} onPress={() => {
                             setOriginalText(item);
                             setEditText(item);
                           }} name='edit' type='material' color={props.theme.colors.placeholder} />
+                          {/* Press and hold for 3 seconds to delete entire section */}
                           <IconButton style={SharedStyles.icon}
                             onPress={() => props.snackbar('Press and hold to delete', 183)}
                             delayLongPress={3000} onLongPress={() => {
@@ -110,6 +117,7 @@ export default function InformationPage(props) {
                 onDragEnd={({ data }) => setPages(data)}
                 // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
                 extraData={{ originalText, editText }} />
+                {/* Add new section and update state/data */}
                 {props.admin &&
                   <View style={{ marginBottom: 15 }}>
                     <Button {...props} text='Add Section'
@@ -125,6 +133,7 @@ export default function InformationPage(props) {
                       }} />
                     </View>}
               </ScrollView>} />
+          {/* Generated page routes for viewing info sections */}
           {pages.map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
@@ -137,6 +146,7 @@ export default function InformationPage(props) {
                 <Content {...props} {...localProps} title={data.find(item => item.title === page).title}
                   content={data.find(entry => entry.title === page).content} extraData={fetched} />
               </AppPage>} />)}
+          {/* Generated page routes for editing info sections */}
           {props.admin && pages.map(page => `Edit ${page}`).map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel onReturn={() => setEditText('')}>
