@@ -50,7 +50,7 @@ export default function MediaContentPage(props) {
               {/* Display posts as individual cards in scrolling feed */}
               <Feed {...props} fetched={fetched} data={posts} loadingText='Loading media content...'
                 onItemPress={item => localProps.navigation.push(pages.viewMediaContent(item && item.id))}
-                keyExtractor={(item, index) => item ? item.title : index.toString()}
+                keyExtractor={(item, index) => (item ? item.id : index).toString()}
                 cardContent={item =>
                   <>
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
@@ -64,7 +64,7 @@ export default function MediaContentPage(props) {
           {/* Static page route for posting media content */}
           {props.admin &&
             <Stack.Screen name={pages.postMediaContent} children={(localProps) =>
-              <MediaContentForm {...props} {...localProps} />} />}
+              <MediaContentForm {...props} {...localProps} posts={posts} setPosts={setPosts} />} />}
           {/* Generated page routes for viewing media content */}
           {posts.map(post => 
             <Stack.Screen key={post.id} name={pages.viewMediaContent(post.id)} children={(localProps) =>
@@ -81,7 +81,8 @@ export default function MediaContentPage(props) {
           {/* Generated page routes for editing media content */}
           {props.admin && posts.map(post =>
             <Stack.Screen key={post.id} name={pages.editMediaContent(post.id)} children={(localProps) =>
-              <MediaContentForm {...props} {...localProps} />} />)}
+              <MediaContentForm {...props} {...localProps}
+                posts={posts} setPosts={setPosts} payload={post} />} />)}
           {/* Generated page routes for deleting media content */}
           {props.admin && posts.map(post =>
             <Stack.Screen key={post.id} name={pages.deleteMediaContent(post.id)} children={(localProps) =>

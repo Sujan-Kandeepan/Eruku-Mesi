@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import EmptyPage from './EmptyPage';
 import NewsStoryForm from './NewsStoryForm';
 import { Button, Content, Feed } from '../shared/SharedComponents';
 import { get, truncate } from '../shared/SharedFunctions';
@@ -50,7 +49,7 @@ export default function NewsFeedPage(props) {
               {/* Display news stories as individual cards in scrolling feed */}
               <Feed {...props} fetched={fetched} data={stories} loadingText='Loading news stories...'
                 onItemPress={item => localProps.navigation.push(pages.viewNewsStory(item && item.id))}
-                keyExtractor={(item, index) => item ? item.title : index.toString()}
+                keyExtractor={(item, index) => (item ? item.id : index).toString()}
                 cardContent={item =>
                   <>
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
@@ -64,7 +63,7 @@ export default function NewsFeedPage(props) {
           {/* Static page route for creating news story */}
           {props.admin &&
             <Stack.Screen name={pages.createNewsStory} children={(localProps) =>
-              <NewsStoryForm {...props} {...localProps} />} />}
+              <NewsStoryForm {...props} {...localProps} stories={stories} setStories={setStories} />} />}
           {/* Generated page routes for viewing news stories */}
           {stories.map(story =>
             <Stack.Screen key={story.id} name={pages.viewNewsStory(story.id)} children={(localProps) =>
@@ -81,7 +80,8 @@ export default function NewsFeedPage(props) {
           {/* Generated page routes for editing news stories */}
           {props.admin && stories.map(story =>
             <Stack.Screen key={story.id} name={pages.editNewsStory(story.id)} children={(localProps) =>
-              <NewsStoryForm {...props} {...localProps} />} />)}
+              <NewsStoryForm {...props} {...localProps}
+                stories={stories} setStories={setStories} payload={story} />} />)}
           {/* Generated page routes for deleting news stories */}
           {props.admin && stories.map(story =>
             <Stack.Screen key={story.id} name={pages.deleteNewsStory(story.id)} children={(localProps) =>

@@ -152,20 +152,28 @@ export default function App() {
           drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
           drawerContent={props => <CustomDrawerContent {...props} theme={theme} />}>
           <Drawer.Screen name={pages.newsFeed}
-            children={(props) => <NewsFeedPage {...props} theme={theme} admin={admin} />} />
+            children={(props) => <NewsFeedPage {...props} theme={theme}
+              admin={admin} snackbar={snackbar} />} />
           <Drawer.Screen name={pages.upcomingEvents}
-            children={(props) => <UpcomingEventsPage {...props} theme={theme} admin={admin} />} />
+            children={(props) => <UpcomingEventsPage {...props} theme={theme}
+              admin={admin} snackbar={snackbar} />} />
           <Drawer.Screen name={pages.messages}
-            children={(props) => <MessagesPage {...props} theme={theme} snackbar={snackbar} />} />
+            children={(props) => <MessagesPage {...props} theme={theme}
+              snackbar={snackbar} />} />
           <Drawer.Screen name={pages.mediaContent}
-            children={(props) => <MediaContentPage {...props} theme={theme} admin={admin} />} />
+            children={(props) => <MediaContentPage {...props} theme={theme}
+              admin={admin} snackbar={snackbar} />} />
           <Drawer.Screen name={pages.information}
-            children={(props) => <InformationPage {...props} theme={theme} admin={admin} snackbar={snackbar} />} />
+            children={(props) => <InformationPage {...props} theme={theme}
+              admin={admin} snackbar={snackbar} />} />
           <Drawer.Screen name={pages.settings} children={(props) =>
-            <SettingsPage {...props} theme={theme} toggleTheme={toggleTheme} snackbar={snackbar}
-              receiveNotifications={receiveNotifications} toggleNotifications={toggleNotifications} />} />
+            <SettingsPage {...props} theme={theme}
+              toggleTheme={toggleTheme} snackbar={snackbar}
+              receiveNotifications={receiveNotifications}
+              toggleNotifications={toggleNotifications} />} />
           <Drawer.Screen name={pages.feedback}
-            children={(props) => <FeedbackForm {...props} theme={theme} snackbar={snackbar} />} />
+            children={(props) => <FeedbackForm {...props}
+            theme={theme} snackbar={snackbar} />} />
         </Drawer.Navigator>
       </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}

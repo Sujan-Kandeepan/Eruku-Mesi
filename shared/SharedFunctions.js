@@ -16,3 +16,5 @@ export const truncate = (string, num) => {
     truncated = truncated.replace(/\. $/, '') + '...';
   return truncated;
 }
+
+export const paragraphs = text => text.split('\n').filter(s => s !== '').map(s => s.trim());

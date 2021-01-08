@@ -60,7 +60,7 @@ export default function UpcomingEventsPage(props) {
                   <Tab.Screen name={pages.listView} children={() =>
                     <Feed {...props} fetched={fetched} data={events} loadingText='Loading events...'
                       onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
-                      keyExtractor={(item, index) => item ? item.title : index.toString()}
+                      keyExtractor={(item, index) => (item ? item.id : index).toString()}
                       cardContent={item =>
                         <>
                           <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
@@ -78,7 +78,7 @@ export default function UpcomingEventsPage(props) {
           {/* Static page route for creating event */}
           {props.admin &&
             <Stack.Screen name={pages.createEvent} children={(localProps) =>
-              <EventForm {...props} {...localProps} />} />}
+              <EventForm {...props} {...localProps} events={events} setEvents={setEvents} />} />}
           {/* Generated page routes for viewing events */}
           {events.map(event =>
             <Stack.Screen key={event.id} name={pages.viewEvent(event.id)} children={(localProps) =>
@@ -95,7 +95,8 @@ export default function UpcomingEventsPage(props) {
           {/* Generated page routes for editing events */}
           {props.admin && events.map(event =>
             <Stack.Screen key={event.id} name={pages.editEvent(event.id)} children={(localProps) =>
-              <EventForm {...props} {...localProps} />} />)}
+              <EventForm {...props} {...localProps}
+                events={events} setEvents={setEvents} payload={event} />} />)}
           {/* Generated page routes for deleting events */}
           {props.admin && events.map(event =>
             <Stack.Screen key={event.id} name={pages.deleteEvent(event.id)} children={(localProps) =>

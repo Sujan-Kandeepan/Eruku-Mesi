@@ -8,7 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import { Button, Content, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
-import { get } from '../shared/SharedFunctions';
+import { get, paragraphs } from '../shared/SharedFunctions';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
@@ -162,7 +162,7 @@ export default function InformationPage(props) {
                       text='Save' onPress={() => {
                         setData(data.map(entry =>
                           page.includes(entry.title)
-                            ? { ...entry, content: editText.split('\n').filter(s => s !== '').map(s => s.trim()) }
+                            ? { ...entry, content: paragraphs(editText) }
                             : entry));
                         setEditText('');
                         localProps.navigation.pop();
