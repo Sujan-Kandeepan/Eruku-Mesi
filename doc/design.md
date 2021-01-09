@@ -410,7 +410,7 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Dependencies | None |
 | Implementation | Database storage for FeedbackData with records containing Feedback information. Functions for CRUD operations on Feedback will be created |
 | Module secrets | Database service and schema used for storage |
-| Rationale | PUC NUM 20; FR 30 |
+| Rationale | PUC NUM 20; FR 28 |
 
 ### 4.2 Algorithm Module Secrets
 
@@ -519,7 +519,7 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Dependencies | FeedbackData |
 | Implementation | Takes form information and calls the FeedbackData CREATE operation |
 | Module secrets |  Requests made to server, front-end components indicate to user that data has been submitted|
-| Rationale | PUC NUM 20; FR 30 |
+| Rationale | PUC NUM 20; FR 28 |
 
 ## 5. Module Interface
 

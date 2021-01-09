@@ -173,9 +173,8 @@ Listed here are the key functions of the application:
 The mobile application is constrained by the Internet connectivity.
 Physical distance between users will also slow down Internet connectivity and latency during page load, location tracking, sending and receiving messages, and other features will be increased.
 Since the application fetches data from a database over the Internet, it is crucial to have stable Internet connectivity.
-Further, the application must be able to track the location of the user with the phone's built-in GPS.
-This is important since the notifications users will receive will be based upon their geographic location.
-The accuracy of the location of the user may vary according to the phone model.
+Application functionality may additionally be restricted by the accuracy of location tracking on the user's device.
+An incorrect location calculation may result in the user receiving wrong results for localized events, news stories, etc.
 
 ### 2.4 User Characteristics
 
@@ -760,27 +759,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | The application fetches content from the database on page load. For sharing content, the application generates and provides the sharable URL link for the content. |
 | Verification | Test whether the user can see and copy the sharable link when the "Share" button is clicked. Test whether the generated link is correctly functional. |
 
-| ID: FR-28 | Modern interface for current website |
-| ----- | ----- |
-| Relevant PUC | 19 |
-| Description | Current website is expected to have a modern user interface on all pages. |
-| Conditions and constraints | Website remains accessible to general public. |
-| Input/stimulus | User navigates to desired page on website. |
-| Output/response | Webpage is displayed with modern interface. |
-| Functions performed | Front-end rendering with modern design. |
-| Verification | Internal and client testing to determine subjective satisfaction from users of website. |
-
-| ID: FR-29 | Retain or expand existing functionality of current website |
-| ----- | ----- |
-| Relevant PUC | 19 |
-| Description | Current website should not lose functionality on any of its pages. |
-| Conditions and constraints | Website remains accessible to general public. |
-| Input/stimulus | User navigates to desired page on website. |
-| Output/response | Functionality from current website is retained or improved in some way. |
-| Functions performed | Same functionality as current website, possibly more depending on improvements. |
-| Verification | Internal and client testing of website to ensure previous functionality is there and intended improvements have been effective. |
-
-| ID: FR-30 | User is able to submit feedback |
+| ID: FR-28 | User is able to submit feedback |
 | ----- | ----- |
 | Relevant PUC | 20 |
 | Description | User is able to submit feedback to be stored and visible to developers and maintainers. |
@@ -789,6 +768,46 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | Feedback is submitted and made visible to internal development team. |
 | Functions performed | Feedback is stored into database with metadata about user and time submitted. |
 | Verification | Submit feedback as regular user and ensure required data is stored in database. |
+
+| ID: FR-29 | Administrator is able to see all news stories |
+| ----- | ----- |
+| Relevant PUC | 2, 3, 4, 5 |
+| Description | In the admin page, the administrator should be able to see all news stories created. |
+| Conditions and constraints | User is connected to the Internet and has been authenticated within the application. |
+| Input/stimulus | Administrator is on the admin news stories page. |
+| Output/response | All news stories in the past and all news stories that have yet to happen should show on page. |
+| Functions performed | Function requests information about news stories from database and populations it on the admin news stories page. |
+| Verification | Go onto admin news stories page and check to see if all news stories are shown. Also check to see if the news stories within the database is showing up correctly in the admin news stories page. |
+
+| ID: FR-30 | Administrator is able to create news story |
+| ----- | ----- |
+| Relevant PUC | 6 |
+| Description | In the admin page, there needs to be a form for the admin to create a news story. |
+| Conditions and constraints | User is connected to the Internet and has been authenticated within the application. |
+| Input/stimulus | Admin fills out the news story form and submits it. |
+| Output/response | An in-app notification shows up indicating that the news story has been submitted. The app sends the news story data to the database. |
+| Functions performed | In-app notification must be called indicating that the news story has been submitted. The server must accept the request for news story creation.  |
+| Verification | Create a news story in the admin page and see if the in-app notification shows up and check to see if news story is now stored in database. |
+
+| ID: FR-31 | Administrator is able to update news story |
+| ----- | ----- |
+| Relevant PUC | 7 |
+| Description | In the admin page, there needs to be a form for the admin to edit a news story. |
+| Conditions and constraints | User is connected to the Internet and has been authenticated within the application. |
+| Input/stimulus | The admin user clicks onto the news story he/she would like to edit. A form should then pop up. The admin would then enter the correct information into the page and then submits it. |
+| Output/response |  An in-app notification shows up indicating that the edited news story has been submitted. The app sends the news story data to the database. |
+| Functions performed | In-app notification function must be called indicating that the edited news story has been submitted. The server must accept the request for edit news story. |
+| Verification | Click into a news story in the admin page. Then edit the news story through the form. Check to see if the news story is now stored in the database |
+
+| ID: FR-32 | Administrator is able to delete/cancel news story |
+| ----- | ----- |
+| Relevant PUC | 8 |
+| Description | In the admin page, there needs to be a form for the admin to delete/cancel a news story. |
+| Conditions and constraints | User is connected to the Internet and has been authenticated within the application. |
+| Input/stimulus | The admin user first view all the news stories. The admin will click on the delete sign of the news story he/she would like to delete. An 'are you sure?' in-app notification will appear. If the admin agrees, the news story will be removed. |
+| Output/response | The in-app notification will indicate that the news story has been deleted. The news story will also be removed from the database. |
+| Functions performed | In-app notification function must be called indicating that the news story has been deleted. The server must accept the request for deleted news story and edit the database. |
+| Verification | Delete a news story. Check to see if the news story is still stored in the database. |
 
 ### 3.3 Quality of Service
 
@@ -877,6 +896,14 @@ Amazon will ensure that the application can scale when necessary.
 For example, this could specify the requirement for software to trace processing activity. Such traces are needed for some applications to meet minimum regulatory or financial standards. An audit trace requirement may, for example, state that all changes to a payroll database shall be recorded in a trace file with before and after values. -->
 
 Accessibility compliances are not required for private organizations with less than 50 employees. Therefore, no accessibility compliances are required for this system [1]. Compliance with the Google Play Store and Apple App store is mandatory in order to be published on those platforms.
+
+A full list of compliance expectations is outlined by the Google Play Store and Apple App Store guidelines:
+
+- <https://support.google.com/googleplay/android-developer/answer/9893335?hl=en&ref_topic=9877766>
+- <https://support.google.com/googleplay/android-developer/answer/9888076>
+- <https://support.google.com/googleplay/android-developer/answer/10144311>
+- <https://support.google.com/googleplay/android-developer/answer/9876714?hl=en&ref_topic=9877065>
+- <https://developer.apple.com/app-store/review/guidelines/#data-collection-and-storage>
 
 ### 3.5 Design and Implementation
 
