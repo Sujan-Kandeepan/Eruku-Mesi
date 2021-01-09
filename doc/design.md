@@ -339,11 +339,12 @@ List of modules (functions/class components in camelCase/PascalCase):
   - Authentication (AuthenticationFunctions)
     - Existing user authentication (authenticateUser)
 - Interface modules (front-end rendering)
-  - News and events feed (NewsAndEventsPage)
-    - Display news and events (displayNewsAndEvents)
+  - News feed (NewsFeedPage)
+    - Display news stories (displayNewsFeed)
   - Event notification layout (EventNotificationFormat)
     - Format notification (formatNotification)
-  - Events calendar interface (EventsCalendarPage)
+  - Upcoming events interface (UpcomingEventsPage)
+    - Display events feed (displayEventsFeed)
     - Display events calendar (displayEventsCalendar)
   - Event posting input form (EventForm)
     - Display form for event posting (displayEventForm)
@@ -451,10 +452,10 @@ List of modules (functions/class components in camelCase/PascalCase):
 
 ### 4.3 Interface Module Secrets
 
-| NewsAndEventsPage | Front-end rendering and server requests for news and events page |
+| NewsFeedPage | Front-end rendering and server requests for news feed page |
 | --- | --- |
-| Dependencies | EventsData, NewsStoriesData, NewsAndEventsFunctions |
-| Implementation | Rendering and layout of news and events page with information for news and events returned by the server |
+| Dependencies | NewsStoriesData, NewsAndEventsFunctions |
+| Implementation | Rendering and layout of news feed page with information for news stories returned by the server |
 | Module secrets | Requests made to server, element hierarchy within front-end components |
 | Rationale | PUC 1 and FR 1 |
 
@@ -465,10 +466,10 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Module secrets | Requests made to server, element hierarchy within front-end components |
 | Rationale | PUC 2-4 FR 2-6 |
 
-| EventsCalendarPage | Front-end rendering and server requests for events calendar page |
+| UpcomingEventsPage | Front-end rendering and server requests for upcoming events page |
 | --- | --- |
 | Dependencies | EventsData, EventNotificationFunctions |
-| Implementation | Rendering and layout of events calendar page with information for events returned by the server |
+| Implementation | Rendering and layout of upcoming events page with information for events returned by the server |
 | Module secrets | Requests made to server, element hierarchy within front-end components |
 | Rationale | PUC 1-8 and FR 1-11 |
 
@@ -839,12 +840,12 @@ Relevant textbook sections for reference: 4.2.2.1, 4.2.3.1, 4.2.4, ?
 
 ### 5.3 Interface Module Interface
 
-| NewsAndEventsPage | displayNewsAndEvents(): display |
+| NewsFeedPage | displayNewsFeed(): display |
 | --- | --- |
 | Input parameters | None |
-| Output value | Display for news and events page |
+| Output value | Display for news feed page |
 | Side effects | None |
-| Description | Scrolling feed displaying news and events |
+| Description | Scrolling feed displaying news stories |
 
 | EventNotificationFormat | formatNotification(eventid: string): notification |
 | --- | --- |
@@ -853,10 +854,17 @@ Relevant textbook sections for reference: 4.2.2.1, 4.2.3.1, 4.2.4, ?
 | Side effects | None |
 | Description | Provides the layout of the notification to be displayed when a notification is schedule to be sent |
 
-| EventsCalendarPage | displayEventsCalendar(): display |
+| UpcomingEventsPage | displayEventsFeed(): display |
 | --- | --- |
 | Input parameters | None |
-| Output value | Display Calendar events page |
+| Output value | Display events feed page |
+| Side effects | None |
+| Description | Feed UI displaying events |
+
+| UpcomingEventsPage | displayEventsCalendar(): display |
+| --- | --- |
+| Input parameters | None |
+| Output value | Display events calendar page |
 | Side effects | None |
 | Description | Calendar UI displaying events |
 
@@ -975,7 +983,7 @@ Relevant textbook sections for reference: ?
 | Improvements | Include CRUD operations for news stories |
 | --- | --- |
 | Description | Include functional requirements detailing CRUD operations for news events, nearly identical to ID: FR-{8-11} for events. |
-| Rationale | Initially did not envision that news story records would need manipulation as event notifications only pertain to events, but news story records additionally need to be manipulated for news and events page. |
+| Rationale | Initially did not envision that news story records would need manipulation as event notifications only pertain to events, but news story records additionally need to be manipulated for news feed page. |
 | Link to SRS | 3.2 Functional Requirements |
 
 | Improvements | Include additional references for quality of service and compliance |
