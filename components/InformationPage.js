@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, YellowBox } from 'react-native';
+import { Keyboard, Text, View, YellowBox } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -69,7 +69,8 @@ export default function InformationPage(props) {
                         backgroundColor: props.theme.colors.card,
                         color: props.theme.colors.text, flex: 1, height: 50,
                         marginBottom: 1, marginLeft: 15, marginTop: 15, textAlign: 'center'
-                      }} value={editText} onChangeText={value => setEditText(value)} />
+                      }} value={editText} onChangeText={value => setEditText(value)}
+                      onBlur={Keyboard.dismiss} />
                       <Text style={{ marginHorizontal: 10 }}>
                         {/* Save changes and update state/data */}
                         <IconButton style={SharedStyles.icon} onPress={() => {
@@ -156,7 +157,8 @@ export default function InformationPage(props) {
                     backgroundColor: props.theme.colors.card,
                     color: props.theme.colors.text, flex: 1, margin: 15,
                     padding: 20, textAlignVertical: 'top', width
-                  }} value={editText} onChangeText={(value) => setEditText(value)} />
+                  }} value={editText} onChangeText={(value) => setEditText(value)}
+                  onBlur={Keyboard.dismiss} />
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
                     <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
                       text='Save' onPress={() => {

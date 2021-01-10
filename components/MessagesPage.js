@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Platform, Text, View } from 'react-native';
+import { Dimensions, Keyboard, Platform, Text, View } from 'react-native';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 
 import AppPage from './AppPage';
@@ -63,7 +63,8 @@ export default function MessagesPage(props) {
             color: props.theme.colors.text, flex: 1, padding: 10
           }}
             placeholder='Enter your message' placeholderTextColor={props.theme.colors.placeholder}
-            value={newMessage} onChangeText={value => setNewMessage(value)} />
+            value={newMessage} onChangeText={value => setNewMessage(value)}
+            onBlur={Keyboard.dismiss} />
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <IconButton {...props} style={{ marginLeft: 15 }} name='send' type='material'
               color={props.theme.colors.accent} onPress={() => {
