@@ -81,11 +81,11 @@ const CustomDrawerContent = (props) =>
     contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
     <CustomDrawer.Section style={{ flexDirection: 'row', marginHorizontal: 15, marginVertical: 5 }}>
       <Avatar.Image source={{ // For local image: source={require('./assets/image.jpg')}
-          uri: 'https://pbs.twimg.com/profile_images/3378852260/ea07b725a6331c3255c6283ae7ad97d0_400x400.jpeg'
-        }} size={50} style={{ alignSelf: 'center' }} />
+        uri: 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
+      }} size={50} style={{ alignSelf: 'center' }} />
       <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
-        <Title>DoodleBob</Title>
-        <Caption>@mehoyminoy</Caption>
+        <Title>John Smith</Title>
+        <Caption>@username</Caption>
       </View>
     </CustomDrawer.Section>
     {/* Add divider above first section by creating empty section */}
