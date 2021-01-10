@@ -499,7 +499,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | User is able to view information about upcoming events and news items as well as media which may be of interest to the user.  |
 | Functions performed | Application fetches and renders content relevant to the user by their location. |
 | Verification | Simulate various scenarios for content to be displayed by creating events and posting updates for a created user at some location. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsStoriesData, NewsAndEventsFunctions, NewsFeedPage, UpcomingEventsPage, EventForm, NewsStoryForm |
 | Relevant Code | ... |
 
 | ID: FR-2 | User is notified of all relevant upcoming local events |
@@ -511,7 +511,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | Event notifications are triggered and contain correct information in the notification content and the details page when opened. |
 | Functions performed | Posted events are filtered by time and location for the user to be notified by the application about only the relevant ones. |
 | Verification | Post multiple events and ensure that notifications are received for only the relevant events at the correct time and with correct event information shown. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-3 | User is not notified of events outside geographic location |
@@ -523,7 +523,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | No event notification is triggered. |
 | Functions performed | The application determines that the event location is outside the feasible radius from the location of the user and the application prevents a notification by this criterion. |
 | Verification | Post events that are outside the known location of a user and ensure that user is not notified of that event at any point. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-4 | User is not notified of past events |
@@ -535,7 +535,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | No event notification is triggered. |
 | Functions performed | The application determines that the event has already finished and the application prevents a notification by this criterion. |
 | Verification | Post events with a past date and ensure that user is not notified of that event at any point. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-5 | User is not notified of events too far into the future |
@@ -547,7 +547,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | No event notification is triggered. |
 | Functions performed | The application determines that the event is too far in the future and the application prevents a notification by this criterion. |
 | Verification | Post events happening far in the future and ensure that user is not yet notified. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-6 | Correct event information shown in notification |
@@ -559,7 +559,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | Event notifications are triggered and contain the same information of the event posted from admin. |
 | Functions performed | Posted events information is checked against the events information shown in the notification. |
 | Verification | Post events within the 'current' time and check to see if notification is showing. If notification shows, check to see if the notification event information corresponds to what is within posted event. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-7 | Correct event information shown on details page |
@@ -571,7 +571,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | User is able to view detailed information about the event from within the application. |
 | Functions performed | Application loads detailed information pertaining to event displayed in opened notification and renders to user interface. |
 | Verification | Ensure page loads and correct information is displayed once notification has been opened. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-8 | Administrator is able to see all events |
@@ -583,7 +583,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | All events in the past and all events that have yet to happen should show on page. |
 | Functions performed | Function requests information about events from database and populations it on the admin events page. |
 | Verification | Go onto admin events page and check to see if all events are shown. Also check to see if the events within the database is showing up correctly in the admin events page. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-9 | Administrator is able to new create event |
@@ -595,7 +595,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | An in-app notification shows up indicating that the event has been submitted. The app sends the event data to the database. |
 | Functions performed | In-app notification must be called indicating that the event has been submitted. The server must accept the request for event creation.  |
 | Verification | Create an event in the admin page and see if the in-app notification shows up and check to see if event is now stored in database. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-10 | Administrator is able to update event |
@@ -607,7 +607,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response |  An in-app notification shows up indicating that the edited event has been submitted. The app sends the event data to the database. |
 | Functions performed | In-app notification function must be called indicating that the edited event has been submitted. The server must accept the request for edit event. |
 | Verification | Click into an event in the admin page. Then edit the event through the form. Check to see if the event is now stored in the database |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-11 | Administrator is able to delete/cancel event |
@@ -619,7 +619,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | The in-app notification will indicate that the event has been deleted. The event will also be removed from the database. |
 | Functions performed | In-app notification function must be called indicating that the event has been deleted. The server must accept the request for deleted event and edit the database. |
 | Verification | Delete an event. Check to see if the event is still stored in the database. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code | ... |
 
 | ID: FR-12 | Administrator is able to see all posts |
@@ -631,7 +631,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | All relevant posts should show on page. |
 | Functions performed | Function requests information about posts from database and populations it on the admin posts page. |
 | Verification | Go onto admin posts page and check to see if all posts are shown. Also check to see if the posts within the database is showing up correctly in the admin posts page. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-13 | Administrator is able to new create post |
@@ -643,7 +643,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | An in-app notification shows up indicating that the post has been submitted. The app sends the post data to the database. |
 | Functions performed | In-app notification must be called indicating that the post has been submitted. The server must accept the request for post creation.  |
 | Verification | Create a post in the admin page and see if the in-app notification shows up and check to see if post is now stored in database. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-14 | Administrator is able to update post |
@@ -655,7 +655,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response |  An in-app notification shows up indicating that the edited post has been submitted. The app sends the post data to the database. |
 | Functions performed | In-app notification function must be called indicating that the edited post has been submitted. The server must accept the request for edit post. |
 | Verification | Click into a post in the admin page. Then edit the post through the form. Check to see if the post is now stored in the database. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-15 | Administrator is able to delete post |
@@ -667,7 +667,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | The in-app notification will indicate that the post has been deleted. The post will also be removed from the database. |
 | Functions performed | In-app notification function must be called indicating that the post has been deleted. The server must accept the request for deleted post and edit the database. |
 | Verification | Delete a post. Check to see if the post is still stored in the database. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-16 | User is able to view messages sent by other users |
@@ -679,7 +679,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | Historical messages are shown. |
 | Functions performed | A function that retrieves all historical messages from database and displays them. |
 | Verification | Go onto the Messaging page and all the historical messages should show. |
-| Relevant Design | ... |
+| Relevant Design | MessagesData, MessagesFunctions, MessagesPage |
 | Relevant Code | ... |
 
 | ID: FR-17 | User is able to send new public message |
@@ -691,7 +691,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | Message will show up in the global Messaging page and also sent to the database. |
 | Functions performed | A function that will create a new message into the database and display it on the page. |
 | Verification | Create a new message and check if new message is being displayed and also stored within database. |
-| Relevant Design | ... |
+| Relevant Design | MessagesData, MessagesFunctions, MessagesPage |
 | Relevant Code | ... |
 
 | ID: FR-18 | Automated replies when no other users active |
@@ -703,7 +703,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | A message is sent personally to the user stating that there are no other users currently who are on the Messaging page. |
 | Functions performed | A function that display a message to the user screen if there are no other users. |
 | Verification | Enter into the page with no other person in the page and check to see if the message pops up. |
-| Relevant Design | ... |
+| Relevant Design | AccountsData, MessagesData, MessagesFunctions, AuthenticationFunctions, MessagesPage, AuthenticationPage |
 | Relevant Code | ... |
 
 | ID: FR-19 | User is able to register new account |
@@ -715,7 +715,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | User information is checked against the database. If there are duplicate emails or usernames, the submission will be rejected. If all checks are successful, then the information will be stored into the database and the user will proceed into the main page. |
 | Functions performed | There is a function to verify account information and then another function to store information correctly into database. |
 | Verification | Go onto the forms page and create a new account. |
-| Relevant Design | ... |
+| Relevant Design | AccountsData, AuthenticationFunctions, AuthenticationPage |
 | Relevant Code | ... |
 
 | ID: FR-20 | User is able to sign into application |
@@ -727,7 +727,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | User information is checked against the database. If the sign in information is incorrect, the sign in will be rejected. If all checks are successful, the user will proceed to main page. |
 | Functions performed | There is a function to verify sign in information. |
 | Verification | Go onto the sign in page and check the sign in with incorrect information. In this case, it should fail. Then check the sign in with correct information. In this case, it should succeed. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
 | Relevant Code | ... |
 
 | ID: FR-21 | Calendar contains all nearby upcoming events |
@@ -739,7 +739,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | User should be able to see all upcoming events in his/her region in the calendar. |
 | Functions performed | There is a function to check all upcoming events and their location. If the user is within the specified range, the function will return the information of the event to be shown in the calendar view. |
 | Verification | Go onto the Calendar View page with your GPS at a specific location within 200km to those events. Check to see if that event is showing up in the calendar. If it is showing, the program is working correctly. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
 | Relevant Code | ... |
 
 | ID: FR-22 | Calendar omits far-away events |
@@ -751,7 +751,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | The user should not be able to see that upcoming event that is outside of the range. |
 | Functions performed | There is a function to check all upcoming events and their location. If the user is outside the specified range, the function will not return the information of the event to be shown in the calendar view. |
 | Verification | Go onto the Calendar View page with your GPS outside of a specific location within 200km to certain events. Check to see if that event is showing up in the calendar. If it is not showing, the program is working correctly. |
-| Relevant Design | ... |
+| Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
 | Relevant Code | ... |
 
 | ID: FR-23 | Regular user is able to see relevant posts |
@@ -763,7 +763,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | All relevant posts should show on page. |
 | Functions performed | Function requests information about posts from database and populations it on the user feed. |
 | Verification | Go onto user feed and check to see if all posts are shown. Also check to see if the posts within the database is showing up correctly in the user feed. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-24 | Regular user is able to new create post |
@@ -775,7 +775,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | An in-app notification shows up indicating that the post has been submitted. The app sends the post data to the database. |
 | Functions performed | In-app notification must be called indicating that the post has been submitted. The server must accept the request for post creation.  |
 | Verification | Create a post in the user feed and see if the in-app notification shows up and check to see if post is now stored in database. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-25 | Regular user is able to update post |
@@ -787,7 +787,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response |  An in-app notification shows up indicating that the edited post has been submitted. The app sends the post data to the database. |
 | Functions performed | In-app notification function must be called indicating that the edited post has been submitted. The server must accept the request for edit post. |
 | Verification | Click into a post in the user page. Then edit the post through the form. Check to see if the post is now stored in the database |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-26 | User is able to delete post |
@@ -799,7 +799,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | The in-app notification will indicate that the post has been deleted. The post will also be removed from the database. |
 | Functions performed | In-app notification function must be called indicating that the post has been deleted. The server must accept the request for deleted post and edit the database. |
 | Verification | Delete a post. Check to see if the post is still stored in the database. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-27 | User is able to share posts from other users |
@@ -810,7 +810,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | User can view content on the event and news, etc. pages of the application. After the "Share" button is clicked, the application generates a sharable link that the user can copy. |
 | Functions performed | The application fetches content from the database on page load. For sharing content, the application generates and provides the sharable URL link for the content. |
 | Verification | Test whether the user can see and copy the sharable link when the "Share" button is clicked. Test whether the generated link is correctly functional. |
-| Relevant Design | ... |
+| Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | ... |
 
 | ID: FR-28 | User is able to submit feedback |
@@ -822,7 +822,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | Feedback is submitted and made visible to internal development team. |
 | Functions performed | Feedback is stored into database with metadata about user and time submitted. |
 | Verification | Submit feedback as regular user and ensure required data is stored in database. |
-| Relevant Design | ... |
+| Relevant Design | FeedbackData, FeedbackForm |
 | Relevant Code | ... |
 
 | ID: FR-29 | Administrator is able to see all news stories |
@@ -834,7 +834,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | All news stories in the past and all news stories that have yet to happen should show on page. |
 | Functions performed | Function requests information about news stories from database and populations it on the admin news stories page. |
 | Verification | Go onto admin news stories page and check to see if all news stories are shown. Also check to see if the news stories within the database is showing up correctly in the admin news stories page. |
-| Relevant Design | ... |
+| Relevant Design | NewsStoryData |
 | Relevant Code | ... |
 
 | ID: FR-30 | Administrator is able to create news story |
@@ -846,7 +846,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | An in-app notification shows up indicating that the news story has been submitted. The app sends the news story data to the database. |
 | Functions performed | In-app notification must be called indicating that the news story has been submitted. The server must accept the request for news story creation.  |
 | Verification | Create a news story in the admin page and see if the in-app notification shows up and check to see if news story is now stored in database. |
-| Relevant Design | ... |
+| Relevant Design | NewsStoryData |
 | Relevant Code | ... |
 
 | ID: FR-31 | Administrator is able to update news story |
@@ -858,7 +858,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response |  An in-app notification shows up indicating that the edited news story has been submitted. The app sends the news story data to the database. |
 | Functions performed | In-app notification function must be called indicating that the edited news story has been submitted. The server must accept the request for edit news story. |
 | Verification | Click into a news story in the admin page. Then edit the news story through the form. Check to see if the news story is now stored in the database |
-| Relevant Design | ... |
+| Relevant Design | NewsStoryData |
 | Relevant Code | ... |
 
 | ID: FR-32 | Administrator is able to delete/cancel news story |
@@ -870,7 +870,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Output/response | The in-app notification will indicate that the news story has been deleted. The news story will also be removed from the database. |
 | Functions performed | In-app notification function must be called indicating that the news story has been deleted. The server must accept the request for deleted news story and edit the database. |
 | Verification | Delete a news story. Check to see if the news story is still stored in the database. |
-| Relevant Design | ... |
+| Relevant Design | NewsStoryData |
 | Relevant Code | ... |
 
 ### 3.3 Quality of Service

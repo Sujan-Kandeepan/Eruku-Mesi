@@ -376,7 +376,7 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Dependencies | None |
 | Implementation | Database storage for events with records containing event name, description, date/time, location provided by the organizers |
 | Module secrets | Database service and schema used for storage |
-| Rationale | Centralized datastore for event posting, notifications, and display within application as outlined in PUC 1-8 and FR 1-11 from SRS |
+| Rationale | Centralized datastore for event posting, notifications, and display within application as outlined in PUC 1-8 and FR 1-11, 20-22 from SRS |
 
 | NewsStoriesData | Store and provide information for news stories |
 | --- | --- |
@@ -420,7 +420,7 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Dependencies | EventsData, NewsStoriesData |
 | Implementation | Aggregate information queried from database for news and events, sort and filter by search criteria, get relevant record fields |
 | Module secrets | Database query logic, data structures and algorithms used to aggregate data, interpretation of client requests and database record structure from query results |
-| Rationale | Server-side processing for functionality with news and events display, event posting, and event notifications as outlined in PUC 1-8 and FR-{1-11} from SRS |
+| Rationale | Server-side processing for functionality with news and events display, event posting, and event notifications as outlined in PUC 1-8 and FR 1-11, 20-22 from SRS |
 
 | EventNotificationFunctions | Non-trivial server-side algorithms necessary for processing event notifications |
 | --- | --- |
@@ -434,7 +434,7 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Dependencies | MessagesData |
 | Implementation | Sorting algorithm to sort the messages based off of timestamp.  |
 | Module secrets | Sorting algorithm  |
-| Rationale | PUC NUM 10-11; FR 16-17 |
+| Rationale | PUC NUM 10-11; FR 16-18 |
 
 | MediaContentFunctions | Non-trivial server-side algorithms necessary for processing media content |
 | --- | --- |
@@ -471,7 +471,7 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Dependencies | EventsData, EventNotificationFunctions |
 | Implementation | Rendering and layout of upcoming events page with information for events returned by the server |
 | Module secrets | Requests made to server, element hierarchy within front-end components |
-| Rationale | PUC 1-8 and FR 1-11 |
+| Rationale | PUC 1-8 and FR 1-11, 20-22 |
 
 | EventForm | Front-end rendering and server requests for posting events |
 | --- | --- |
