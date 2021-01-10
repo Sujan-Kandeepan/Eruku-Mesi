@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import EmptyPage from './EmptyPage';
 import MediaContentForm from './MediaContentForm';
 import { Button, Content, Feed } from '../shared/SharedComponents';
 import { get, truncate } from '../shared/SharedFunctions';
@@ -13,13 +12,16 @@ import SharedStyles from '../shared/SharedStyles';
 // Initialize stack navigator
 const Stack = createStackNavigator();
 
+// Page for managing/displaying media content (photos, files, etc.)
 export default function MediaContentPage(props) {
+  // Central list of page names for consistency
   const pages = {
     postMediaContent: 'Post Media Content',
     viewMediaContent: id => `View Media Content Post ${id}`,
     editMediaContent: id => `Edit Media Content Post ${id}`,
     deleteMediaContent: id => `Delete Media Content Post ${id}`
   };
+  // State variables for display data and state (two-way data binding)
   const [posts, setPosts] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
   // Initial load of posts by calling useEffect with [] as second param to run once
@@ -54,6 +56,7 @@ export default function MediaContentPage(props) {
                 keyExtractor={(item, index) => (item ? item.id : index).toString()}
                 cardContent={item =>
                   <>
+                    {/* Layout soon to change, title and text for now */}
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
                       {item && item.title}
                     </Text>
@@ -65,29 +68,34 @@ export default function MediaContentPage(props) {
           {/* Static page route for posting media content */}
           {props.admin &&
             <Stack.Screen name={pages.postMediaContent} children={(localProps) =>
+              // Separate form with no payload to indicate new record
               <MediaContentForm {...props} {...localProps} posts={posts} setPosts={setPosts} />} />}
           {/* Generated page routes for viewing media content */}
           {posts.map(post => 
             <Stack.Screen key={post.id} name={pages.viewMediaContent(post.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
+                {/* Admin controls */}
                 {props.admin &&
                   <Button {...props} {...localProps} text='Edit'
                     onPress={() => localProps.navigation.push(pages.editMediaContent(post.id))} />}
                 {props.admin &&
                   <Button {...props} {...localProps} text='Delete'
                     onPress={() => localProps.navigation.push(pages.deleteMediaContent(post.id))} />}
+                {/* Display for individual post */}
                 <Content {...props} {...localProps} title={post.title}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}
           {props.admin && posts.map(post =>
             <Stack.Screen key={post.id} name={pages.editMediaContent(post.id)} children={(localProps) =>
+              // Separate form with existing record as payload
               <MediaContentForm {...props} {...localProps}
                 posts={posts} setPosts={setPosts} payload={post} />} />)}
           {/* Generated page routes for deleting media content */}
           {props.admin && posts.map(post =>
             <Stack.Screen key={post.id} name={pages.deleteMediaContent(post.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
+                {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' accent
                   onPress={() => setPosts(posts.filter(p => p.id !== post.id))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>

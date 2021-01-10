@@ -4,6 +4,7 @@ import { Keyboard, Text, TextInput, View } from 'react-native';
 import AppPage from './AppPage';
 import { Button } from '../shared/SharedComponents';
 
+// Form for submitting user feedback/issues
 export default function FeedbackForm(props) {
   const [text, setText] = React.useState('');
   // Reference: https://stackoverflow.com/a/59875773

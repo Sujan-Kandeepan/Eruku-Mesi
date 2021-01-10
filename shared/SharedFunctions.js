@@ -10,6 +10,7 @@ export const get = async (url) => {
   }
 }
 
+// Shorten text for compact display purposes
 export const truncate = (string, num) => {
   let truncated = string.split(' ').slice(0, num).join(' ');
   if (truncated.length < string.length)
@@ -17,4 +18,5 @@ export const truncate = (string, num) => {
   return truncated;
 }
 
+// Extract list of paragraphs from large input field value containing text
 export const paragraphs = text => text.split('\n').filter(s => s !== '').map(s => s.trim());

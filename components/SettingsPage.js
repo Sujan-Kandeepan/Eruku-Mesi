@@ -3,9 +3,11 @@ import React from 'react';
 import AppPage from './AppPage';
 import { Button, Header, Toggle } from '../shared/SharedComponents';
 
+// Page for updating user settings, account management, etc.
 export default function SettingsPage(props) {
   return (
     <AppPage {...props}>
+      {/* Most common logic here extracted into shared components */}
       <Header {...props} text={'Preferences'} />
       <Toggle {...props} text={'Receive Event Notifications'}
         value={props.receiveNotifications} onValueChange={props.toggleNotifications} />
