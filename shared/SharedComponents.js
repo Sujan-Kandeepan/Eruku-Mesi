@@ -28,7 +28,8 @@ export const Button = (props) =>
 
 export const IconButton = (props) =>
   <TouchableOpacity style={props.style} onPress={noRepeat(props.onPress)}
-    onLongPress={noRepeat(props.onLongPress)} delayLongPress={props.delayLongPress}>
+    onLongPress={noRepeat(props.onLongPress)} delayLongPress={props.delayLongPress}
+    activeOpacity={props.noFeedback ? 1.0 : 0.2}>
     <Icon name={props.name} type={props.type} color={props.color} containerStyle={props.containerStyle} />
   </TouchableOpacity>
 

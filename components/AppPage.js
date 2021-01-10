@@ -40,7 +40,7 @@ export default function AppPage({ cancel, children, navigation, nested, onReturn
             isKeyboardVisible &&
               <IconButton name='keyboard-hide' color={theme.colors.text}
                 containerStyle={{ marginRight: 25, marginTop: 5 }}
-                onPress={() => Keyboard.dismiss()} />
+                onPress={() => Keyboard.dismiss()} noFeedback />
         }} children={() => // Display back button if nested, then children
           <>
             {nested && !tab &&
