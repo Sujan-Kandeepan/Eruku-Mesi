@@ -6,6 +6,8 @@ Software Requirements Specification: [doc/srs.md](doc/srs.md)
 
 Design Document: [doc/design.md](doc/design.md)
 
+SRS-driven roadmap information given in [3.2 Functional Requirements](doc/srs.md#32-functional-requirements).
+
 ## Getting Started with Eruku Mesi App
 
 Start your mongodb instance locally. Create a new database with the name `accounts` by running `use accounts` in the mongodb command line.
