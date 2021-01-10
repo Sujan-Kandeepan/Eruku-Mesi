@@ -15,12 +15,14 @@ export default function EventForm(props) {
     <AppPage {...props} nested cancel onReturn={() => setDescription('')}>
       <View style={{ flex: 1 }}>
         {/* Reference: https://reactnative.dev/docs/textinput */}
-        <TextInput placeholder='Event Title' autoFocus autoCapitalize='words' style={{
+        <TextInput placeholder='Event Title' placeholderTextColor={props.theme.colors.placeholder}
+        autoFocus autoCapitalize='words' style={{
           backgroundColor: props.theme.colors.card,
           color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
           margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
         }} value={title} onChangeText={value => setTitle(value)} />
-        <TextInput placeholder='Event Description' autoFocus multiline editable spellCheck style={{
+        <TextInput placeholder='Event Description' placeholderTextColor={props.theme.colors.placeholder}
+        autoFocus multiline editable spellCheck style={{
           backgroundColor: props.theme.colors.card,
           color: props.theme.colors.text, flex: 1, margin: 15,
           padding: 20, textAlignVertical: 'top', width
