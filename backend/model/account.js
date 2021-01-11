@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const accountDB = mongoose.connection.useDb('Accounts');
 
 let Account = new Schema({
     username: {
@@ -59,4 +60,4 @@ let Account = new Schema({
         default: Date.now
     }
 });
-module.exports = mongoose.model('Account', Account, 'User');
+module.exports = accountDB.model('Account', Account, 'User');
