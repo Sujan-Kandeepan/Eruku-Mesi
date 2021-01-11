@@ -1,16 +1,16 @@
 import React from 'react';
-import { TextInput, View } from 'react-native';
+import { View } from 'react-native';
 
 import AppPage from './AppPage';
-import { Button } from '../shared/SharedComponents';
+import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
 import { paragraphs } from '../shared/SharedFunctions';
 
 // Form for creating or updating a media content record
-// Duplicated code for now as layout will soon change
 export default function MediaContentForm(props) {
   // State variables for form fields (two-way data binding)
   const [title, setTitle] = React.useState(props.payload ? props.payload.title : '');
-  const [description, setDescription] = React.useState(props.payload ? props.payload.description.join('\n\n') : '');
+  const [description, setDescription] =
+    React.useState(props.payload ? props.payload.description.join('\n\n') : '');
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
@@ -19,19 +19,11 @@ export default function MediaContentForm(props) {
       <View style={{ flex: 1 }}>
         {/* Simple bold input field for post title */}
         {/* Reference: https://reactnative.dev/docs/textinput */}
-        <TextInput placeholder='Post Title' placeholderTextColor={props.theme.colors.placeholder}
-          autoFocus autoCapitalize='words' style={{
-            backgroundColor: props.theme.colors.card,
-            color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
-            margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
-          }} value={title} onChangeText={value => setTitle(value)} />
+        <TitleInput {...props} placeholder='Post Title' value={title}
+          onChangeText={value => setTitle(value)} />
         {/* Large input field for post description */}
-        <TextInput placeholder='Post Description' placeholderTextColor={props.theme.colors.placeholder}
-          autoFocus multiline editable spellCheck style={{
-            backgroundColor: props.theme.colors.card,
-            color: props.theme.colors.text, flex: 1, margin: 15,
-            padding: 20, textAlignVertical: 'top', width
-          }} value={description} onChangeText={(value) => setDescription(value)} />
+        <BodyInput {...props} placeholder='Post Description' value={description}
+          onChangeText={(value) => setDescription(value)} width={width} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15, marginTop: -15 }}>
           <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}

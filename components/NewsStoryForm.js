@@ -1,16 +1,16 @@
 import React from 'react';
-import { TextInput, View } from 'react-native';
+import { View } from 'react-native';
 
 import AppPage from './AppPage';
-import { Button } from '../shared/SharedComponents';
+import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
 import { paragraphs } from '../shared/SharedFunctions';
 
 // Form for creating or updating a news story record
-// Duplicated code for now as layout will soon change
 export default function NewsStoryForm(props) {
   // State variables for form fields (two-way data binding)
   const [title, setTitle] = React.useState(props.payload ? props.payload.title : '');
-  const [content, setContent] = React.useState(props.payload ? props.payload.content.join('\n\n') : '');
+  const [content, setContent] =
+    React.useState(props.payload ? props.payload.content.join('\n\n') : '');
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
@@ -19,19 +19,11 @@ export default function NewsStoryForm(props) {
       <View style={{ flex: 1 }}>
         {/* Simple bold input field for news story title */}
         {/* Reference: https://reactnative.dev/docs/textinput */}
-        <TextInput placeholder='News Story Title' placeholderTextColor={props.theme.colors.placeholder}
-          autoFocus autoCapitalize='words' style={{
-            backgroundColor: props.theme.colors.card,
-            color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
-            margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
-          }} value={title} onChangeText={value => setTitle(value)} />
+        <TitleInput {...props} placeholder='News Story Title' value={title}
+          onChangeText={value => setTitle(value)} />
         {/* Large input field for news story content */}
-        <TextInput placeholder='News Story Content' placeholderTextColor={props.theme.colors.placeholder}
-          autoFocus multiline editable spellCheck style={{
-            backgroundColor: props.theme.colors.card,
-            color: props.theme.colors.text, flex: 1, margin: 15,
-            padding: 20, textAlignVertical: 'top', width
-          }} value={content} onChangeText={(value) => setContent(value)} />
+        <BodyInput {...props} placeholder='News Story Content' value={content}
+          onChangeText={(value) => setContent(value)} width={width} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15, marginTop: -15 }}>
           <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}

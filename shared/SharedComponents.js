@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { FlatList, Switch, TouchableOpacity } from 'react-native-gesture-handler';
 import debounce from 'lodash/debounce';
@@ -34,7 +34,7 @@ export const IconButton = (props) =>
     onLongPress={noRepeat(props.onLongPress)} delayLongPress={props.delayLongPress}
     activeOpacity={props.noFeedback ? 1.0 : 0.2}>
     <Icon name={props.name} type={props.type} color={props.color} containerStyle={props.containerStyle} />
-  </TouchableOpacity>
+  </TouchableOpacity>;
 
 // Card component containing switch with accompanying label text
 export const Toggle = (props) =>
@@ -75,7 +75,7 @@ export const Feed = (props) =>
         <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
           Nothing to display at this time.
         </Text>}
-    ListFooterComponent={<View style={{ height: 15 }} />} extraData={props.fetched} />
+    ListFooterComponent={<View style={{ height: 15 }} />} extraData={props.fetched} />;
 
 // Component to display expanded content for individual item
 export const Content = (props) =>
@@ -91,4 +91,23 @@ export const Content = (props) =>
     }}>
       {props.title}
     </Text>
-  } extraData={props.fetched} />
+  } extraData={props.fetched} />;
+
+// Component to input title field in form
+ //Reference: https://reactnative.dev/docs/textinput
+export const TitleInput = (props) =>
+  <TextInput placeholder={props.placeholder} placeholderTextColor={props.theme.colors.placeholder}
+    autoFocus autoCapitalize='words' onBlur={props.onBlur} style={{
+      backgroundColor: props.theme.colors.card,
+      color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
+      margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
+    }} value={props.value} onChangeText={props.onChangeText} />;
+
+// Component to input body field in form
+export const BodyInput = (props) =>
+  <TextInput placeholder={props.placeholder} placeholderTextColor={props.theme.colors.placeholder}
+    autoFocus multiline editable spellCheck onBlur={props.onBlur} style={{
+      backgroundColor: props.theme.colors.card,
+      color: props.theme.colors.text, flex: 1, margin: 15,
+      padding: 20, textAlignVertical: 'top', width: props.width
+    }} value={props.value} onChangeText={props.onChangeText} />;

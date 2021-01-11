@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import { Button, Content, IconButton } from '../shared/SharedComponents';
+import { BodyInput, Button, Content, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
 import { get, paragraphs } from '../shared/SharedFunctions';
 
@@ -159,12 +159,9 @@ export default function InformationPage(props) {
                 <View style={{ flex: 1 }}>
                   {/* All content editable within large text field */}
                   {/* Reference: https://reactnative.dev/docs/textinput */}
-                  <TextInput autoFocus multiline editable spellCheck style={{
-                    backgroundColor: props.theme.colors.card,
-                    color: props.theme.colors.text, flex: 1, margin: 15,
-                    padding: 20, textAlignVertical: 'top', width
-                  }} value={editText} onChangeText={(value) => setEditText(value)}
-                  onBlur={Keyboard.dismiss} />
+                  <BodyInput {...props} value={editText}
+                    onChangeText={(value) => setEditText(value)}
+                    width={width} onBlur={Keyboard.dismiss} />
                   {/* Submit button with logic to update information section */}
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
                     <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
