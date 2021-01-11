@@ -32,7 +32,7 @@ export default function InformationPage(props) {
       await Promise.all(pages.map((page, index) =>
         get('https://baconipsum.com/api/?type=meat-and-filler').then(content => {
           let newData = data;
-          newData[index] = { title: page, content }
+          newData[index] = { title: page, content };
           setData(newData);
         })));
       setFetched(true);

@@ -53,7 +53,7 @@ export default function MediaContentPage(props) {
               {/* Display posts as individual cards in scrolling feed */}
               <Feed {...props} fetched={fetched} data={posts} loadingText='Loading media content...'
                 onItemPress={item => localProps.navigation.push(pages.viewMediaContent(item && item.id))}
-                keyExtractor={(item, index) => (item ? item.id : index).toString()}
+                keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                 cardContent={item =>
                   <>
                     {/* Layout soon to change, title and text for now */}

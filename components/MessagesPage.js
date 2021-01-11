@@ -58,7 +58,7 @@ export default function MessagesPage(props) {
               <Text style={{ color: props.theme.colors.text }}>
                 {item.content}
               </Text>
-            </View>} keyExtractor={item => item && item.id.toString()} extraData={fetched}
+            </View>} keyExtractor={(item, index) => `${item ? item.id : index} ${index}`} extraData={fetched}
             // Set reference and automatically scroll to bottom when list populates
             ref={ref => setList(ref)} onContentSizeChange={scroll} onLayout={scroll} onEndReached={stopScroll} />
         </View>

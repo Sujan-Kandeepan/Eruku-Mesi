@@ -64,7 +64,7 @@ export default function UpcomingEventsPage(props) {
                   <Tab.Screen name={pages.listView} children={() =>
                     <Feed {...props} fetched={fetched} data={events} loadingText='Loading events...'
                       onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
-                      keyExtractor={(item, index) => (item ? item.id : index).toString()}
+                      keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                       cardContent={item =>
                         <>
                           {/* Layout soon to change, title and text for now */}

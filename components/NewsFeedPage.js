@@ -53,7 +53,7 @@ export default function NewsFeedPage(props) {
               {/* Display news stories as individual cards in scrolling feed */}
               <Feed {...props} fetched={fetched} data={stories} loadingText='Loading news stories...'
                 onItemPress={item => localProps.navigation.push(pages.viewNewsStory(item && item.id))}
-                keyExtractor={(item, index) => (item ? item.id : index).toString()}
+                keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                 cardContent={item =>
                   <>
                     {/* Layout soon to change, title and text for now */}
