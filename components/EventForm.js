@@ -1,9 +1,10 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, Text, View, YellowBox } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import AppPage from './AppPage';
 import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
-import { paragraphs } from '../shared/SharedFunctions';
+import { currentDate, paragraphs, showDate, showTime } from '../shared/SharedFunctions';
 
 // Form for creating or updating an event record
 export default function EventForm(props) {
@@ -11,15 +12,34 @@ export default function EventForm(props) {
   const [title, setTitle] = React.useState(props.payload ? props.payload.title : '');
   const [description, setDescription] =
     React.useState(props.payload ? props.payload.description.join('\n\n') : '');
+  const [date, setDate] = React.useState(props.payload ? props.payload.date : currentDate());
+  const [mode, setMode] = React.useState('date');
+  const [show, setShow] = React.useState(false);
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
+  // Ignore warnings about date picker (still works, warning is superfluous) and YellowBox itself
+  React.useEffect(() => YellowBox.ignoreWarnings([
+    'Possible Unhandled Promise Rejection',
+    'YellowBox has been replaced with LogBox'
+  ]), []);
   return (
     <AppPage {...props} nested cancel onReturn={() => setDescription('')}>
       <View style={{ flex: 1 }}>
         {/* Simple bold input field for event title */}
         <TitleInput {...props} placeholder='Event Title' value={title}
           onChangeText={value => setTitle(value)} />
+        {/* Buttons to open date picker in date and time selection mode respectively */}
+        {/* Reference: https://github.com/react-native-datetimepicker/datetimepicker */}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 15 }}>
+          <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('date'); }}
+            text={<><Text style={{ fontWeight: 'bold' }}>Date:</Text> {showDate(date)}</>} />
+          <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('time'); }}
+            text={<><Text style={{ fontWeight: 'bold' }}>Time:</Text> {showTime(date)}</>} />
+        </View>
+        {/* Date picker widget triggered by buttons above */}
+        {show && <DateTimePicker mode={mode} value={date}
+          onChange={(_, value) => { try { setShow(Platform.OS === 'ios'); setDate(value || date); } catch {} }} />}
         {/* Large input field for event description */}
         <BodyInput {...props} placeholder='Event Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
@@ -42,12 +62,12 @@ export default function EventForm(props) {
                   // Find and update existing record
                   ? props.events.map(event =>
                     event.id === props.payload.id
-                      ? { ...event, title, description: paragraphs(description) }
+                      ? { ...event, title, date, description: paragraphs(description) }
                       : event)
                   // Append new record
                   : [
                     ...props.events,
-                    { id: props.events.length + 1, title, description: paragraphs(description) }
+                    { id: props.events.length + 1, title, date, description: paragraphs(description) }
                   ]);
               // Exit page, return to previous
               props.navigation.pop();

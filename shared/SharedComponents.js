@@ -83,14 +83,24 @@ export const Content = (props) =>
     // Supports only text paragraphs for now, will add more functionality later
     <Text style={{ color: props.theme.colors.text, margin: 15, marginTop: 0 }}>{item}</Text>
   } keyExtractor={item => item} ListHeaderComponent={
-    // Display title above rest of content
-    <Text style={{
-      color: props.theme.colors.text,
-      fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10,
-      textAlign: 'center', textDecorationLine: 'underline'
-    }}>
-      {props.title}
-    </Text>
+    <>
+      {/* Display title above rest of content */}
+      {props.title && <Text style={{
+        color: props.theme.colors.text,
+        fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10,
+        textAlign: 'center', textDecorationLine: 'underline'
+      }}>
+        {props.title}
+      </Text>}
+      {/* Display title above rest of content */}
+      {props.subtitle && <Text style={{
+        color: props.theme.colors.text,
+        fontSize: 14, marginBottom: 10,
+        textAlign: 'center'
+      }}>
+        {props.subtitle}
+      </Text>}
+    </>
   } extraData={props.fetched} />;
 
 // Component to input title field in form

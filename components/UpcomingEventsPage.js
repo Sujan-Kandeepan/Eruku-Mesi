@@ -8,7 +8,7 @@ import AppPage from './AppPage';
 import EmptyPage from './EmptyPage';
 import EventForm from './EventForm';
 import { Button, Content, Feed } from '../shared/SharedComponents';
-import { get, truncate } from '../shared/SharedFunctions';
+import { get, showDate, showTime, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
@@ -37,7 +37,7 @@ export default function UpcomingEventsPage(props) {
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&paras=2').then(description => {
           let newEvents = events;
-          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, description };
+          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, date: new Date(), description };
           setEvents(newEvents);
         })));
       setFetched(true);
@@ -67,8 +67,13 @@ export default function UpcomingEventsPage(props) {
                       cardContent={item =>
                         <>
                           {/* Layout soon to change, title and text for now */}
-                          <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
-                            {item && item.title}
+                          <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
+                            {item &&
+                              <>
+                                <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
+                                <Text style={{ color: props.theme.colors.disabled}}> | </Text>
+                                <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
+                              </>}
                           </Text>
                           <Text style={{ color: props.theme.colors.text }}>
                             {item && truncate(item.description[0], 10)}
@@ -97,6 +102,7 @@ export default function UpcomingEventsPage(props) {
                     onPress={() => localProps.navigation.push(pages.deleteEvent(event.id))} />}
                 {/* Display for individual event */}
                 <Content {...props} {...localProps} title={event.title}
+                  subtitle={`${showDate(event.date, true)} @ ${showTime(event.date, true)}`}
                   content={event.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing events */}
