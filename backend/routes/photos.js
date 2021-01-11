@@ -23,7 +23,21 @@ router.post('/add', function(req, res){
     }
   });
 
+router.post("/edit/:id", function (req, res) {
+  let photo = req.body;
+  let query = { _id: req.params.id };
 
+  Photo.update(query, photo, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res
+        .status(200)
+        .json({ msg: "photo successfully updated", photo: photo });
+    }
+  });
+});
 router.get('/', function(req, res){
     Photo.find({}, function(err, photos){
         if (err){
@@ -34,4 +48,14 @@ router.get('/', function(req, res){
     });
 });
 
+router.delete("/:id", function (req, res) {
+  let query = { _id: req.params.id };
+
+  Photo.remove(query, function (err) {
+    if (err) {
+      console.log(err);
+    }
+    res.status(200).json({ msg: "photo deleted successfully!" });
+  });
+});
 module.exports = router;

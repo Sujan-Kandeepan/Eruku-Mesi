@@ -23,6 +23,21 @@ router.post('/add', function(req, res){
     }
   });
 
+router.post("/edit/:id", function (req, res) {
+  let notification = req.body;
+  let query = { _id: req.params.id };
+
+  Notification.update(query, notification, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res
+        .status(200)
+        .json({ msg: "notification successfully updated", notification: notification });
+    }
+  });
+});
 
 router.get('/', function(req, res){
     Notification.find({}, function(err, notifications){
@@ -32,6 +47,17 @@ router.get('/', function(req, res){
         res.json({notifications:notifications});
         }
     });
+});
+
+router.delete("/:id", function (req, res) {
+  let query = { _id: req.params.id };
+
+  Notification.remove(query, function (err) {
+    if (err) {
+      console.log(err);
+    }
+    res.status(200).json({ msg: "notification deleted successfully!" });
+  });
 });
 
 module.exports = router;

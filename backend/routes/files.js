@@ -23,6 +23,21 @@ router.post('/add', function(req, res){
     }
   });
 
+router.post("/edit/:id", function (req, res) {
+  let file = req.body;
+  let query = { _id: req.params.id };
+
+  File.update(query, file, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res
+        .status(200)
+        .json({ msg: "file successfully updated", file: file });
+    }
+  });
+});
 
 router.get('/', function(req, res){
     File.find({}, function(err, files){
@@ -32,6 +47,17 @@ router.get('/', function(req, res){
         res.json({files:files});
         }
     });
+});
+
+router.delete("/:id", function (req, res) {
+  let query = { _id: req.params.id };
+
+  File.remove(query, function (err) {
+    if (err) {
+      console.log(err);
+    }
+    res.status(200).json({ msg: "file deleted successfully!" });
+  });
 });
 
 module.exports = router;

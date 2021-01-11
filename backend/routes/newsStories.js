@@ -24,6 +24,21 @@ router.post('/add', function(req, res){
     }
   });
 
+  router.post("/edit/:id", function (req, res) {
+    let newsStory = req.body;
+    let query = { _id: req.params.id };
+  
+    NewsStory.update(query, newsStory, function (err) {
+      if (err) {
+        console.log(err);
+        return;
+      } else {
+        res
+          .status(200)
+          .json({ msg: "newsStory successfully updated", newsStory: newsStory });
+      }
+    });
+  });
 
 router.get('/', function(req, res){
     NewsStory.find({}, function(err, newsStories){
@@ -33,6 +48,17 @@ router.get('/', function(req, res){
         res.json({newsStories:newsStories});
         }
     });
+});
+
+router.delete("/:id", function (req, res) {
+  let query = { _id: req.params.id };
+
+  NewsStory.remove(query, function (err) {
+    if (err) {
+      console.log(err);
+    }
+    res.status(200).json({ msg: "newsStory deleted successfully!" });
+  });
 });
 
 module.exports = router;

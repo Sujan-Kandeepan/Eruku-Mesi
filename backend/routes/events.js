@@ -22,6 +22,21 @@ router.post('/add', function(req, res){
     }
   });
 
+router.post("/edit/:id", function (req, res) {
+  let event = req.body;
+  let query = { _id: req.params.id };
+
+  Event.update(query, event, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res
+        .status(200)
+        .json({ msg: "event successfully updated", event: event });
+    }
+  });
+});
 
 router.get('/', function(req, res){
     Event.find({}, function(err, events){
@@ -31,6 +46,17 @@ router.get('/', function(req, res){
         res.json({events:events});
         }
     });
+});
+
+router.delete("/:id", function (req, res) {
+  let query = { _id: req.params.id };
+
+  Event.remove(query, function (err) {
+    if (err) {
+      console.log(err);
+    }
+    res.status(200).json({ msg: "event deleted successfully!" });
+  });
 });
 
 module.exports = router;
