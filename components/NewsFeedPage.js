@@ -32,8 +32,7 @@ export default function NewsFeedPage(props) {
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=meat-and-filler&paras=7').then(content => {
           let newStories = stories;
-          if (!newStories[index])
-            newStories[index] = { id: index + 1, title: `News Story ${index + 1}`, content };
+          newStories[index] = { id: index + 1, title: `News Story ${index + 1}`, content };
           setStories(newStories);
         })));
       setFetched(true);

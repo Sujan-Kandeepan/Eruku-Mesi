@@ -37,8 +37,7 @@ export default function UpcomingEventsPage(props) {
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&paras=2').then(description => {
           let newEvents = events;
-          if (!newEvents[index])
-            newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, description };
+          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, description };
           setEvents(newEvents);
         })));
       setFetched(true);
