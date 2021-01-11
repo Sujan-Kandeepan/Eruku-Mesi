@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const PORT = process.env.PORT || 4000;
 
 app.use(cors());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 // mongoose.connect(config.database, { useNewUrlParser: true });
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
@@ -42,7 +43,21 @@ app.use(expressValidator({
 
 
 const accounts = require('./routes/accounts');
+const events = require('./routes/events');
+const files = require('./routes/files');
+const messages = require('./routes/messages');
+const newsStories = require('./routes/newsStories');
+const notifications = require('./routes/notifications');
+const photos = require('./routes/photos');
+
 app.use('/accounts', accounts);
+app.use('/events', events);
+app.use('/files', files);
+app.use('/messages', messages);
+app.use('/newsStories', newsStories);
+app.use('/notifications', notifications);
+app.use('/photos', photos);
+
 
 app.listen(PORT, function() {
     console.log("Server is running on port: " + PORT);

@@ -3,8 +3,6 @@ const router = express.Router();
 
 let Account = require('../model/account.js');
 
-
-
 router.post('/add', function(req, res){
     req.assert('username', 'Post username must be set').notEmpty();
     req.assert('firstName', 'Post firstName must have content').notEmpty();
@@ -12,7 +10,6 @@ router.post('/add', function(req, res){
     req.assert('phone', 'Post phone must have content').notEmpty();
     req.assert('hash', 'Post hash must be set').notEmpty();
     req.assert('salt', 'Post salt must have content').notEmpty();
-    req.assert('createdAt', 'Post passwordResetToken must be set').notEmpty();
   
     let errors = req.validationErrors();
     
@@ -24,7 +21,7 @@ router.post('/add', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.status(200).json({ msg: 'Account created', account });
+          res.status(200).json({ msg: 'account created', account });
         }
       })
     }

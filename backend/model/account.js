@@ -56,8 +56,7 @@ let Account = new Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-        required: true
+        default: Date.now
     }
 });
 module.exports = mongoose.model('Account', Account, 'User');
