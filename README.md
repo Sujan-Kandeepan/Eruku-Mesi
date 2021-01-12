@@ -2,7 +2,7 @@
 
 Create a `.env` file in the `backend` directory and replace `<password>` and `<dbname>` with MongoDB password and database name.
 
-## Install
+## Install & Usage
 This project uses node, npm, and expo.
 
 In the `backend` directory, 
