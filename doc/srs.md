@@ -500,7 +500,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Application fetches and renders content relevant to the user by their location. |
 | Verification | Simulate various scenarios for content to be displayed by creating events and posting updates for a created user at some location. |
 | Relevant Design | EventsData, NewsStoriesData, NewsAndEventsFunctions, NewsFeedPage, UpcomingEventsPage, EventForm, NewsStoryForm |
-| Relevant Code | NewsFeedPage.js, UpcomingEventsPage.js, MediaContentPage.js |
+| Relevant Code (Front) | NewsFeedPage.js, UpcomingEventsPage.js, MediaContentPage.js |
+| Relevant Code (Back) | server.js, newsStory.js, events.js |
 
 | ID: FR-2 | User is notified of all relevant upcoming local events |
 | ----- | ----- |
@@ -512,7 +513,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Posted events are filtered by time and location for the user to be notified by the application about only the relevant ones. |
 | Verification | Post multiple events and ensure that notifications are received for only the relevant events at the correct time and with correct event information shown. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js, notifications.js |
 
 | ID: FR-3 | User is not notified of events outside geographic location |
 | ----- | ----- |
@@ -524,7 +526,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | The application determines that the event location is outside the feasible radius from the location of the user and the application prevents a notification by this criterion. |
 | Verification | Post events that are outside the known location of a user and ensure that user is not notified of that event at any point. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js, notifications.js |
 
 | ID: FR-4 | User is not notified of past events |
 | ----- | ----- |
@@ -536,7 +539,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | The application determines that the event has already finished and the application prevents a notification by this criterion. |
 | Verification | Post events with a past date and ensure that user is not notified of that event at any point. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js, notifications.js |
 
 | ID: FR-5 | User is not notified of events too far into the future |
 | ----- | ----- |
@@ -548,7 +552,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | The application determines that the event is too far in the future and the application prevents a notification by this criterion. |
 | Verification | Post events happening far in the future and ensure that user is not yet notified. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js, notifications.js |
 
 | ID: FR-6 | Correct event information shown in notification |
 | ----- | ----- |
@@ -560,7 +565,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Posted events information is checked against the events information shown in the notification. |
 | Verification | Post events within the 'current' time and check to see if notification is showing. If notification shows, check to see if the notification event information corresponds to what is within posted event. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js, notifications.js |
 
 | ID: FR-7 | Correct event information shown on details page |
 | ----- | ----- |
@@ -572,7 +578,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Application loads detailed information pertaining to event displayed in opened notification and renders to user interface. |
 | Verification | Ensure page loads and correct information is displayed once notification has been opened. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js |
 
 | ID: FR-8 | Administrator is able to see all events |
 | ----- | ----- |
@@ -584,7 +591,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Function requests information about events from database and populations it on the admin events page. |
 | Verification | Go onto admin events page and check to see if all events are shown. Also check to see if the events within the database is showing up correctly in the admin events page. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (front) | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (Back) | server.js, events.js |
 
 | ID: FR-9 | Administrator is able to new create event |
 | ----- | ----- |
@@ -596,7 +604,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification must be called indicating that the event has been submitted. The server must accept the request for event creation.  |
 | Verification | Create an event in the admin page and see if the in-app notification shows up and check to see if event is now stored in database. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (front) | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (Back) | server.js, events.js |
 
 | ID: FR-10 | Administrator is able to update event |
 | ----- | ----- |
@@ -608,7 +617,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification function must be called indicating that the edited event has been submitted. The server must accept the request for edit event. |
 | Verification | Click into an event in the admin page. Then edit the event through the form. Check to see if the event is now stored in the database |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (front) | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (Back) | server.js, events.js |
 
 | ID: FR-11 | Administrator is able to delete/cancel event |
 | ----- | ----- |
@@ -620,7 +630,9 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification function must be called indicating that the event has been deleted. The server must accept the request for deleted event and edit the database. |
 | Verification | Delete an event. Check to see if the event is still stored in the database. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
-| Relevant Code | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (front) | UpcomingEventsPage.js, EventForm.js |
+| Relevant Code (Back) | server.js, events.js |
+
 
 | ID: FR-12 | Administrator is able to see all posts |
 | ----- | ----- |
@@ -632,7 +644,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Function requests information about posts from database and populations it on the admin posts page. |
 | Verification | Go onto admin posts page and check to see if all posts are shown. Also check to see if the posts within the database is showing up correctly in the admin posts page. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
-| Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (front) | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (Back) | server.js, events.js, newsStory.js |
 
 | ID: FR-13 | Administrator is able to new create post |
 | ----- | ----- |
@@ -644,7 +657,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification must be called indicating that the post has been submitted. The server must accept the request for post creation.  |
 | Verification | Create a post in the admin page and see if the in-app notification shows up and check to see if post is now stored in database. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
-| Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (front) | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (Back) | server.js, events.js, newsStory.js |
 
 | ID: FR-14 | Administrator is able to update post |
 | ----- | ----- |
@@ -656,7 +670,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification function must be called indicating that the edited post has been submitted. The server must accept the request for edit post. |
 | Verification | Click into a post in the admin page. Then edit the post through the form. Check to see if the post is now stored in the database. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
-| Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (front) | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (Back) | server.js, events.js, newsStory.js |
 
 | ID: FR-15 | Administrator is able to delete post |
 | ----- | ----- |
@@ -668,7 +683,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification function must be called indicating that the post has been deleted. The server must accept the request for deleted post and edit the database. |
 | Verification | Delete a post. Check to see if the post is still stored in the database. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
-| Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (front) | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (Back) | server.js, events.js, newsStory.js |
 
 | ID: FR-16 | User is able to view messages sent by other users |
 | ----- | ----- |
@@ -680,7 +696,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | A function that retrieves all historical messages from database and displays them. |
 | Verification | Go onto the Messaging page and all the historical messages should show. |
 | Relevant Design | MessagesData, MessagesFunctions, MessagesPage |
-| Relevant Code | MessagesPage.js |
+| Relevant Code (front) | MessagesPage.js |
+| Relevant Code (Back) | server.js, messages.js |
 
 | ID: FR-17 | User is able to send new public message |
 | ----- | ----- |
@@ -692,7 +709,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | A function that will create a new message into the database and display it on the page. |
 | Verification | Create a new message and check if new message is being displayed and also stored within database. |
 | Relevant Design | MessagesData, MessagesFunctions, MessagesPage |
-| Relevant Code | MessagesPage.js |
+| Relevant Code (front) | MessagesPage.js |
+| Relevant Code (Back) | server.js, messages.js |
 
 | ID: FR-18 | Automated replies when no other users active |
 | ----- | ----- |
@@ -704,7 +722,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | A function that display a message to the user screen if there are no other users. |
 | Verification | Enter into the page with no other person in the page and check to see if the message pops up. |
 | Relevant Design | AccountsData, MessagesData, MessagesFunctions, AuthenticationFunctions, MessagesPage, AuthenticationPage |
-| Relevant Code | MessagesPage.js |
+| Relevant Code (front) | MessagesPage.js |
+| Relevant Code (Back) | server.js, messages.js |
 
 | ID: FR-19 | User is able to register new account |
 | ----- | ----- |
@@ -716,7 +735,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | There is a function to verify account information and then another function to store information correctly into database. |
 | Verification | Go onto the forms page and create a new account. |
 | Relevant Design | AccountsData, AuthenticationFunctions, AuthenticationPage |
-| Relevant Code | SettingsPage.js |
+| Relevant Code (front) | SettingsPage.js |
+| Relevant Code (Back) | server.js, accounts.js |
 
 | ID: FR-20 | User is able to sign into application |
 | ----- | ----- |
@@ -728,7 +748,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | There is a function to verify sign in information. |
 | Verification | Go onto the sign in page and check the sign in with incorrect information. In this case, it should fail. Then check the sign in with correct information. In this case, it should succeed. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
-| Relevant Code | SettingsPage.js |
+| Relevant Code (front) | SettingsPage.js |
+| Relevant Code (Back) | server.js, accounts.js |
 
 | ID: FR-21 | Calendar contains all nearby upcoming events |
 | ----- | ----- |
@@ -740,7 +761,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | There is a function to check all upcoming events and their location. If the user is within the specified range, the function will return the information of the event to be shown in the calendar view. |
 | Verification | Go onto the Calendar View page with your GPS at a specific location within 200km to those events. Check to see if that event is showing up in the calendar. If it is showing, the program is working correctly. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js |
 
 | ID: FR-22 | Calendar omits far-away events |
 | ----- | ----- |
@@ -752,7 +774,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | There is a function to check all upcoming events and their location. If the user is outside the specified range, the function will not return the information of the event to be shown in the calendar view. |
 | Verification | Go onto the Calendar View page with your GPS outside of a specific location within 200km to certain events. Check to see if that event is showing up in the calendar. If it is not showing, the program is working correctly. |
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js |
 
 | ID: FR-23 | Regular user is able to see relevant posts |
 | ----- | ----- |
@@ -764,7 +787,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Function requests information about posts from database and populations it on the user feed. |
 | Verification | Go onto user feed and check to see if all posts are shown. Also check to see if the posts within the database is showing up correctly in the user feed. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
-| Relevant Code | UpcomingEventsPage.js |
+| Relevant Code (front) | UpcomingEventsPage.js |
+| Relevant Code (Back) | server.js, events.js, newsStories.js |
 
 | ID: FR-24 | Regular user is able to new create post |
 | ----- | ----- |
@@ -811,7 +835,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | The application fetches content from the database on page load. For sharing content, the application generates and provides the sharable URL link for the content. |
 | Verification | Test whether the user can see and copy the sharable link when the "Share" button is clicked. Test whether the generated link is correctly functional. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
-| Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (front) | MediaContentPage.js, MediaContentForm.js |
+| Relevant Code (back) | server.js, newsStory.js, events.js |
 
 | ID: FR-28 | User is able to submit feedback |
 | ----- | ----- |
@@ -835,7 +860,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | Function requests information about news stories from database and populations it on the admin news stories page. |
 | Verification | Go onto admin news stories page and check to see if all news stories are shown. Also check to see if the news stories within the database is showing up correctly in the admin news stories page. |
 | Relevant Design | NewsStoryData |
-| Relevant Code | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (front) | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (back) | server.js, newsStory.js |
 
 | ID: FR-30 | Administrator is able to create news story |
 | ----- | ----- |
@@ -847,7 +873,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification must be called indicating that the news story has been submitted. The server must accept the request for news story creation.  |
 | Verification | Create a news story in the admin page and see if the in-app notification shows up and check to see if news story is now stored in database. |
 | Relevant Design | NewsStoryData |
-| Relevant Code | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (front) | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (back) | server.js, newsStory.js |
 
 | ID: FR-31 | Administrator is able to update news story |
 | ----- | ----- |
@@ -859,7 +886,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification function must be called indicating that the edited news story has been submitted. The server must accept the request for edit news story. |
 | Verification | Click into a news story in the admin page. Then edit the news story through the form. Check to see if the news story is now stored in the database |
 | Relevant Design | NewsStoryData |
-| Relevant Code | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (front) | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (back) | server.js, newsStory.js |
 
 | ID: FR-32 | Administrator is able to delete/cancel news story |
 | ----- | ----- |
@@ -871,7 +899,8 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Functions performed | In-app notification function must be called indicating that the news story has been deleted. The server must accept the request for deleted news story and edit the database. |
 | Verification | Delete a news story. Check to see if the news story is still stored in the database. |
 | Relevant Design | NewsStoryData |
-| Relevant Code | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (front) | NewsFeedPage.js, NewsStoryForm.js |
+| Relevant Code (back) | server.js, newsStory.js |
 
 ### 3.3 Quality of Service
 
