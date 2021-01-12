@@ -8,6 +8,8 @@ Design Document: [doc/design.md](doc/design.md) ([see revisions](https://gitlab.
 
 SRS-driven roadmap information given in [3.2 Functional Requirements](doc/srs.md#32-functional-requirements).
 
+Note: only the mandatory features in [2.6 Apportioning of Requirements](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/blob/master/doc/srs.md#26-apportioning-of-requirements) are being targeted for the final release while the rest, while included in the requirements/design documentation, would be initially out of scope unless additional time permits.
+
 ## Getting Started with Eruku Mesi App
 
 Create a `.env` file in the `backend` directory and replace `<password>` and `<dbname>` with MongoDB password and database name.
