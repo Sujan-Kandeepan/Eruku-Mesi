@@ -2,11 +2,9 @@
 
 ## Documentation
 
-Software Requirements Specification: [doc/srs.md](doc/srs.md)
+Software Requirements Specification: [doc/srs.md](doc/srs.md) ([see revisions](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/commits/master/doc/srs.md))
 
-Design Document: [doc/design.md](doc/design.md)
-
-Most recent revisions made in [Merge Request !6](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/merge_requests/6/commits).
+Design Document: [doc/design.md](doc/design.md) ([see revisions](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/commits/master/doc/design.md))
 
 SRS-driven roadmap information given in [3.2 Functional Requirements](doc/srs.md#32-functional-requirements).
 
