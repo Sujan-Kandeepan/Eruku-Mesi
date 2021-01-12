@@ -3,15 +3,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const expressValidator = require('express-validator');
-// const config = require('./config/database.js');
+require('dotenv').config(); // load environment from .env file automatically
+const config = require('./config/database.js');
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000; 
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-// mongoose.connect(config.database, { useNewUrlParser: true });
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(config.database, { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 connection.once('open', function() {
@@ -23,6 +23,7 @@ connection.on('error', function(err) {
     console.log(err)
 })
 
+// format error message
 app.use(expressValidator({
     errorFormatter: function(param, msg, value) {
         var namespace = param.split('.')

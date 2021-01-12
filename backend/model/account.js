@@ -35,7 +35,7 @@ let Account = new Schema({
         type: String,
         default: null
     },
-    passwordResetToken: {
+    resetTokenExpiredAt: {
         type: Date,
         default: null
     },
