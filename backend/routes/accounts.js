@@ -57,7 +57,7 @@ router.post("/edit/:id", function (req, res) {
 // router.get("/:id").get(function (req, res) {
 //   let id = req.params.id;
 //   console.log(id)
-  
+
 //   Account.findById(id, function (err, account) {
 //     if (err) {
 //       console.log(err);

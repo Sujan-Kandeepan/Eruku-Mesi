@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const NewsStoriesDB = mongoose.connection.useDb('NewsStories');
+const NewsStoriesDB = mongoose.connection.useDb("NewsStories");
 
 let NewsStory = new Schema({
   title: {
@@ -16,7 +16,7 @@ let NewsStory = new Schema({
   },
   publishedAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   source: {
     type: String,
@@ -35,7 +35,7 @@ let NewsStory = new Schema({
       "multimedia",
       "sport",
     ],
-    default: "featured"
+    default: "featured",
   },
 });
 module.exports = NewsStoriesDB.model("NewsStory", NewsStory, "NewsStory");
