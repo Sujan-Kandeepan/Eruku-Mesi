@@ -24,6 +24,7 @@ export const truncate = (string, num) => {
 export const currentDate = () => new Date(Math.round((new Date()).getTime() / 60000) * 60000);
 
 // Get formatted date to display
+// Reference: https://day.js.org/docs/en/display/format
 export const showDate = (date, long) =>
   dayjs(date).format(`${'d'.repeat(long ? 4 : 3)}, ${'M'.repeat(long ? 4 : 3)} D, YYYY`);
 
