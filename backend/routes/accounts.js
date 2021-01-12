@@ -53,19 +53,16 @@ router.post("/edit/:id", function (req, res) {
   });
 });
 
-// currently not working
-// router.get("/:id").get(function (req, res) {
-//   let id = req.params.id;
-//   console.log(id)
-
-//   Account.findById(id, function (err, account) {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       res.json(account);
-//     }
-//   });
-// });
+router.get("/:id", function (req, res) {
+  let id = req.params.id;
+  Account.findById(id, function (err, account) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(account);
+    }
+  });
+});
 
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
