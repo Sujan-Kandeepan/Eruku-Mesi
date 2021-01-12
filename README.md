@@ -1,4 +1,14 @@
-# Getting Started with Eruku Mesi App
+# Eruku Mesi North America
+
+## Documentation
+
+Software Requirements Specification: [doc/srs.md](doc/srs.md) ([see revisions](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/commits/master/doc/srs.md))
+
+Design Document: [doc/design.md](doc/design.md) ([see revisions](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/commits/master/doc/design.md))
+
+SRS-driven roadmap information given in [3.2 Functional Requirements](doc/srs.md#32-functional-requirements).
+
+## Getting Started with Eruku Mesi App
 
 Create a `.env` file in the `backend` directory and replace `<password>` and `<dbname>` with MongoDB password and database name.
 
