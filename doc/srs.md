@@ -214,8 +214,9 @@ Identify requirements that may be delayed until future versions of the system (e
 
 As the scope of this application is quite broad and consists of multiple components, there are some features and demands which take higher precedence than others which may be deferred to a future release if targeting the initial release is not feasible.
 The following table details which features are to be prioritized or potentially deferred:
+
 | Feature | Priority |
-| --- | --- |
+| ----- | ----- |
 | Central feed for news and local events | Mandatory for initial release, high priority |
 | Localized push notifications for events | Mandatory for initial release, high priority |
 | Media content uploaded by administrator | Mandatory for initial release, high priority |
