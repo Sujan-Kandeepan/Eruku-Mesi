@@ -29,7 +29,7 @@ export const showDate = (date, long) =>
   dayjs(date).format(`${'d'.repeat(long ? 4 : 3)}, ${'M'.repeat(long ? 4 : 3)} D, YYYY`);
 
 // Get formatted time to display
-export const showTime = (date, long) => dayjs(date).format('h:mm A');
+export const showTime = (date) => dayjs(date).format('h:mm A');
 
 // Extract list of paragraphs from large input field value containing text
 export const paragraphs = text => text.split('\n').filter(s => s !== '').map(s => s.trim());
