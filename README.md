@@ -1,6 +1,6 @@
 # Getting Started with Eruku Mesi App
 
-Create a `.env` file in the project directory and replace `<password>` and `<dbname>`. Apply environment variables from the .env file (with OS-specific command). 
+Create a `.env` file in the backend directory and replace `<password>` and `<dbname>` with MongoDB password and database name.
 
 ## Available Scripts
 
