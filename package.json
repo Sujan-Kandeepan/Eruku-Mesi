@@ -24,6 +24,7 @@
     "react-native-draggable-flatlist": "^2.5.1",
     "react-native-elements": "^3.1.0",
     "react-native-gesture-handler": "~1.9.0",
+    "react-native-modal-datetime-picker": "^9.1.0",
     "react-native-paper": "^4.5.0",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
@@ -31,7 +32,6 @@
     "react-native-tab-view": "^2.15.2",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12",
-    "react-native-windows": "^0.63.17",
     "react-navigation": "^4.4.3"
   },
   "devDependencies": {

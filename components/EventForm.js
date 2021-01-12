@@ -1,6 +1,6 @@
 import React from 'react';
-import { Platform, Text, View, YellowBox } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Text, View, YellowBox } from 'react-native';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import AppPage from './AppPage';
 import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
@@ -31,6 +31,7 @@ export default function EventForm(props) {
           onChangeText={value => setTitle(value)} />
         {/* Buttons to open date picker in date and time selection mode respectively */}
         {/* Reference: https://github.com/react-native-datetimepicker/datetimepicker */}
+        {/* Reference: https://github.com/mmazzarolo/react-native-modal-datetime-picker */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 15 }}>
           <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('date'); }}
             text={<><Text style={{ fontWeight: 'bold' }}>Date:</Text> {showDate(date)}</>} />
@@ -38,8 +39,8 @@ export default function EventForm(props) {
             text={<><Text style={{ fontWeight: 'bold' }}>Time:</Text> {showTime(date)}</>} />
         </View>
         {/* Date picker widget triggered by buttons above */}
-        {show && <DateTimePicker mode={mode} value={date}
-          onChange={(_, value) => { try { setShow(Platform.OS === 'ios'); setDate(value || date); } catch {} }} />}
+        <DateTimePickerModal mode={mode} date={date} isVisible={show} isDarkModeEnabled={props.theme.dark}
+          onCancel={() => setShow(false)} onConfirm={value => { setShow(false); setDate(value); }} />
         {/* Large input field for event description */}
         <BodyInput {...props} placeholder='Event Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
