@@ -4,11 +4,11 @@ const router = express.Router();
 let File = require("../model/file.js");
 
 /**
- * Add  file
+ * Upload a file if all required fields are not empty.
  */
 router.post("/add", function (req, res) {
-  req.assert("name", "Post name must be set").notEmpty();
-  req.assert("url", "Post url must be set").notEmpty();
+  req.assert("name", "File: name must be set").notEmpty();
+  req.assert("url", "File: url must be set").notEmpty();
 
   let errors = req.validationErrors();
 
@@ -27,7 +27,7 @@ router.post("/add", function (req, res) {
 });
 
 /**
- * Edit the information of a specific file (given the file ID)
+ * Edit the information of a specific file (given the file id)
  */
 router.post("/edit/:id", function (req, res) {
   let file = req.body;
@@ -57,7 +57,21 @@ router.get("/", function (req, res) {
 });
 
 /**
- * Delete the information of a specific file (given the file ID)
+ * Get the information of a specific file (given the file id)
+ */
+router.get("/:id", function (req, res) {
+  let id = req.params.id;
+  File.findById(id, function (err, file) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(file);
+    }
+  });
+});
+
+/**
+ * Delete the information of a specific file (given the file id)
  */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };

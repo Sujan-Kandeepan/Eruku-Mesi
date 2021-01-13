@@ -4,11 +4,11 @@ const router = express.Router();
 let Notification = require("../model/notification.js");
 
 /**
- * Add a single notification 
+ * Add a notification if all required fields are not empty.
  */
 router.post("/add", function (req, res) {
-  req.assert("receiver", "Post receiver must be set").notEmpty();
-  req.assert("body", "Post body must have content").notEmpty();
+  req.assert("receiver", "Notification: receiver must be set").notEmpty();
+  req.assert("body", "Notification: body must have content").notEmpty();
 
   let errors = req.validationErrors();
 
@@ -27,7 +27,7 @@ router.post("/add", function (req, res) {
 });
 
 /**
- * Edit a single notification (given the notification ID)
+ * Edit a notification (given the notification id)
  */
 router.post("/edit/:id", function (req, res) {
   let notification = req.body;
@@ -62,7 +62,21 @@ router.get("/", function (req, res) {
 });
 
 /**
- * Delete a single notification (given the notification ID)
+ * Get the information of a specific notification (given the notification id)
+ */
+router.get("/:id", function (req, res) {
+  let id = req.params.id;
+  Notification.findById(id, function (err, notification) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(notification);
+    }
+  });
+});
+
+/**
+ * Delete a notification (given the notification id)
  */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };

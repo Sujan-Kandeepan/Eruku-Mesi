@@ -3,13 +3,16 @@ const router = express.Router();
 
 let Account = require("../model/account.js");
 
+/**
+ * Add a user if the required fields are not empty.
+ */
 router.post("/add", function (req, res) {
-  req.assert("username", "Post username must be set").notEmpty();
-  req.assert("firstName", "Post firstName must have content").notEmpty();
-  req.assert("lastName", "Post lastname must be set").notEmpty();
-  req.assert("phone", "Post phone must have content").notEmpty();
-  req.assert("hash", "Post hash must be set").notEmpty();
-  req.assert("salt", "Post salt must have content").notEmpty();
+  req.assert("username", "Account: username must be set").notEmpty();
+  req.assert("firstName", "Account: firstName must have content").notEmpty();
+  req.assert("lastName", "Account: lastname must be set").notEmpty();
+  req.assert("phone", "Account: phone must have content").notEmpty();
+  req.assert("hash", "Account: hash must be set").notEmpty();
+  req.assert("salt", "Account: salt must have content").notEmpty();
 
   let errors = req.validationErrors();
 
@@ -27,6 +30,9 @@ router.post("/add", function (req, res) {
   }
 });
 
+/**
+ * Get all users
+ */
 router.get("/", function (req, res) {
   Account.find({}, function (err, accounts) {
     if (err) {
@@ -37,6 +43,9 @@ router.get("/", function (req, res) {
   });
 });
 
+/**
+ * Edit the information of a specific user (given the user id)
+ */
 router.post("/edit/:id", function (req, res) {
   let account = req.body;
   let query = { _id: req.params.id };
@@ -53,6 +62,9 @@ router.post("/edit/:id", function (req, res) {
   });
 });
 
+/**
+ * Get the information of a specific user (given the user id)
+ */
 router.get("/:id", function (req, res) {
   let id = req.params.id;
   Account.findById(id, function (err, account) {
@@ -64,6 +76,9 @@ router.get("/:id", function (req, res) {
   });
 });
 
+/**
+ * Delete the information of a specific user (given the user id)
+ */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
 

@@ -4,11 +4,11 @@ const router = express.Router();
 let Photo = require("../model/photo.js");
 
 /**
- * Add a single photo
+ * Upload a photo notification if all required fields are not empty.
  */
 router.post("/add", function (req, res) {
-  req.assert("name", "Post username must be set").notEmpty();
-  req.assert("url", "Post lastname must be set").notEmpty();
+  req.assert("name", "Photo: username must be set").notEmpty();
+  req.assert("url", "Photo: lastname must be set").notEmpty();
 
   let errors = req.validationErrors();
 
@@ -27,7 +27,7 @@ router.post("/add", function (req, res) {
 });
 
 /**
- * Edit a single photo (given the photo ID)
+ * Edit a photo (given the photo id)
  */
 router.post("/edit/:id", function (req, res) {
   let photo = req.body;
@@ -44,7 +44,21 @@ router.post("/edit/:id", function (req, res) {
 });
 
 /**
- * Get a list of photos
+ * Get the information of a specific photo (given the photo id)
+ */
+router.get("/:id", function (req, res) {
+  let id = req.params.id;
+  Photo.findById(id, function (err, photo) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(photo);
+    }
+  });
+});
+
+/**
+ * Get all photos
  */
 router.get("/", function (req, res) {
   Photo.find({}, function (err, photos) {
@@ -57,7 +71,7 @@ router.get("/", function (req, res) {
 });
 
 /**
- * Delete a single photo (given the photo ID)
+ * Delete a photo (given the photo id)
  */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
