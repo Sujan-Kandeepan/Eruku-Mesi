@@ -3,6 +3,9 @@ const router = express.Router();
 
 let Photo = require("../model/photo.js");
 
+/**
+ * Add a single photo
+ */
 router.post("/add", function (req, res) {
   req.assert("name", "Post username must be set").notEmpty();
   req.assert("url", "Post lastname must be set").notEmpty();
@@ -23,6 +26,9 @@ router.post("/add", function (req, res) {
   }
 });
 
+/**
+ * Edit a single photo (given the photo ID)
+ */
 router.post("/edit/:id", function (req, res) {
   let photo = req.body;
   let query = { _id: req.params.id };
@@ -36,6 +42,10 @@ router.post("/edit/:id", function (req, res) {
     }
   });
 });
+
+/**
+ * Get a list of photos
+ */
 router.get("/", function (req, res) {
   Photo.find({}, function (err, photos) {
     if (err) {
@@ -46,6 +56,9 @@ router.get("/", function (req, res) {
   });
 });
 
+/**
+ * Delete a single photo (given the photo ID)
+ */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
 

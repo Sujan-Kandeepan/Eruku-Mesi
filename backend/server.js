@@ -1,3 +1,7 @@
+/**
+ * Server.js is the starting point file that gets executed when you start running the backend code.
+ */
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -50,6 +54,10 @@ const newsStories = require('./routes/newsStories');
 const notifications = require('./routes/notifications');
 const photos = require('./routes/photos');
 
+/**
+ * Creating the routes through the router.
+ * Reference: https://expressjs.com/en/guide/routing.html (express.Router component)
+ */
 app.use('/accounts', accounts);
 app.use('/events', events);
 app.use('/files', files);

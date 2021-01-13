@@ -3,6 +3,9 @@ const router = express.Router();
 
 let Event = require("../model/event.js");
 
+/**
+ * Add the information of a specific event (given the event ID)
+ */
 router.post("/add", function (req, res) {
   req.assert("name", "Post name must be set").notEmpty();
 
@@ -22,6 +25,9 @@ router.post("/add", function (req, res) {
   }
 });
 
+/**
+ * Edit the information of a specific event (given the event ID)
+ */
 router.post("/edit/:id", function (req, res) {
   let event = req.body;
   let query = { _id: req.params.id };
@@ -36,6 +42,9 @@ router.post("/edit/:id", function (req, res) {
   });
 });
 
+/**
+ * Get the information on all events
+ */
 router.get("/", function (req, res) {
   Event.find({}, function (err, events) {
     if (err) {
@@ -46,6 +55,9 @@ router.get("/", function (req, res) {
   });
 });
 
+/**
+ * Delete the information of a specific event (given the event ID)
+ */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
 

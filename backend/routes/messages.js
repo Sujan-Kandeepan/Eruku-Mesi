@@ -3,6 +3,9 @@ const router = express.Router();
 
 let Message = require("../model/message.js");
 
+/**
+ * Add a message
+ */
 router.post("/add", function (req, res) {
   req.assert("from", "Post from must be set").notEmpty();
   req.assert("message", "Post message must be set").notEmpty();
@@ -23,6 +26,9 @@ router.post("/add", function (req, res) {
   }
 });
 
+/**
+ * Edit the information of a specific message (given the message ID)
+ */
 router.post("/edit/:id", function (req, res) {
   let message = req.body;
   let query = { _id: req.params.id };
@@ -39,6 +45,9 @@ router.post("/edit/:id", function (req, res) {
   });
 });
 
+/**
+ * Get all messages
+ */
 router.get("/", function (req, res) {
   Message.find({}, function (err, messages) {
     if (err) {
@@ -49,6 +58,9 @@ router.get("/", function (req, res) {
   });
 });
 
+/**
+ * Delete the information of a specific file (given the message ID)
+ */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
 
