@@ -4,10 +4,10 @@ const router = express.Router();
 let Event = require("../model/event.js");
 
 /**
- * Add the information of a specific event (given the event ID)
+ * Add the information of a specific event if the required field is not empty.
  */
 router.post("/add", function (req, res) {
-  req.assert("name", "Post name must be set").notEmpty();
+  req.assert("name", "Event: name must be set").notEmpty();
 
   let errors = req.validationErrors();
 
@@ -26,7 +26,7 @@ router.post("/add", function (req, res) {
 });
 
 /**
- * Edit the information of a specific event (given the event ID)
+ * Edit the information of a specific event (given the event id)
  */
 router.post("/edit/:id", function (req, res) {
   let event = req.body;
@@ -56,7 +56,21 @@ router.get("/", function (req, res) {
 });
 
 /**
- * Delete the information of a specific event (given the event ID)
+ * Get the information of a event file (given the event id)
+ */
+router.get("/:id", function (req, res) {
+  let id = req.params.id;
+  Event.findById(id, function (err, event) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(event);
+    }
+  });
+});
+
+/**
+ * Delete the information of a specific event (given the event id)
  */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };

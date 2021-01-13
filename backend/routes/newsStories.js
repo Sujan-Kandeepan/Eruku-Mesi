@@ -4,12 +4,12 @@ const router = express.Router();
 let NewsStory = require("../model/newsStory.js");
 
 /**
- * Add a single newsStory
+ * Add a single newsStory if all required fields are not empty.
  */
 router.post("/add", function (req, res) {
-  req.assert("title", "Post title must be set").notEmpty();
-  req.assert("content", "Post content must be set").notEmpty();
-  req.assert("source", "Post source must be set").notEmpty();
+  req.assert("title", "NewsStory: title must be set").notEmpty();
+  req.assert("content", "NewsStory: content must be set").notEmpty();
+  req.assert("source", "NewsStory: source must be set").notEmpty();
 
   let errors = req.validationErrors();
 
@@ -28,7 +28,7 @@ router.post("/add", function (req, res) {
 });
 
 /**
- * Edit a single newsStory (given the newsStory ID)
+ * Edit a single newsStory (given the newsStory id)
  */
 router.post("/edit/:id", function (req, res) {
   let newsStory = req.body;
@@ -47,7 +47,7 @@ router.post("/edit/:id", function (req, res) {
 });
 
 /**
- * Get all newsStories 
+ * Get all newsStories
  */
 router.get("/", function (req, res) {
   NewsStory.find({}, function (err, newsStories) {
@@ -60,7 +60,21 @@ router.get("/", function (req, res) {
 });
 
 /**
- * Delete a single newsStory (given the newsStory ID)
+ * Get the information of a specific newsStory (given the newsStory id)
+ */
+router.get("/:id", function (req, res) {
+  let id = req.params.id;
+  NewsStory.findById(id, function (err, newsStory) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(newsStory);
+    }
+  });
+});
+
+/**
+ * Delete a newsStory (given the newsStory id)
  */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
