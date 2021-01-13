@@ -38,6 +38,7 @@ Wednesday, November 18, 2020
 - [Design Document](#design-document)
   - [For Eruku Mesi North America](#for-eruku-mesi-north-america)
   - [Table of Contents](#table-of-contents)
+  - [Revision History](#revision-history)
   - [1. Likely Changes](#1-likely-changes)
   - [2. Unlikely Changes](#2-unlikely-changes)
   - [3. Concepts](#3-concepts)
@@ -52,6 +53,13 @@ Wednesday, November 18, 2020
   - [6. SRS Changes](#6-srs-changes)
   - [7. Dependency Diagram](#7-dependency-diagram)
   - [8. Significant Design](#8-significant-design)
+
+## Revision History
+
+| Name | Date    | Reason For Changes  | Version   |
+| ---- | ------- | ------------------- | --------- |
+| Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Wednesday, January 13, 2021 | Revisions for Prototype 2.0 | 0.2 |
+| Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Wednesday, November 18, 2020 | Initial version | 0.1 |
 
 ## 1. Likely Changes
 
