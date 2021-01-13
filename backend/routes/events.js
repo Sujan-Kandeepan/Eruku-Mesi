@@ -56,7 +56,7 @@ router.get("/", function (req, res) {
 });
 
 /**
- * Get the information of a event file (given the event id)
+ * Get the information of a event (given the event id)
  */
 router.get("/:id", function (req, res) {
   let id = req.params.id;
