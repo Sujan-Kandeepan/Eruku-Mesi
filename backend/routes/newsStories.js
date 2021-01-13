@@ -3,6 +3,9 @@ const router = express.Router();
 
 let NewsStory = require("../model/newsStory.js");
 
+/**
+ * Add a single newsStory
+ */
 router.post("/add", function (req, res) {
   req.assert("title", "Post title must be set").notEmpty();
   req.assert("content", "Post content must be set").notEmpty();
@@ -24,6 +27,9 @@ router.post("/add", function (req, res) {
   }
 });
 
+/**
+ * Edit a single newsStory (given the newsStory ID)
+ */
 router.post("/edit/:id", function (req, res) {
   let newsStory = req.body;
   let query = { _id: req.params.id };
@@ -40,6 +46,9 @@ router.post("/edit/:id", function (req, res) {
   });
 });
 
+/**
+ * Get all newsStories 
+ */
 router.get("/", function (req, res) {
   NewsStory.find({}, function (err, newsStories) {
     if (err) {
@@ -50,6 +59,9 @@ router.get("/", function (req, res) {
   });
 });
 
+/**
+ * Delete a single newsStory (given the newsStory ID)
+ */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
 

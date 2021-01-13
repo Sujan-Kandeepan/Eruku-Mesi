@@ -3,6 +3,9 @@ const router = express.Router();
 
 let Notification = require("../model/notification.js");
 
+/**
+ * Add a single notification 
+ */
 router.post("/add", function (req, res) {
   req.assert("receiver", "Post receiver must be set").notEmpty();
   req.assert("body", "Post body must have content").notEmpty();
@@ -23,6 +26,9 @@ router.post("/add", function (req, res) {
   }
 });
 
+/**
+ * Edit a single notification (given the notification ID)
+ */
 router.post("/edit/:id", function (req, res) {
   let notification = req.body;
   let query = { _id: req.params.id };
@@ -42,6 +48,9 @@ router.post("/edit/:id", function (req, res) {
   });
 });
 
+/**
+ * Get all notifications
+ */
 router.get("/", function (req, res) {
   Notification.find({}, function (err, notifications) {
     if (err) {
@@ -52,6 +61,9 @@ router.get("/", function (req, res) {
   });
 });
 
+/**
+ * Delete a single notification (given the notification ID)
+ */
 router.delete("/:id", function (req, res) {
   let query = { _id: req.params.id };
 
