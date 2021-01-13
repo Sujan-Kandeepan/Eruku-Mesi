@@ -6,14 +6,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import { Button, Content, IconButton } from '../shared/SharedComponents';
+import { BodyInput, Button, Content, IconButton } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
 import { get, paragraphs } from '../shared/SharedFunctions';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
 
+// Page for displaying informational content under a modifiable list of sections
 export default function InformationPage(props) {
+  // State variables for dynamic page information (two-way data binding)
   const [pages, setPages] = React.useState(['General', 'About Us', 'History', 'Contact']);
   const [data, setData] = React.useState(pages.map(page => ({ title: page, content: ['Loading...'] })));
   const [originalText, setOriginalText] = React.useState('');
@@ -30,7 +32,7 @@ export default function InformationPage(props) {
       await Promise.all(pages.map((page, index) =>
         get('https://baconipsum.com/api/?type=meat-and-filler').then(content => {
           let newData = data;
-          newData[index] = { title: page, content }
+          newData[index] = { title: page, content };
           setData(newData);
         })));
       setFetched(true);
@@ -52,6 +54,7 @@ export default function InformationPage(props) {
             // Implementation with no warnings (bug persists which is fixed by nested scroll views):
             // https://nyxo.app/fixing-virtualizedlists-should-never-be-nested-inside-plain-scrollviews
             <ScrollView>
+              {/* Draggable version of FlatList displaying individual sections with options */}
               {/* Reference: https://github.com/computerjazz/react-native-draggable-flatlist */}
               <DraggableFlatList scrollEnabled={false} data={pages} renderItem={({ drag, item }) =>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -62,7 +65,7 @@ export default function InformationPage(props) {
                         name='unfold-more' type='material' color={props.theme.colors.placeholder} />
                     </Text>}
                   {/* Inline edit interface for section name */}
-                  {item === originalText ?
+                  {props.admin && item === originalText ?
                     <>
                       {/* Text input for new section name */}
                       <TextInput autoFocus autoCapitalize='words' style={{
@@ -138,12 +141,14 @@ export default function InformationPage(props) {
           {pages.map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
+                {/* Admin controls */}
                 {props.admin &&
                   <Button {...props} {...localProps} text='Edit'
                     onPress={() => {
                       setEditText(data.find(entry => entry.title === page).content.join('\n\n'));
                       localProps.navigation.push(`Edit ${page}`);
                     }} />}
+                {/* Display of content for specific information section */}
                 <Content {...props} {...localProps} title={data.find(item => item.title === page).title}
                   content={data.find(entry => entry.title === page).content} extraData={fetched} />
               </AppPage>} />)}
@@ -152,13 +157,12 @@ export default function InformationPage(props) {
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel onReturn={() => setEditText('')}>
                 <View style={{ flex: 1 }}>
+                  {/* All content editable within large text field */}
                   {/* Reference: https://reactnative.dev/docs/textinput */}
-                  <TextInput autoFocus multiline editable spellCheck style={{
-                    backgroundColor: props.theme.colors.card,
-                    color: props.theme.colors.text, flex: 1, margin: 15,
-                    padding: 20, textAlignVertical: 'top', width
-                  }} value={editText} onChangeText={(value) => setEditText(value)}
-                  onBlur={Keyboard.dismiss} />
+                  <BodyInput {...props} value={editText}
+                    onChangeText={(value) => setEditText(value)}
+                    width={width} onBlur={Keyboard.dismiss} />
+                  {/* Submit button with logic to update information section */}
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
                     <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
                       text='Save' onPress={() => {
