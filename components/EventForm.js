@@ -32,11 +32,23 @@ export default function EventForm(props) {
         {/* Buttons to open date picker in date and time selection mode respectively */}
         {/* Reference: https://github.com/react-native-datetimepicker/datetimepicker */}
         {/* Reference: https://github.com/mmazzarolo/react-native-modal-datetime-picker */}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 15 }}>
-          <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('date'); }}
-            text={<><Text style={{ fontWeight: 'bold' }}>Date:</Text> {showDate(date)}</>} />
-          <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('time'); }}
-            text={<><Text style={{ fontWeight: 'bold' }}>Time:</Text> {showTime(date)}</>} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', margin: 15 }}>
+          <View style={{ flex: 1, margin: -15, marginRight: -16, minWidth: 50 }}>
+            <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('date'); }} text={
+              <View>
+                <Text style={{ flexShrink: 1 }}>
+                  <Text style={{ fontWeight: 'bold' }}>Date:</Text> {showDate(date)}
+                </Text>
+              </View>} />
+          </View>
+          <View style={{ flex: 1, margin: -15, marginLeft: -16 }}>
+            <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('time'); }} text={
+              <View>
+                <Text style={{ flexShrink: 1 }}>
+                  <Text style={{ fontWeight: 'bold' }}>Time:</Text> {showTime(date)}
+                </Text>
+              </View>} />
+          </View>
         </View>
         {/* Date picker widget triggered by buttons above */}
         <DateTimePickerModal mode={mode} date={date} isVisible={show} isDarkModeEnabled={props.theme.dark}
