@@ -116,7 +116,7 @@ export default function UpcomingEventsPage(props) {
             <Stack.Screen key={event.id} name={pages.deleteEvent(event.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
-                <Button {...props} {...localProps} text='Confirm' accent
+                <Button {...props} {...localProps} text='Confirm' color='danger'
                   onPress={() => setEvents(events.filter(e => e.id !== event.id))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {event.title}?

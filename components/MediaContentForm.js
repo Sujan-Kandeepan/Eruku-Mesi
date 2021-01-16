@@ -26,8 +26,7 @@ export default function MediaContentForm(props) {
           onChangeText={(value) => setDescription(value)} width={width} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15, marginTop: -15 }}>
-          <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
-            text='Save' onPress={() => {
+          <Button {...props} color='accent' text='Save' onPress={() => {
               // Check for required fields
               if (title.trim() === '') {
                 props.snackbar('Post title is required', 157);

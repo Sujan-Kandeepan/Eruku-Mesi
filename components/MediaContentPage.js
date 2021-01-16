@@ -95,7 +95,7 @@ export default function MediaContentPage(props) {
             <Stack.Screen key={post.id} name={pages.deleteMediaContent(post.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
-                <Button {...props} {...localProps} text='Confirm' accent
+                <Button {...props} {...localProps} text='Confirm' color='danger'
                   onPress={() => setPosts(posts.filter(p => p.id !== post.id))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {post.title}?

@@ -95,7 +95,7 @@ export default function NewsFeedPage(props) {
             <Stack.Screen key={story.id} name={pages.deleteNewsStory(story.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
-                <Button {...props} {...localProps} text='Confirm' accent
+                <Button {...props} {...localProps} text='Confirm' color='danger'
                   onPress={() => setStories(stories.filter(s => s.id !== story.id))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {story.title}?

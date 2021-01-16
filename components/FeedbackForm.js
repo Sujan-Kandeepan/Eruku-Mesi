@@ -46,8 +46,7 @@ export default function FeedbackForm(props) {
           value={text} onChangeText={textChanged} onBlur={Keyboard.dismiss} />
         {/* Button to validate and submit feedback */}
         <View style={{ marginHorizontal: 10, marginVertical: 25 }}>
-          <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
-            text='Submit' onPress={handleSubmit} />
+          <Button {...props} color='accent' text='Submit' onPress={handleSubmit} />
         </View>
       </View>
     </AppPage>

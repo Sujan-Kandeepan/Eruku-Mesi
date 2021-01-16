@@ -20,10 +20,10 @@ export const Button = (props) =>
   <TouchableOpacity onPress={noRepeat(props.onPress)} onLongPress={noRepeat(props.onLongPress)}
     delayLongPress={props.delayLongPress}>
     <Card containerStyle={{
-        backgroundColor: props.accent ? props.theme.colors.accent : props.theme.colors.surface,
+        backgroundColor: props.color ? props.theme.colors[props.color] : props.theme.colors.surface,
         borderColor: props.theme.colors.border
       }} style={{ justifyContent: 'center' }}>
-      <Text style={{ alignSelf: 'center', color: props.accent ? 'white' : props.theme.colors.text,
+      <Text style={{ alignSelf: 'center', color: props.color ? 'white' : props.theme.colors.text,
         ...props.textStyle }} children={props.text} />
     </Card>
   </TouchableOpacity>;

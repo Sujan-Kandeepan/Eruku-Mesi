@@ -164,8 +164,7 @@ export default function InformationPage(props) {
                     width={width} onBlur={Keyboard.dismiss} />
                   {/* Submit button with logic to update information section */}
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
-                    <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
-                      text='Save' onPress={() => {
+                    <Button {...props} color='accent' text='Save' onPress={() => {
                         setData(data.map(entry =>
                           page.includes(entry.title)
                             ? { ...entry, content: paragraphs(editText) }
