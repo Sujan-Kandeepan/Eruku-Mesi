@@ -107,7 +107,8 @@ export const Content = (props) =>
  //Reference: https://reactnative.dev/docs/textinput
 export const TitleInput = (props) =>
   <TextInput placeholder={props.placeholder} placeholderTextColor={props.theme.colors.placeholder}
-    autoFocus autoCapitalize='words' onBlur={props.onBlur} style={{
+    autoFocus={props.autoFocus} autoCapitalize='words'
+    onFocus={props.onFocus} onBlur={props.onBlur} style={{
       backgroundColor: props.theme.colors.card,
       color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
       margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
@@ -116,7 +117,8 @@ export const TitleInput = (props) =>
 // Component to input body field in form
 export const BodyInput = (props) =>
   <TextInput placeholder={props.placeholder} placeholderTextColor={props.theme.colors.placeholder}
-    autoFocus multiline editable spellCheck onBlur={props.onBlur} style={{
+    autoFocus={props.autoFocus} multiline editable spellCheck
+    onFocus={props.onFocus} onBlur={props.onBlur} style={{
       backgroundColor: props.theme.colors.card,
       color: props.theme.colors.text, flex: 1, margin: 15,
       padding: 20, textAlignVertical: 'top', width: props.width

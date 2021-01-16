@@ -30,7 +30,7 @@ export default function FeedbackForm(props) {
     }
   }
   return (
-    <AppPage {...props}>
+    <AppPage {...props} scroll>
       <View style={{ flex: 1 }}>
         {/* Informational text above feedback input field */}
         <Text style={{ color: props.theme.colors.text, marginVertical: 25, textAlign: 'center' }}
