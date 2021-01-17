@@ -1,10 +1,10 @@
 import React from 'react';
-import {Image, View } from 'react-native';
+import { View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import AppPage from './AppPage';
-import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
-import { paragraphs, scale } from '../shared/SharedFunctions';
+import { BodyInput, Button, Media, TitleInput } from '../shared/SharedComponents';
+import { paragraphs } from '../shared/SharedFunctions';
 
 // Form for creating or updating a media content record
 export default function MediaContentForm(props) {
@@ -26,15 +26,15 @@ export default function MediaContentForm(props) {
         {/* Large input field for post description */}
         <BodyInput {...props} placeholder='Post Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
-        {/* Image with button to open image picker */}
-        {image && <Image source={{ uri: image.uri }}
-          style={{ ...scale({ image, maxHeight: 300 }), alignSelf: 'center', marginBottom: 15 }} />}
+        {/* Image or video with button to open image picker */}
+        <Media image={image} scale={{ image, maxHeight: 300 }}
+          style={{ alignSelf: 'center', marginBottom: 15 }} />
         <View style={{ marginTop: -15 }}>
-          <Button {...props} text='Choose Photo' onPress={async () => {
+          <Button {...props} text='Choose Photo or Video' onPress={async () => {
             try {
               // Reference: https://docs.expo.io/versions/latest/sdk/imagepicker/
               let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
                 allowsEditing: true,
                 quality: 1,
               });
@@ -42,7 +42,7 @@ export default function MediaContentForm(props) {
                 setImage(result);
               }
             } catch {
-              props.snackbar('File selected is not a valid image', 235)
+              props.snackbar('File selected is not a valid photo or video', 286)
             }
           }} />
         </View>
@@ -59,7 +59,7 @@ export default function MediaContentForm(props) {
                 return;
               }
               if (!image) {
-                props.snackbar('Image is required', 141);
+                props.snackbar('No photo or video selected', 200);
                 return;
               }
               // Create or update record depending on whether an existing record was given as payload

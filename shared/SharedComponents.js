@@ -1,3 +1,4 @@
+import { Video } from 'expo-av';
 import React from 'react';
 import { Image, Text, TextInput, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
@@ -55,6 +56,20 @@ export const Toggle = (props) =>
       value={props.value} onValueChange={props.onValueChange} />
   </Card>;
 
+// Image or video component with given image source and properties
+export const Media = (props) =>
+ <>
+    {props.image && (props.image.type === 'image'
+      || props.image.uri.startsWith('data:image') || props.thumbnail) &&
+      <Image source={{ uri: props.image.uri }}
+        style={{ ...scale(props.scale), ...props.style }} />}
+    {props.image && (props.image.type === 'video'
+      || props.image.uri.startsWith('data:video')) && !props.thumbnail &&
+      <Video source={{ uri: props.image.uri }} shouldPlay useNativeControls isLooping
+        resizeMode={Video.RESIZE_MODE_CONTAIN}
+        style={{ ...scale(props.scale), ...props.style }} />}
+ </>;
+
 // List component accepting common item layout and rendering options
 export const Feed = (props) =>
   <FlatList data={props.data} renderItem={({ item }) =>
@@ -96,8 +111,8 @@ export const Content = (props) =>
       </Text>}
       {/* Display top image if exists */}
       {props.imageTop &&
-        <Image source={{ uri: props.imageTop.uri }}
-          style={{ ...scale({ image: props.imageTop }), alignSelf: 'center', marginBottom: 15 }} />}
+        <Media image={props.imageTop} scale={{ image: props.imageTop }}
+          style={{ alignSelf: 'center', marginBottom: 15 }} />}
       {/* Display title above rest of content */}
       {props.subtitle && <Text style={{
         color: props.theme.colors.text,
@@ -111,8 +126,8 @@ export const Content = (props) =>
     <>
       {/* Display bottom image if exists */}
       {props.imageBottom &&
-        <Image source={{ uri: props.imageBottom.uri }}
-          style={{ ...scale({ image: props.imageBottom }), alignSelf: 'center', marginBottom: 15 }} />}
+        <Media image={props.imageBottom} scale={{ image: props.imageBottom }}
+          style={{ alignSelf: 'center', marginBottom: 15 }} />}
     </>
   } extraData={props.fetched} />;
 

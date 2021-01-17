@@ -1,12 +1,12 @@
 import React from 'react';
-import { Image, Text } from 'react-native';
+import { Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import MediaContentForm from './MediaContentForm';
-import { Button, Content, Feed } from '../shared/SharedComponents';
-import { get, scale, truncate } from '../shared/SharedFunctions';
+import { Button, Content, Feed, Media } from '../shared/SharedComponents';
+import { get, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -56,17 +56,16 @@ export default function MediaContentPage(props) {
                 keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                 cardContent={item =>
                   <>
-                    {/* Layout soon to change, title and text for now */}
+                    {/* Display post title, truncated description, and image or video thumbnail */}
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
                       {item && item.title}
                     </Text>
                     <Text style={{ color: props.theme.colors.text }}>
                       {item && truncate(item.description[0], 10)}
                     </Text>
-                    {item.image &&
-                      <Image source={{ uri: item.image.uri }}
-                        style={{ ...scale({ image: item.image, marginHorizontal: 30, maxHeight: 200 }),
-                        alignSelf: 'center', marginTop: 10 }} />}
+                    <Media image={item.image} thumbnail
+                      scale={{ image: item.image, marginHorizontal: 30, maxHeight: 200 }}
+                      style={{ alignSelf: 'center', marginTop: 15 }} />
                   </>} />
             </>} />
           {/* Static page route for posting media content */}

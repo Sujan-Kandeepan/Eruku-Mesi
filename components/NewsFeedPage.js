@@ -55,7 +55,7 @@ export default function NewsFeedPage(props) {
                 keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                 cardContent={item =>
                   <>
-                    {/* Layout soon to change, title and text for now */}
+                    {/* Display preview of news story */}
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
                       {item && item.title}
                     </Text>

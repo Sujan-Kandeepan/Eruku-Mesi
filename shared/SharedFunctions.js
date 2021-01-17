@@ -28,7 +28,7 @@ export const currentDate = () => new Date(Math.round((new Date()).getTime() / 60
 export const scale = ({ image, marginHorizontal, maxHeight }) => {
   if (!image) return;
   let width = Dimensions.get('window').width - (marginHorizontal * 2 || 30);
-  let height = width * image.height / image.width;
+  let height = image.width && image.height ? width * image.height / image.width : width;
   if (maxHeight && height > maxHeight) {
     width *= maxHeight / height;
     height = maxHeight;

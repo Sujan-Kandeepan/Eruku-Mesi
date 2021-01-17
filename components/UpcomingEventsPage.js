@@ -66,7 +66,7 @@ export default function UpcomingEventsPage(props) {
                       keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                       cardContent={item =>
                         <>
-                          {/* Layout soon to change, title and text for now */}
+                          {/* Display preview of event information */}
                           <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
                             {item &&
                               <>
