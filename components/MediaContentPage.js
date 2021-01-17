@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -33,7 +33,7 @@ export default function MediaContentPage(props) {
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&sentences=3').then(description => {
           let newPosts = posts;
-          newPosts[index] = { id: index + 1, title: `Post ${index + 1}`, image, description };
+          newPosts[index] = { id: index + 1, title: `Post ${index + 1}`, description, image };
           setPosts(newPosts);
         })));
       setFetched(true);
@@ -60,13 +60,13 @@ export default function MediaContentPage(props) {
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
                       {item && item.title}
                     </Text>
-                    {item.image &&
-                      <Image source={{ uri: item.image.uri }}
-                        style={{ ...scale({ image: item.image, marginHorizontal: 30, maxHeight: 200 }),
-                        alignSelf: 'center', marginBottom: 10 }} />}
                     <Text style={{ color: props.theme.colors.text }}>
                       {item && truncate(item.description[0], 10)}
                     </Text>
+                    {item.image &&
+                      <Image source={{ uri: item.image.uri }}
+                        style={{ ...scale({ image: item.image, marginHorizontal: 30, maxHeight: 200 }),
+                        alignSelf: 'center', marginTop: 10 }} />}
                   </>} />
             </>} />
           {/* Static page route for posting media content */}
@@ -86,7 +86,7 @@ export default function MediaContentPage(props) {
                   <Button {...props} {...localProps} text='Delete'
                     onPress={() => localProps.navigation.push(pages.deleteMediaContent(post.id))} />}
                 {/* Display for individual post */}
-                <Content {...props} {...localProps} title={post.title} image={post.image}
+                <Content {...props} {...localProps} title={post.title} imageBottom={post.image}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}

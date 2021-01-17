@@ -10,27 +10,12 @@ import { paragraphs, scale } from '../shared/SharedFunctions';
 export default function MediaContentForm(props) {
   // State variables for form fields (two-way data binding)
   const [title, setTitle] = React.useState(props.payload ? props.payload.title : '');
-  const [image, setImage] = React.useState(props.payload ? props.payload.image : null);
   const [description, setDescription] =
     React.useState(props.payload ? props.payload.description.join('\n\n') : '');
+  const [image, setImage] = React.useState(props.payload ? props.payload.image : null);
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
-  // Reference: https://docs.expo.io/versions/latest/sdk/imagepicker/
-  const selectImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        setImage(result);
-      }
-    } catch {
-      props.snackbar('File selected is not a valid image', 235)
-    }
-  };
   return (
     <AppPage {...props} nested cancel scroll onReturn={() => setDescription('')}>
       <View style={{ flex: 1 }}>
@@ -38,27 +23,43 @@ export default function MediaContentForm(props) {
         {/* Reference: https://reactnative.dev/docs/textinput */}
         <TitleInput {...props} placeholder='Post Title' value={title}
           onChangeText={value => setTitle(value)} />
-        {/* Image with button to open image picker */}
-        {image && <Image source={{ uri: image.uri }}
-          style={{ ...scale({ image, maxHeight: 300 }), alignSelf: 'center', marginTop: 15 }} />}
-        <Button {...props} text='Choose Photo' onPress={selectImage} />
         {/* Large input field for post description */}
         <BodyInput {...props} placeholder='Post Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
+        {/* Image with button to open image picker */}
+        {image && <Image source={{ uri: image.uri }}
+          style={{ ...scale({ image, maxHeight: 300 }), alignSelf: 'center', marginBottom: 15 }} />}
+        <View style={{ marginTop: -15 }}>
+          <Button {...props} text='Choose Photo' onPress={async () => {
+            try {
+              // Reference: https://docs.expo.io/versions/latest/sdk/imagepicker/
+              let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                quality: 1,
+              });
+              if (!result.cancelled) {
+                setImage(result);
+              }
+            } catch {
+              props.snackbar('File selected is not a valid image', 235)
+            }
+          }} />
+        </View>
         {/* Submit button with form validation */}
-        <View style={{ marginBottom: 15, marginTop: -15 }}>
+        <View style={{ marginBottom: 15 }}>
           <Button {...props} color='accent' text='Save' onPress={() => {
               // Check for required fields
               if (title.trim() === '') {
                 props.snackbar('Post title is required', 157);
                 return;
               }
-              if (!image) {
-                props.snackbar('Image is required', 141);
-                return;
-              }
               if (description.trim() === '') {
                 props.snackbar('Post description is required', 203);
+                return;
+              }
+              if (!image) {
+                props.snackbar('Image is required', 141);
                 return;
               }
               // Create or update record depending on whether an existing record was given as payload
@@ -67,12 +68,12 @@ export default function MediaContentForm(props) {
                   // Find and update existing record
                   ? props.posts.map(post =>
                     post.id === props.payload.id
-                      ? { ...post, title, image, description: paragraphs(description) }
+                      ? { ...post, title, description: paragraphs(description), image }
                       : post)
                   // Append new record
                   : [
                     ...props.posts,
-                    { id: props.posts.length + 1, title, image, description: paragraphs(description) }
+                    { id: props.posts.length + 1, title, description: paragraphs(description), image }
                   ]);
               // Exit page, return to previous
               props.navigation.pop();

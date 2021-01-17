@@ -94,10 +94,10 @@ export const Content = (props) =>
       }}>
         {props.title}
       </Text>}
-      {/* Display image if exists */}
-      {props.image &&
-        <Image source={{ uri: props.image.uri }}
-          style={{ ...scale({ image: props.image }), alignSelf: 'center', marginBottom: 10 }} />}
+      {/* Display top image if exists */}
+      {props.imageTop &&
+        <Image source={{ uri: props.imageTop.uri }}
+          style={{ ...scale({ image: props.imageTop }), alignSelf: 'center', marginBottom: 15 }} />}
       {/* Display title above rest of content */}
       {props.subtitle && <Text style={{
         color: props.theme.colors.text,
@@ -106,6 +106,13 @@ export const Content = (props) =>
       }}>
         {props.subtitle}
       </Text>}
+    </>
+  } ListFooterComponent={
+    <>
+      {/* Display bottom image if exists */}
+      {props.imageBottom &&
+        <Image source={{ uri: props.imageBottom.uri }}
+          style={{ ...scale({ image: props.imageBottom }), alignSelf: 'center', marginBottom: 15 }} />}
     </>
   } extraData={props.fetched} />;
 
