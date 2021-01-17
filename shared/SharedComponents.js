@@ -1,8 +1,10 @@
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Image, Text, TextInput, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { FlatList, Switch, TouchableOpacity } from 'react-native-gesture-handler';
 import debounce from 'lodash/debounce';
+
+import { scale } from './SharedFunctions';
 
 // Function wrapper to prevent multiple triggers
 // Reference: https://stackoverflow.com/a/47229486
@@ -92,6 +94,10 @@ export const Content = (props) =>
       }}>
         {props.title}
       </Text>}
+      {/* Display image if exists */}
+      {props.image &&
+        <Image source={{ uri: props.image.uri }}
+          style={{ ...scale({ image: props.image }), alignSelf: 'center', marginBottom: 10 }} />}
       {/* Display title above rest of content */}
       {props.subtitle && <Text style={{
         color: props.theme.colors.text,

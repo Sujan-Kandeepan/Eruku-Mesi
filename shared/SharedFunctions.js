@@ -1,3 +1,4 @@
+import { Dimensions } from 'react-native';
 import dayjs from 'dayjs';
 
 // Perform GET request to provided endpoint URL
@@ -22,6 +23,18 @@ export const truncate = (string, num) => {
 
 // Round current date to nearest minute; reference: https://stackoverflow.com/a/28037042
 export const currentDate = () => new Date(Math.round((new Date()).getTime() / 60000) * 60000);
+
+// Scale image to screen width or to maximum height with customizable horizontal margin
+export const scale = ({ image, marginHorizontal, maxHeight }) => {
+  if (!image) return;
+  let width = Dimensions.get('window').width - (marginHorizontal * 2 || 30);
+  let height = width * image.height / image.width;
+  if (maxHeight && height > maxHeight) {
+    width *= maxHeight / height;
+    height = maxHeight;
+  }
+  return { height, width };
+};
 
 // Get formatted date to display
 // Reference: https://day.js.org/docs/en/display/format

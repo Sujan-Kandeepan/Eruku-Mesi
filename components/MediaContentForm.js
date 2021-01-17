@@ -1,19 +1,36 @@
 import React from 'react';
-import { View } from 'react-native';
+import {Image, View } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 import AppPage from './AppPage';
 import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
-import { paragraphs } from '../shared/SharedFunctions';
+import { paragraphs, scale } from '../shared/SharedFunctions';
 
 // Form for creating or updating a media content record
 export default function MediaContentForm(props) {
   // State variables for form fields (two-way data binding)
   const [title, setTitle] = React.useState(props.payload ? props.payload.title : '');
+  const [image, setImage] = React.useState(props.payload ? props.payload.image : null);
   const [description, setDescription] =
     React.useState(props.payload ? props.payload.description.join('\n\n') : '');
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
+  // Reference: https://docs.expo.io/versions/latest/sdk/imagepicker/
+  const selectImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setImage(result);
+      }
+    } catch {
+      props.snackbar('File selected is not a valid image', 235)
+    }
+  };
   return (
     <AppPage {...props} nested cancel scroll onReturn={() => setDescription('')}>
       <View style={{ flex: 1 }}>
@@ -21,6 +38,10 @@ export default function MediaContentForm(props) {
         {/* Reference: https://reactnative.dev/docs/textinput */}
         <TitleInput {...props} placeholder='Post Title' value={title}
           onChangeText={value => setTitle(value)} />
+        {/* Image with button to open image picker */}
+        {image && <Image source={{ uri: image.uri }}
+          style={{ ...scale({ image, maxHeight: 300 }), alignSelf: 'center', marginTop: 15 }} />}
+        <Button {...props} text='Choose Photo' onPress={selectImage} />
         {/* Large input field for post description */}
         <BodyInput {...props} placeholder='Post Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
@@ -30,6 +51,10 @@ export default function MediaContentForm(props) {
               // Check for required fields
               if (title.trim() === '') {
                 props.snackbar('Post title is required', 157);
+                return;
+              }
+              if (!image) {
+                props.snackbar('Image is required', 141);
                 return;
               }
               if (description.trim() === '') {
@@ -42,12 +67,12 @@ export default function MediaContentForm(props) {
                   // Find and update existing record
                   ? props.posts.map(post =>
                     post.id === props.payload.id
-                      ? { ...post, title, description: paragraphs(description) }
+                      ? { ...post, title, image, description: paragraphs(description) }
                       : post)
                   // Append new record
                   : [
                     ...props.posts,
-                    { id: props.posts.length + 1, title, description: paragraphs(description) }
+                    { id: props.posts.length + 1, title, image, description: paragraphs(description) }
                   ]);
               // Exit page, return to previous
               props.navigation.pop();
