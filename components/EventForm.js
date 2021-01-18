@@ -61,11 +61,11 @@ export default function EventForm(props) {
           <Button {...props} color='accent' text='Save' onPress={() => {
               // Check for required fields
               if (title.trim() === '') {
-                props.snackbar('Event title is required', 163);
+                props.snackbar('Event title is required');
                 return;
               }
               if (description.trim() === '') {
-                props.snackbar('Event description is required', 209);
+                props.snackbar('Event description is required');
                 return;
               }
               // Create or update record depending on whether an existing record was given as payload

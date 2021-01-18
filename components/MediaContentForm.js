@@ -42,7 +42,7 @@ export default function MediaContentForm(props) {
                 setImage(result);
               }
             } catch {
-              props.snackbar('File selected is not a valid photo or video', 286)
+              props.snackbar('File selected is not a valid photo or video')
             }
           }} />
         </View>
@@ -51,15 +51,15 @@ export default function MediaContentForm(props) {
           <Button {...props} color='accent' text='Save' onPress={() => {
               // Check for required fields
               if (title.trim() === '') {
-                props.snackbar('Post title is required', 157);
+                props.snackbar('Post title is required');
                 return;
               }
               if (description.trim() === '') {
-                props.snackbar('Post description is required', 203);
+                props.snackbar('Post description is required');
                 return;
               }
               if (!image) {
-                props.snackbar('No photo or video selected', 200);
+                props.snackbar('No photo or video selected');
                 return;
               }
               // Create or update record depending on whether an existing record was given as payload

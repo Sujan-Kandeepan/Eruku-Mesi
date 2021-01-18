@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Avatar, Caption, DarkTheme as DarkDrawerTheme, DefaultTheme as LightDrawerTheme,
   Drawer as CustomDrawer, Provider, Snackbar, Title } from 'react-native-paper';
@@ -119,12 +119,10 @@ export default function App() {
   // Reference: https://callstack.github.io/react-native-paper/snackbar.html
   const [snackbarText, setSnackbarText] = React.useState('');
   const [snackbarVisible, setSnackbarVisible] = React.useState(false);
-  const [snackbarWidth, setSnackbarWidth] = React.useState(0);
   const onDismissSnackbar = () => setSnackbarVisible(false);
-  const snackbar = (text, width) => {
+  const snackbar = (text) => {
     setSnackbarVisible(false);
     setSnackbarText(text);
-    setSnackbarWidth(width);
     setSnackbarVisible(true);
   }
 
@@ -134,8 +132,7 @@ export default function App() {
   // Toggle event notifications and display snackbar message on change
   let [receiveNotifications, setReceiveNotifications] = React.useState(true);
   const toggleNotifications = () => {
-    snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`,
-      receiveNotifications ? 272 : 240);
+    snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
     setReceiveNotifications(!receiveNotifications);
   }
 
@@ -178,11 +175,14 @@ export default function App() {
       </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
-      <Snackbar visible={snackbarVisible} duration={3000} onDismiss={onDismissSnackbar}
-        style={{ alignSelf: 'center', flexDirection: 'row', margin: 50, width: snackbarWidth || 'auto' }}
-        theme={{ colors: { onSurface: theme.colors.card, surface: theme.colors.text } }}>
-        <Text adjustsFontSizeToFit={true}>{snackbarText}</Text>
-      </Snackbar>
+      <Text style={{ ...(Platform.OS !== 'web' &&
+        { alignSelf: 'center', bottom: 0, position: 'absolute', textAlign: 'center' }) }}>
+        <Snackbar visible={snackbarVisible} duration={3000} onDismiss={onDismissSnackbar}
+          style={{ alignSelf: 'center', flexDirection: 'row', margin: 50 }}
+          theme={{ colors: { onSurface: theme.colors.card, surface: theme.colors.text } }}>
+          <Text>{snackbarText}</Text>
+        </Snackbar>
+      </Text>
     </Provider>
   );
 }

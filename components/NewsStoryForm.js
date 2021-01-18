@@ -29,11 +29,11 @@ export default function NewsStoryForm(props) {
           <Button {...props} color='accent' text='Save' onPress={() => {
               // Check for required fields
               if (title.trim() === '') {
-                props.snackbar('News story title is required', 198);
+                props.snackbar('News story title is required');
                 return;
               }
               if (content.trim() === '') {
-                props.snackbar('News story content is required', 222);
+                props.snackbar('News story content is required');
                 return;
               }
               // Create or update record depending on whether an existing record was given as payload

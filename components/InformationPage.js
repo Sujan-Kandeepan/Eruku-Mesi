@@ -61,7 +61,7 @@ export default function InformationPage(props) {
                   {props.admin &&
                     <Text style={{ marginLeft: 5, marginRight: -15 }}>
                       <IconButton style={SharedStyles.icon} onLongPress={drag}
-                        onPress={() => props.snackbar('Hold and drag to reorder list', 207)}
+                        onPress={() => props.snackbar('Hold and drag to reorder list')}
                         name='unfold-more' type='material' color={props.theme.colors.placeholder} />
                     </Text>}
                   {/* Inline edit interface for section name */}
@@ -78,7 +78,7 @@ export default function InformationPage(props) {
                         {/* Save changes and update state/data */}
                         <IconButton style={SharedStyles.icon} onPress={() => {
                           if (pages.includes(editText) && originalText !== editText) {
-                            props.snackbar('Duplicate sections not allowed', 224);
+                            props.snackbar('Duplicate sections not allowed');
                             return;
                           }
                           setPages(pages.map(page => page === originalText ? editText : page));
@@ -109,7 +109,7 @@ export default function InformationPage(props) {
                           }} name='edit' type='material' color={props.theme.colors.placeholder} />
                           {/* Press and hold for 3 seconds to delete entire section */}
                           <IconButton style={SharedStyles.icon}
-                            onPress={() => props.snackbar('Press and hold to delete', 183)}
+                            onPress={() => props.snackbar('Press and hold to delete')}
                             delayLongPress={3000} onLongPress={() => {
                               setPages(pages.filter(page => page !== item));
                               setData(data.filter(entry => entry.title !== item));
@@ -127,7 +127,7 @@ export default function InformationPage(props) {
                     <Button {...props} text='Add Section'
                       onPress={() => {
                         if (pages.includes(newSection)) {
-                          props.snackbar('Rename the previous new section first', 269);
+                          props.snackbar('Rename the previous new section first');
                           return;
                         }
                         setPages([...pages, newSection]);
