@@ -1,9 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 
 import AppPage from './AppPage';
-import { BodyInput, Button, Media, TitleInput } from '../shared/SharedComponents';
+import { BodyInput, Button, Media, MediaPicker, TitleInput } from '../shared/SharedComponents';
 import { paragraphs } from '../shared/SharedFunctions';
 
 // Form for creating or updating a media content record
@@ -26,26 +25,11 @@ export default function MediaContentForm(props) {
         {/* Large input field for post description */}
         <BodyInput {...props} placeholder='Post Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
-        {/* Image or video with button to open image picker */}
+        {/* Image or video with button to open image/video picker */}
         <Media image={image} scale={{ image, maxHeight: 300 }}
           style={{ alignSelf: 'center', marginBottom: 15 }} />
-        <View style={{ marginTop: -15 }}>
-          <Button {...props} text='Choose Photo or Video' onPress={async () => {
-            try {
-              // Reference: https://docs.expo.io/versions/latest/sdk/imagepicker/
-              let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
-                quality: 1,
-              });
-              if (!result.cancelled) {
-                setImage(result);
-              }
-            } catch {
-              props.snackbar('File selected is not a valid photo or video')
-            }
-          }} />
-        </View>
+        <MediaPicker {...props} text='Choose Photo or Video'
+          allowVideo handleResult={setImage} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15 }}>
           <Button {...props} color='accent' text='Save' onPress={() => {

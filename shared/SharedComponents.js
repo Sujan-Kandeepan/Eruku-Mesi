@@ -3,6 +3,7 @@ import React from 'react';
 import { Image, Text, TextInput, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { FlatList, Switch, TouchableOpacity } from 'react-native-gesture-handler';
+import * as ImagePicker from 'expo-image-picker';
 import debounce from 'lodash/debounce';
 
 import { scale } from './SharedFunctions';
@@ -69,6 +70,26 @@ export const Media = (props) =>
         resizeMode={Video.RESIZE_MODE_CONTAIN}
         style={{ ...scale(props.scale), ...props.style }} />}
  </>;
+
+export const MediaPicker = (props) =>
+  <View style={{ marginTop: -15 }}>
+    <Button {...props} text={props.text} onPress={async () => {
+      try {
+        // Reference: https://docs.expo.io/versions/latest/sdk/imagepicker/
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions[props.allowVideo ? 'All' : 'Image'],
+          allowsEditing: true,
+          quality: 1,
+        });
+        if (!result.cancelled) {
+          props.handleResult(result);
+        }
+      } catch (error) {
+        console.log(error);
+        props.snackbar(`File selected is not a valid photo${props.allowVideo ? ' or video' : ''}`)
+      }
+    }} />
+  </View>;
 
 // List component accepting common item layout and rendering options
 export const Feed = (props) =>
