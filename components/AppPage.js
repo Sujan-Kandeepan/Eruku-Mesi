@@ -11,7 +11,7 @@ import SharedStyles from '../shared/SharedStyles';
 const Stack = createStackNavigator();
 
 // Common layout/logic for all app pages, accept some props for slight customization/variance
-export default function AppPage({ cancel, children, navigation, nested, route, scroll, tab, theme }) {
+export default function AppPage({ cancel, children, navigation, nested, onReturn, route, scroll, tab, theme }) {
   // Monitor drawer state (check for toggleDrawer function to see if exists) and close keyboard whenever opened
   // References: https://stackoverflow.com/a/64249361 and https://stackoverflow.com/a/39772206
   const drawerOpen = navigation.toggleDrawer && useIsDrawerOpen();
@@ -51,7 +51,7 @@ export default function AppPage({ cancel, children, navigation, nested, route, s
             {nested && !tab &&
               <Button theme={theme} text={cancel ? 'Cancel' : 'Go Back'}
                 // Optionally specify callback function for return button
-                onPress={() => navigation.pop()} />}
+                onPress={(...args) => { navigation.pop(); if (onReturn) onReturn(...args); }} />}
             {/* Reference: https://github.com/facebook/react-native/issues/4099#issuecomment-307541206 */}
             {scroll ? <ScrollView contentContainerStyle={{ flexGrow: 1 }}>{children}</ScrollView> : children}
           </>} />
