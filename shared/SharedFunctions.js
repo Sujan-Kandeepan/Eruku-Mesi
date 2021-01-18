@@ -27,6 +27,8 @@ export const currentDate = () => new Date(Math.round((new Date()).getTime() / 60
 // Scale image to screen width or to maximum height with customizable horizontal margin
 export const scale = ({ image, marginHorizontal, maxHeight }) => {
   if (!image) return;
+  if (image.rotation && [90, 270].includes(parseInt(image.rotation)))
+    image = { ...image, width: image.height, height: image.width };
   let width = Dimensions.get('window').width - (marginHorizontal * 2 || 30);
   let height = image.width && image.height ? width * image.height / image.width : width;
   if (maxHeight && height > maxHeight) {
