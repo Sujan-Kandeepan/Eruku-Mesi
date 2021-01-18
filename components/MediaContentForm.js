@@ -17,7 +17,7 @@ export default function MediaContentForm(props) {
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
   return (
-    <AppPage {...props} nested cancel scroll onReturn={() => setDescription('')}>
+    <AppPage {...props} nested cancel scroll>
       <View style={{ flex: 1 }}>
         {/* Simple bold input field for post title */}
         {/* Reference: https://reactnative.dev/docs/textinput */}

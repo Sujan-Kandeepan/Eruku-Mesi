@@ -15,7 +15,7 @@ export default function NewsStoryForm(props) {
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
   return (
-    <AppPage {...props} nested cancel scroll onReturn={() => setContent('')}>
+    <AppPage {...props} nested cancel scroll>
       <View style={{ flex: 1 }}>
         {/* Simple bold input field for news story title */}
         {/* Reference: https://reactnative.dev/docs/textinput */}

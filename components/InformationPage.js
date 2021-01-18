@@ -155,7 +155,7 @@ export default function InformationPage(props) {
           {/* Generated page routes for editing info sections */}
           {props.admin && pages.map(page => `Edit ${page}`).map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
-              <AppPage {...props} {...localProps} nested cancel scroll onReturn={() => setEditText('')}>
+              <AppPage {...props} {...localProps} nested cancel scroll>
                 <View style={{ flex: 1 }}>
                   {/* All content editable within large text field */}
                   {/* Reference: https://reactnative.dev/docs/textinput */}

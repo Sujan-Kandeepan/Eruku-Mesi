@@ -24,7 +24,7 @@ export default function EventForm(props) {
     'YellowBox has been replaced with LogBox'
   ]), []);
   return (
-    <AppPage {...props} nested cancel scroll onReturn={() => setDescription('')}>
+    <AppPage {...props} nested cancel scroll>
       <View style={{ flex: 1 }}>
         {/* Simple bold input field for event title */}
         <TitleInput {...props} placeholder='Event Title' value={title}
