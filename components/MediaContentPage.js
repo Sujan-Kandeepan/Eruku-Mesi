@@ -27,7 +27,7 @@ export default function MediaContentPage(props) {
   // Initial load of posts by calling useEffect with [] as second param to run once
   React.useEffect(() => {
     // Wait for all posts and trigger update to list by setting flag
-    const image = { cancelled: false, height: 359, uri: 'https://bit.ly/3sAOAp8', width: 640 };
+    const image = { cancelled: false, height: 359, uri: 'https://bit.ly/3sAOAp8', type: 'image', width: 640 };
     const populate = async () => {
       // Using lorem ipsum data for now with 10 posts
       await Promise.all([...Array(10).keys()].map(index =>
