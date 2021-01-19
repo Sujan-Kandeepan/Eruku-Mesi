@@ -132,7 +132,7 @@ export const Content = (props) =>
       </Text>}
       {/* Display top image if exists */}
       {props.imageTop &&
-        <Media image={props.imageTop} scale={{ image: props.imageTop }}
+        <Media image={props.imageTop} scale={{ image: props.imageTop, maxHeight: props.maxImageHeight }}
           style={{ alignSelf: 'center', marginBottom: 15 }} />}
       {/* Display subtitle below title, line by line */}
       {props.subtitle && props.subtitle.split('\n').map((line, index) =>
@@ -148,7 +148,7 @@ export const Content = (props) =>
     <>
       {/* Display bottom image if exists */}
       {props.imageBottom &&
-        <Media image={props.imageBottom} scale={{ image: props.imageBottom }}
+        <Media image={props.imageBottom} scale={{ image: props.imageBottom, maxHeight: props.maxImageHeight }}
           style={{ alignSelf: 'center', marginBottom: 15 }} />}
     </>
   } extraData={props.fetched} />;

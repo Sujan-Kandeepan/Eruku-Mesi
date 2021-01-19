@@ -155,7 +155,7 @@ export default function InformationPage(props) {
                 {/* Display of content for specific information section */}
                 <Content {...props} {...localProps} title={data.find(item => item.title === page).title}
                   imageTop={data.find(item => item.title === page).imageTop}
-                  imageBottom={data.find(item => item.title === page).imageBottom}
+                  imageBottom={data.find(item => item.title === page).imageBottom} maxImageHeight={300}
                   content={data.find(entry => entry.title === page).content} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing info sections */}
