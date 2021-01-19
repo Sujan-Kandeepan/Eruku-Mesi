@@ -105,15 +105,23 @@ export const Feed = (props) =>
     </TouchableOpacity>
   } keyExtractor={props.keyExtractor}
     // Display text if content loading or empty
-    ListHeaderComponent={!props.fetched ?
-      <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
-        {props.loadingText}
-      </Text> :
-      props.data.length === 0 &&
+    ListHeaderComponent={
+      <>
+        {props.header}
+        {!props.fetched ?
         <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
-          Nothing to display at this time.
-        </Text>}
-    ListFooterComponent={<View style={{ height: 15 }} />} extraData={props.fetched} />;
+          {props.loadingText}
+        </Text> :
+        props.data.length === 0 &&
+          <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
+            Nothing to display at this time.
+          </Text>}
+      </>}
+    ListFooterComponent={
+      <>
+        {props.footer}
+        <View style={{ height: 15 }} />
+      </>} extraData={props.fetched} />;
 
 // Component to display expanded content for individual item
 export const Content = (props) =>

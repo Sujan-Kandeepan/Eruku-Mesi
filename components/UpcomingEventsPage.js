@@ -8,13 +8,38 @@ import dayjs from 'dayjs';
 
 import AppPage from './AppPage';
 import EventForm from './EventForm';
-import { Button, Content, Feed } from '../shared/SharedComponents';
+import { Button, Content, Feed, Header } from '../shared/SharedComponents';
 import { get, showDate, showTime, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+// Common logic for scrolling events list on both tabs
+const EventsList = ({ data, fetched, header, localProps, pages, props }) =>
+  <Feed {...props} fetched={fetched} data={data} loadingText='Loading events...'
+    onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
+    keyExtractor={(item, index) => `${item ? item.id : index} ${index}`} header={header}
+    cardContent={item =>
+      // Display preview of event information
+      item &&
+      <>
+        <Text style={{
+          color: props.theme.colors.text,
+          fontWeight: 'bold', marginBottom: 10
+        }}>
+          {item.title}
+        </Text>
+        <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
+          <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
+          <Text style={{ color: props.theme.colors.disabled }}> | </Text>
+          <Text>{item.location}</Text>
+        </Text>
+        <Text style={{ color: props.theme.colors.text }}>
+          {item && truncate(item.description[0], 10)}
+        </Text>
+      </>} />;
 
 // Page for displaying upcoming events (feed + calendar view)
 export default function UpcomingEventsPage(props) {
@@ -79,43 +104,39 @@ export default function UpcomingEventsPage(props) {
                   fontSize: 14, margin: 15, textAlignVertical: 'center'
                 }}}>
                   <Tab.Screen name={pages.listView} children={() =>
-                    <Feed {...props} fetched={fetched} data={events} loadingText='Loading events...'
-                      onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
-                      keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
-                      cardContent={item =>
-                        // Display preview of event information
-                        item &&
-                          <>
-                            <Text style={{ color: props.theme.colors.text,
-                              fontWeight: 'bold', marginBottom: 10 }}>
-                              {item.title}
-                            </Text>
-                            <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
-                              <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
-                              <Text style={{ color: props.theme.colors.disabled }}> | </Text>
-                              <Text>{item.location}</Text>
-                            </Text>
-                            <Text style={{ color: props.theme.colors.text }}>
-                              {item && truncate(item.description[0], 10)}
-                            </Text>
-                          </>} />} />
-                  <Tab.Screen name={pages.calendarView} children={(localProps) =>
+                    <EventsList data={events} fetched={fetched} pages={pages}
+                      localProps={localProps} props={props} />} />
+                  <Tab.Screen name={pages.calendarView} children={() =>
                     <View style={{ flex: 1 }}>
-                      {/* Reference: https://github.com/wix/react-native-calendars */}
-                      <Calendar style={{ margin: 15 }}
-                        // Set key to update on theme change or date selection
-                        key={`${props.theme.dark} ${formatDate(selectedDate)}`}
-                        markedDates={markedDates} theme={{
-                          arrowColor: props.theme.colors.accent,
-                          calendarBackground: props.theme.colors.card,
-                          dayTextColor: props.theme.colors.text,
-                          dotColor: props.theme.colors.primary,
-                          monthTextColor: props.theme.colors.text,
-                          selectedDayBackgroundColor: props.theme.colors.accent,
-                          textDisabledColor: props.theme.colors.disabled,
-                          textSectionTitleColor: props.theme.colors.placeholder,
-                          todayTextColor: props.theme.colors.accent
-                        }} onDayPress={(day) => setSelectedDate(new Date(day.year, day.month - 1, day.day))} />
+                      <EventsList data={events.filter(event =>
+                        formatDate(event.date) === formatDate(selectedDate))}
+                        fetched={fetched} pages={pages}
+                        localProps={localProps} props={props}
+                        header={
+                          <>
+                            {/* Reference: https://github.com/wix/react-native-calendars */}
+                            <View style={{ borderColor: props.theme.colors.border,
+                              borderWidth: 1, margin: 15 }}>
+                              <Calendar
+                                // Set key to update on theme change or date selection
+                                key={`${props.theme.dark} ${formatDate(selectedDate)}`}
+                                onDayPress={(day) => setSelectedDate(new Date(day.year, day.month - 1, day.day))}
+                                markedDates={markedDates} theme={{
+                                  arrowColor: props.theme.colors.accent,
+                                  calendarBackground: props.theme.colors.card,
+                                  dayTextColor: props.theme.colors.text,
+                                  dotColor: props.theme.colors.primary,
+                                  monthTextColor: props.theme.colors.text,
+                                  selectedDayBackgroundColor: props.theme.colors.accent,
+                                  textDisabledColor: props.theme.colors.disabled,
+                                  textSectionTitleColor: props.theme.colors.placeholder,
+                                  todayTextColor: props.theme.colors.accent
+                                }} />
+                            </View>
+                            <View style={{ marginTop: -15 }}>
+                              <Header {...props} text={'Events On This Day'} />
+                            </View>
+                          </>} />
                     </View>} />
                 </Tab.Navigator>
               </NavigationContainer>
