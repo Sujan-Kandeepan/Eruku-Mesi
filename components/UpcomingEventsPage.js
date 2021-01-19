@@ -54,9 +54,11 @@ export default function UpcomingEventsPage(props) {
           let newEvents = events;
           newEvents[index] = { id: index + 1, title: `Event ${index + 1}`,
             date: new Date(), location: 'Baltimore, MA, US', description };
+          newEvents[index].date.setDate(newEvents[index].date.getDate() + Math.floor(Math.random() * 20 - 10));
           setEvents(newEvents);
         })));
       setFetched(true);
+      setSelectedDate(new Date());
     };
     populate();
   }, []);
@@ -110,6 +112,8 @@ export default function UpcomingEventsPage(props) {
                           dotColor: props.theme.colors.primary,
                           monthTextColor: props.theme.colors.text,
                           selectedDayBackgroundColor: props.theme.colors.accent,
+                          textDisabledColor: props.theme.colors.disabled,
+                          textSectionTitleColor: props.theme.colors.placeholder,
                           todayTextColor: props.theme.colors.accent
                         }} onDayPress={(day) => setSelectedDate(new Date(day.year, day.month - 1, day.day))} />
                     </View>} />
