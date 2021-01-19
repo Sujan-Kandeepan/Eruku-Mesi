@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import dayjs from 'dayjs';
 
 import AppPage from './AppPage';
-import EmptyPage from './EmptyPage';
 import EventForm from './EventForm';
 import { Button, Content, Feed } from '../shared/SharedComponents';
 import { get, showDate, showTime, truncate } from '../shared/SharedFunctions';
@@ -29,6 +30,20 @@ export default function UpcomingEventsPage(props) {
   // State variables for display data and state (two-way data binding)
   const [events, setEvents] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [markedDates, setMarkedDates] = React.useState({});
+  const formatDate = date => dayjs(date).format(`YYYY-MM-DD`);
+  // Update calendar on data change
+  React.useEffect(() => {
+    let newMarkedDates = {};
+    // Update marked events with latest events data
+    events.map(event => event.date).forEach(date =>
+      newMarkedDates[`${formatDate(date)}`] = { marked: true });
+    // Update selected date with current date selection
+    newMarkedDates[`${formatDate(selectedDate)}`] =
+      { ...newMarkedDates[`${formatDate(selectedDate)}`], selected: true };
+    setMarkedDates(newMarkedDates);
+  }, [events, selectedDate]);
   // Initial load of events by calling useEffect with [] as second param to run once
   React.useEffect(() => {
     // Wait for all events and trigger update to list by setting flag
@@ -83,7 +98,21 @@ export default function UpcomingEventsPage(props) {
                             </Text>
                           </>} />} />
                   <Tab.Screen name={pages.calendarView} children={(localProps) =>
-                    <EmptyPage {...props} {...localProps} nested tab />} />
+                    <View style={{ flex: 1 }}>
+                      {/* Reference: https://github.com/wix/react-native-calendars */}
+                      <Calendar style={{ margin: 15 }}
+                        // Set key to update on theme change or date selection
+                        key={`${props.theme.dark} ${formatDate(selectedDate)}`}
+                        markedDates={markedDates} theme={{
+                          arrowColor: props.theme.colors.accent,
+                          calendarBackground: props.theme.colors.card,
+                          dayTextColor: props.theme.colors.text,
+                          dotColor: props.theme.colors.primary,
+                          monthTextColor: props.theme.colors.text,
+                          selectedDayBackgroundColor: props.theme.colors.accent,
+                          todayTextColor: props.theme.colors.accent
+                        }} onDayPress={(day) => setSelectedDate(new Date(day.year, day.month - 1, day.day))} />
+                    </View>} />
                 </Tab.Navigator>
               </NavigationContainer>
             </>} />
