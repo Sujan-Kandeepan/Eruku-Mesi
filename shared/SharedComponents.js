@@ -134,14 +134,15 @@ export const Content = (props) =>
       {props.imageTop &&
         <Media image={props.imageTop} scale={{ image: props.imageTop }}
           style={{ alignSelf: 'center', marginBottom: 15 }} />}
-      {/* Display title above rest of content */}
-      {props.subtitle && <Text style={{
+      {/* Display subtitle below title, line by line */}
+      {props.subtitle && props.subtitle.split('\n').map((line, index) =>
+      <Text key={index} style={{
         color: props.theme.colors.text,
         fontSize: 14, marginBottom: 10,
         textAlign: 'center'
       }}>
-        {props.subtitle}
-      </Text>}
+        {line}
+      </Text>)}
     </>
   } ListFooterComponent={
     <>
@@ -156,10 +157,19 @@ export const Content = (props) =>
  //Reference: https://reactnative.dev/docs/textinput
 export const TitleInput = (props) =>
   <TextInput placeholder={props.placeholder} placeholderTextColor={props.theme.colors.placeholder}
-    autoFocus={props.autoFocus} autoCapitalize='words'
+    autoFocus={props.autoFocus} autoCapitalize='words' editable spellCheck
     onFocus={props.onFocus} onBlur={props.onBlur} style={{
       backgroundColor: props.theme.colors.card,
       color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
+      margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
+    }} value={props.value} onChangeText={props.onChangeText} />;
+
+// Component to input simple field in form
+export const SimpleInput = (props) =>
+  <TextInput placeholder={props.placeholder} placeholderTextColor={props.theme.colors.placeholder}
+    autoFocus={props.autoFocus} autoCapitalize={props.autoCapitalize} editable spellCheck
+    onFocus={props.onFocus} onBlur={props.onBlur} style={{
+      backgroundColor: props.theme.colors.card, color: props.theme.colors.text,
       margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
     }} value={props.value} onChangeText={props.onChangeText} />;
 

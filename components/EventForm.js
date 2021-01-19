@@ -3,7 +3,7 @@ import { Text, View, YellowBox } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import AppPage from './AppPage';
-import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
+import { BodyInput, Button, SimpleInput, TitleInput } from '../shared/SharedComponents';
 import { currentDate, paragraphs, showDate, showTime } from '../shared/SharedFunctions';
 
 // Form for creating or updating an event record
@@ -13,6 +13,7 @@ export default function EventForm(props) {
   const [description, setDescription] =
     React.useState(props.payload ? props.payload.description.join('\n\n') : '');
   const [date, setDate] = React.useState(props.payload ? props.payload.date : currentDate());
+  const [location, setLocation] = React.useState(props.payload ? props.payload.location : '');
   const [mode, setMode] = React.useState('date');
   const [show, setShow] = React.useState(false);
   // Reference: https://stackoverflow.com/a/59875773
@@ -53,6 +54,9 @@ export default function EventForm(props) {
         {/* Date picker widget triggered by buttons above */}
         <DateTimePickerModal mode={mode} date={date} isVisible={show} isDarkModeEnabled={props.theme.dark}
           onCancel={() => setShow(false)} onConfirm={value => { setShow(false); setDate(value); }} />
+        {/* Simple input field for event location */}
+        <SimpleInput {...props} placeholder='Event Location' value={location} autoCapitalize='words'
+          onChangeText={(value) => setLocation(value)} width={width} />
         {/* Large input field for event description */}
         <BodyInput {...props} placeholder='Event Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
@@ -62,6 +66,10 @@ export default function EventForm(props) {
               // Check for required fields
               if (title.trim() === '') {
                 props.snackbar('Event title is required');
+                return;
+              }
+              if (location.trim() === '') {
+                props.snackbar('Event location is required');
                 return;
               }
               if (description.trim() === '') {
@@ -74,12 +82,12 @@ export default function EventForm(props) {
                   // Find and update existing record
                   ? props.events.map(event =>
                     event.id === props.payload.id
-                      ? { ...event, title, date, description: paragraphs(description) }
+                      ? { ...event, title, date, location, description: paragraphs(description) }
                       : event)
                   // Append new record
                   : [
                     ...props.events,
-                    { id: props.events.length + 1, title, date, description: paragraphs(description) }
+                    { id: props.events.length + 1, title, date, location, description: paragraphs(description) }
                   ]);
               // Exit page, return to previous
               props.navigation.pop();

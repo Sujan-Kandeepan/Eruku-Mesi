@@ -37,7 +37,8 @@ export default function UpcomingEventsPage(props) {
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&paras=2').then(description => {
           let newEvents = events;
-          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, date: new Date(), description };
+          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`,
+            date: new Date(), location: 'Baltimore, MA, US', description };
           setEvents(newEvents);
         })));
       setFetched(true);
@@ -65,20 +66,22 @@ export default function UpcomingEventsPage(props) {
                       onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
                       keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                       cardContent={item =>
-                        <>
-                          {/* Display preview of event information */}
-                          <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
-                            {item &&
-                              <>
-                                <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
-                                <Text style={{ color: props.theme.colors.disabled}}> | </Text>
-                                <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
-                              </>}
-                          </Text>
-                          <Text style={{ color: props.theme.colors.text }}>
-                            {item && truncate(item.description[0], 10)}
-                          </Text>
-                        </>} />} />
+                        // Display preview of event information
+                        item &&
+                          <>
+                            <Text style={{ color: props.theme.colors.text,
+                              fontWeight: 'bold', marginBottom: 10 }}>
+                              {item.title}
+                            </Text>
+                            <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
+                              <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
+                              <Text style={{ color: props.theme.colors.disabled }}> | </Text>
+                              <Text>{item.location}</Text>
+                            </Text>
+                            <Text style={{ color: props.theme.colors.text }}>
+                              {item && truncate(item.description[0], 10)}
+                            </Text>
+                          </>} />} />
                   <Tab.Screen name={pages.calendarView} children={(localProps) =>
                     <EmptyPage {...props} {...localProps} nested tab />} />
                 </Tab.Navigator>
@@ -102,7 +105,7 @@ export default function UpcomingEventsPage(props) {
                     onPress={() => localProps.navigation.push(pages.deleteEvent(event.id))} />}
                 {/* Display for individual event */}
                 <Content {...props} {...localProps} title={event.title}
-                  subtitle={`${showDate(event.date, true)} @ ${showTime(event.date, true)}`}
+                  subtitle={`${showDate(event.date, true)} @ ${showTime(event.date, true)}\n${event.location}`}
                   content={event.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing events */}
