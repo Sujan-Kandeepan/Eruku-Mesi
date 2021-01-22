@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, ScrollView } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -53,7 +53,12 @@ export default function AppPage({ cancel, children, navigation, nested, onReturn
                 // Optionally specify callback function for return button
                 onPress={(...args) => { navigation.pop(); if (onReturn) onReturn(...args); }} />}
             {/* Reference: https://github.com/facebook/react-native/issues/4099#issuecomment-307541206 */}
-            {scroll ? <ScrollView contentContainerStyle={{ flexGrow: 1 }}>{children}</ScrollView> : children}
+            {scroll ?
+              <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : ''} style={{ flex: 1 }}>
+                  {children}
+                </KeyboardAvoidingView>
+              </ScrollView> : children}
           </>} />
       </Stack.Navigator>
     </NavigationContainer>
