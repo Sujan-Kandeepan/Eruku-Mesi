@@ -21,8 +21,8 @@ export const Header = (props) =>
 
 // Button component with card style
 export const Button = (props) =>
-  <TouchableOpacity onPress={noRepeat(props.onPress)} onLongPress={noRepeat(props.onLongPress)}
-    delayLongPress={props.delayLongPress}>
+  <TouchableOpacity disabled={props.disabled} onPress={noRepeat(props.onPress)}
+    onLongPress={noRepeat(props.onLongPress)} delayLongPress={props.delayLongPress}>
     <Card containerStyle={{
         backgroundColor: props.color ? props.theme.colors[props.color] : props.theme.colors.surface,
         borderColor: props.theme.colors.border
@@ -34,7 +34,7 @@ export const Button = (props) =>
 
 // Button appearing as small icon
 export const IconButton = (props) =>
-  <TouchableOpacity style={props.style} onPress={noRepeat(props.onPress)}
+  <TouchableOpacity style={props.style} disabled={props.disabled} onPress={noRepeat(props.onPress)}
     onLongPress={noRepeat(props.onLongPress)} delayLongPress={props.delayLongPress}
     activeOpacity={props.noFeedback ? 1.0 : 0.2}>
     <Icon name={props.name} type={props.type} color={props.color} containerStyle={props.containerStyle} />

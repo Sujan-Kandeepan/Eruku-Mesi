@@ -6,10 +6,45 @@ import dayjs from 'dayjs';
 export const get = async (url) => {
   try {
     const response = await fetch(url);
-    const json = await response.json();
-    return json;
+    return await response.json();
   } catch (error) {
-    return console.error(error);
+    console.error(error);
+    throw error;
+  }
+}
+
+// Perform POST request to provided endpoint URL with body
+export const post = async (url, body) => {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+// Perform DELETE request to provided endpoint URL
+export const del = async (url) => {
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
@@ -48,3 +83,6 @@ export const showTime = (date) => dayjs(date).format('h:mm A');
 
 // Extract list of paragraphs from large input field value containing text
 export const paragraphs = text => text.split('\n').filter(s => s !== '').map(s => s.trim());
+
+// Merge list of paragraphs back into single text string
+export const text = paragraphs => paragraphs.join('\n\n');

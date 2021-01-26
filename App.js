@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Platform, Text, View } from 'react-native';
@@ -15,6 +16,10 @@ import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 import FeedbackForm from './components/FeedbackForm';
 
+// Base URL for API wherever hosted (computer's IP for now)
+// Reference: https://stackoverflow.com/a/56943681
+const ip = Platform.OS === 'web' ? 'localhost' : Constants.manifest.debuggerHost.split(':').shift();
+const baseURL = `http://${ip}:${process.env.MONGODB_PORT || 4000}`;
 // Initialize drawer navigator
 const Drawer = createDrawerNavigator();
 
@@ -141,6 +146,10 @@ export default function App() {
   let [theme, setTheme] = React.useState(lightTheme);
   const toggleTheme = () => setTheme(theme === darkTheme ? lightTheme : darkTheme);
 
+  // Props to expose to nested child components, extra for settings
+  const sharedProps = { admin, baseURL, snackbar, theme };
+  const settingsProps = { receiveNotifications, toggleNotifications, toggleTheme };
+
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
@@ -149,28 +158,19 @@ export default function App() {
           drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
           drawerContent={props => <CustomDrawerContent {...props} theme={theme} />}>
           <Drawer.Screen name={pages.newsFeed}
-            children={(props) => <NewsFeedPage {...props} theme={theme}
-              admin={admin} snackbar={snackbar} />} />
+            children={(props) => <NewsFeedPage {...props} {...sharedProps} />} />
           <Drawer.Screen name={pages.upcomingEvents}
-            children={(props) => <UpcomingEventsPage {...props} theme={theme}
-              admin={admin} snackbar={snackbar} />} />
+            children={(props) => <UpcomingEventsPage {...props} {...sharedProps} />} />
           <Drawer.Screen name={pages.messages}
-            children={(props) => <MessagesPage {...props} theme={theme}
-              snackbar={snackbar} />} />
+            children={(props) => <MessagesPage {...props} {...sharedProps} />} />
           <Drawer.Screen name={pages.mediaContent}
-            children={(props) => <MediaContentPage {...props} theme={theme}
-              admin={admin} snackbar={snackbar} />} />
+            children={(props) => <MediaContentPage {...props} {...sharedProps} />} />
           <Drawer.Screen name={pages.information}
-            children={(props) => <InformationPage {...props} theme={theme}
-              admin={admin} snackbar={snackbar} />} />
-          <Drawer.Screen name={pages.settings} children={(props) =>
-            <SettingsPage {...props} theme={theme}
-              toggleTheme={toggleTheme} snackbar={snackbar}
-              receiveNotifications={receiveNotifications}
-              toggleNotifications={toggleNotifications} />} />
+            children={(props) => <InformationPage {...props} {...sharedProps} />} />
+          <Drawer.Screen name={pages.settings}
+            children={(props) => <SettingsPage {...props} {...sharedProps} {...settingsProps} />} />
           <Drawer.Screen name={pages.feedback}
-            children={(props) => <FeedbackForm {...props}
-            theme={theme} snackbar={snackbar} />} />
+            children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
         </Drawer.Navigator>
       </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}

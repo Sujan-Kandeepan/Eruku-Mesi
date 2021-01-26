@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import NewsStoryForm from './NewsStoryForm';
 import { Button, Content, Feed } from '../shared/SharedComponents';
-import { get, truncate } from '../shared/SharedFunctions';
+import { del, get, paragraphs, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -24,21 +24,16 @@ export default function NewsFeedPage(props) {
   // State variables for display data and state (two-way data binding)
   const [stories, setStories] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
+  const fetchNewsStories = () => {
+    get(`${props.baseURL}/newsStories`)
+      .then(response =>
+        setStories(response.newsStories.map(item =>
+          ({ id: item._id, title: item.title, content: paragraphs(item.content) }))))
+      .catch(() => props.snackbar('Unable to fetch news stories'))
+      .finally(() => setFetched(true));
+  };
   // Initial load of new stories by calling useEffect with [] as second param to run once
-  React.useEffect(() => {
-    // Wait for all new stories and trigger update to list by setting flag
-    const populate = async () => {
-      // Using lorem ipsum data for now with 10 new stories
-      await Promise.all([...Array(10).keys()].map(index =>
-        get('https://baconipsum.com/api/?type=meat-and-filler&paras=7').then(content => {
-          let newStories = stories;
-          newStories[index] = { id: index + 1, title: `News Story ${index + 1}`, content };
-          setStories(newStories);
-        })));
-      setFetched(true);
-    };
-    populate();
-  }, []);
+  React.useEffect(fetchNewsStories, []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
@@ -68,7 +63,9 @@ export default function NewsFeedPage(props) {
           {props.admin &&
             <Stack.Screen name={pages.createNewsStory} children={(localProps) =>
               // Separate form with no payload to indicate new record
-              <NewsStoryForm {...props} {...localProps} stories={stories} setStories={setStories} />} />}
+              <NewsStoryForm {...props} {...localProps}
+                stories={stories} setStories={setStories}
+                update={fetchNewsStories} />} />}
           {/* Generated page routes for viewing news stories */}
           {stories.map(story =>
             <Stack.Screen key={story.id} name={pages.viewNewsStory(story.id)} children={(localProps) =>
@@ -89,14 +86,17 @@ export default function NewsFeedPage(props) {
             <Stack.Screen key={story.id} name={pages.editNewsStory(story.id)} children={(localProps) =>
               // Separate form with existing record as payload
               <NewsStoryForm {...props} {...localProps}
-                stories={stories} setStories={setStories} payload={story} />} />)}
+                stories={stories} setStories={setStories}
+                update={fetchNewsStories} payload={story} />} />)}
           {/* Generated page routes for deleting news stories */}
           {props.admin && stories.map(story =>
             <Stack.Screen key={story.id} name={pages.deleteNewsStory(story.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' color='danger'
-                  onPress={() => setStories(stories.filter(s => s.id !== story.id))} />
+                  onPress={() => del(`${props.baseURL}/newsStories/${story.id}`)
+                    .then(fetchNewsStories)
+                    .catch(() => props.snackbar('Failed to update database'))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {story.title}?
                 </Text>
