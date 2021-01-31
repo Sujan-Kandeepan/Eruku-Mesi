@@ -150,6 +150,14 @@ export default function App() {
   const sharedProps = { admin, baseURL, snackbar, theme };
   const settingsProps = { receiveNotifications, toggleNotifications, toggleTheme };
 
+  // Refactored variable for duplicate code in platform-specific snackbar below
+  const snackbarView =
+    <Snackbar visible={snackbarVisible} duration={3000} onDismiss={onDismissSnackbar}
+      style={Platform.OS !== 'ios' && { alignSelf: 'center', flexDirection: 'row', margin: 50 }}
+      theme={{ colors: { onSurface: theme.colors.card, surface: theme.colors.text } }}>
+      <Text>{snackbarText}</Text>
+    </Snackbar>;
+
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
@@ -175,14 +183,11 @@ export default function App() {
       </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
-      <Text style={{ ...(Platform.OS !== 'web' &&
-        { alignSelf: 'center', bottom: 0, position: 'absolute', textAlign: 'center' }) }}>
-        <Snackbar visible={snackbarVisible} duration={3000} onDismiss={onDismissSnackbar}
-          style={{ alignSelf: 'center', flexDirection: 'row', margin: 50 }}
-          theme={{ colors: { onSurface: theme.colors.card, surface: theme.colors.text } }}>
-          <Text>{snackbarText}</Text>
-        </Snackbar>
-      </Text>
+      {Platform.OS === 'ios' ? snackbarView :
+        <Text style={Platform.select({
+          android: { alignSelf: 'center', bottom: 0, position: 'absolute', textAlign: 'center' } })}>
+          {snackbarView}
+        </Text>}
     </Provider>
   );
 }
