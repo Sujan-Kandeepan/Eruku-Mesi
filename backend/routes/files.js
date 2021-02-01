@@ -33,7 +33,7 @@ router.post("/edit/:id", function (req, res) {
   let file = req.body;
   let query = { _id: req.params.id };
 
-  File.update(query, file, function (err) {
+  File.updateOne(query, file, function (err) {
     if (err) {
       console.log(err);
       return;

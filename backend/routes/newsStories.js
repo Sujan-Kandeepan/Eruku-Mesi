@@ -34,7 +34,7 @@ router.post("/edit/:id", function (req, res) {
   let newsStory = req.body;
   let query = { _id: req.params.id };
 
-  NewsStory.update(query, newsStory, function (err) {
+  NewsStory.updateOne(query, newsStory, function (err) {
     if (err) {
       console.log(err);
       return;

@@ -50,7 +50,7 @@ router.post("/edit/:id", function (req, res) {
   let account = req.body;
   let query = { _id: req.params.id };
 
-  Account.update(query, account, function (err) {
+  Account.updateOne(query, account, function (err) {
     if (err) {
       console.log(err);
       return;

@@ -33,7 +33,7 @@ router.post("/edit/:id", function (req, res) {
   let notification = req.body;
   let query = { _id: req.params.id };
 
-  Notification.update(query, notification, function (err) {
+  Notification.updateOne(query, notification, function (err) {
     if (err) {
       console.log(err);
       return;

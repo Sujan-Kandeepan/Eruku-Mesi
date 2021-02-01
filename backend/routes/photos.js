@@ -33,7 +33,7 @@ router.post("/edit/:id", function (req, res) {
   let photo = req.body;
   let query = { _id: req.params.id };
 
-  Photo.update(query, photo, function (err) {
+  Photo.updateOne(query, photo, function (err) {
     if (err) {
       console.log(err);
       return;

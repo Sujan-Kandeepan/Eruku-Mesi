@@ -32,7 +32,7 @@ router.post("/edit/:id", function (req, res) {
   let event = req.body;
   let query = { _id: req.params.id };
 
-  Event.update(query, event, function (err) {
+  Event.updateOne(query, event, function (err) {
     if (err) {
       console.log(err);
       return;
