@@ -7,6 +7,21 @@ let Event = new Schema({
     type: String,
     required: true,
   },
+  date: {
+    type: Date,
+    required: true,
+  },
+  location: {
+    city: {
+      type: String,
+    },
+    province: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+  },
   desc: {
     type: String,
   },

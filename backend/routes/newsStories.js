@@ -9,7 +9,6 @@ let NewsStory = require("../model/newsStory.js");
 router.post("/add", function (req, res) {
   req.assert("title", "NewsStory: title must be set").notEmpty();
   req.assert("content", "NewsStory: content must be set").notEmpty();
-  req.assert("source", "NewsStory: source must be set").notEmpty();
 
   let errors = req.validationErrors();
 

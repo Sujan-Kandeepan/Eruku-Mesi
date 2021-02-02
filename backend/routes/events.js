@@ -8,6 +8,7 @@ let Event = require("../model/event.js");
  */
 router.post("/add", function (req, res) {
   req.assert("name", "Event: name must be set").notEmpty();
+  req.assert("date", "Event: date must be set").notEmpty();
 
   let errors = req.validationErrors();
 
