@@ -6,7 +6,7 @@ let File = require("../model/file.js");
 /**
  * Upload a file if all required fields are not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("name", "File: name must be set").notEmpty();
   req.assert("url", "File: url must be set").notEmpty();
 
@@ -21,7 +21,7 @@ router.post("/add", function (req, res) {
 
   try {
     const file = new File(req.body);
-    file.save();
+    await file.save();
     return res
       .status(200)
       .json({ message: "file successfully added", file: file });

@@ -6,7 +6,7 @@ let NewsStory = require("../model/newsStory.js");
 /**
  * Add a single newsStory if all required fields are not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("title", "NewsStory: title must be set").notEmpty();
   req.assert("content", "NewsStory: content must be set").notEmpty();
 
@@ -21,7 +21,7 @@ router.post("/add", function (req, res) {
 
   try {
     const newsStories = new NewsStory(req.body);
-    newsStories.save();
+    await newsStories.save();
     return res
       .status(200)
       .json({

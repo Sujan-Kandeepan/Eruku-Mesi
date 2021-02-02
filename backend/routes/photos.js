@@ -6,7 +6,7 @@ let Photo = require("../model/photo.js");
 /**
  * Upload a photo if all required fields are not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("name", "Photo: username must be set").notEmpty();
   req.assert("url", "Photo: lastname must be set").notEmpty();
 
@@ -21,7 +21,7 @@ router.post("/add", function (req, res) {
 
   try {
     const photo = new Photo(req.body);
-    photo.save();
+    await photo.save();
     return res.status(200).json({
       message: "photo successfully added",
       photo: photo,

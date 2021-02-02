@@ -6,7 +6,7 @@ let Settings = require("../model/settings.js");
 /**
  * Upload a setting if all required fields are not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   let errors = req.validationErrors();
 
   if (errors) {
@@ -18,7 +18,7 @@ router.post("/add", function (req, res) {
 
   try {
     const setting = new Settings(req.body);
-    setting.save();
+    await setting.save();
     return res
       .status(200)
       .json({ message: "setting successfully added", setting: setting });

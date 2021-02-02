@@ -6,7 +6,7 @@ let Information = require("../model/information.js");
 /**
  * Add information if the required field is not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("title", "Information: title must be set").notEmpty();
   req.assert("content", "Information: content must be set").notEmpty();
 
@@ -20,7 +20,7 @@ router.post("/add", function (req, res) {
   }
   try {
     const information = new Information(req.body);
-    information.save();
+    await information.save();
     return res
       .status(200)
       .json({ message: "information successfully added", information: information });

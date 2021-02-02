@@ -7,7 +7,7 @@ let Account = require("../model/account.js");
 /**
  * Add a user if the required fields are not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("username", "Account: username must be set").notEmpty();
   req.assert("firstName", "Account: firstName must have content").notEmpty();
   req.assert("lastName", "Account: lastname must be set").notEmpty();
@@ -26,7 +26,7 @@ router.post("/add", function (req, res) {
 
   try {
     const account = new Account(req.body);
-    account.save();
+    await account.save();
     return res
       .status(200)
       .json({ message: "account successfully added", account: account });

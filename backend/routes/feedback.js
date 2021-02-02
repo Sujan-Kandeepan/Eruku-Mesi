@@ -6,7 +6,7 @@ let Feedback = require("../model/feedback.js");
 /**
  * Add the information of a specific feedback if the required field is not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("text", "Feedback: text must be set").notEmpty();
 
   let errors = req.validationErrors();
@@ -19,7 +19,7 @@ router.post("/add", function (req, res) {
   }
   try {
     const feedback = new Feedback(req.body);
-    feedback.save();
+    await feedback.save();
     return res
       .status(200)
       .json({ message: "feedback successfully added", feedback: feedback });

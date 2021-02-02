@@ -6,7 +6,7 @@ let Notification = require("../model/notification.js");
 /**
  * Add a notification if all required fields are not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("receiver", "Notification: receiver must be set").notEmpty();
   req.assert("body", "Notification: body must have content").notEmpty();
 
@@ -21,7 +21,7 @@ router.post("/add", function (req, res) {
 
   try {
     const notification = new Notification(req.body);
-    notification.save();
+    await notification.save();
     return res
       .status(200)
       .json({

@@ -6,7 +6,7 @@ let Message = require("../model/message.js");
 /**
  * Add a message if all required fields are not empty.
  */
-router.post("/add", function (req, res) {
+router.post("/add", async function (req, res) {
   req.assert("sender", "Message: sender must be set").notEmpty();
   req.assert("message", "Message: message must be set").notEmpty();
 
@@ -21,7 +21,7 @@ router.post("/add", function (req, res) {
 
   try {
     const message = new Message(req.body);
-    message.save();
+    await message.save();
     return res
       .status(200)
       .json({ message: "message successfully added", message: message });
