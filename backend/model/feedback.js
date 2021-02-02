@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const feedbackDB = mongoose.connection.useDb("Feedback");
 
 let Feedback = new Schema({
-  content: {
+  text: {
     type: String,
     required: true,
   }

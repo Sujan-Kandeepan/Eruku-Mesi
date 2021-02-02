@@ -22,7 +22,7 @@ let Event = new Schema({
       type: String,
     },
   },
-  desc: {
+  description: {
     type: String,
   },
   createdAt: {

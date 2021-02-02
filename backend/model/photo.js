@@ -7,7 +7,7 @@ let Photo = new Schema({
     type: String,
     required: true,
   },
-  desc: {
+  description: {
     type: String,
   },
   uploadedAt: {

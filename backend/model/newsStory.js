@@ -11,7 +11,7 @@ let NewsStory = new Schema({
     type: String,
     required: true,
   },
-  desc: {
+  description: {
     type: String,
   },
   publishedAt: {
