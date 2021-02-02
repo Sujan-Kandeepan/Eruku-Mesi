@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const chatsDB = mongoose.connection.useDb("Chats");
 
 let Message = new Schema({
-  from: {
+  sender: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "User",
