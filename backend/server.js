@@ -1,7 +1,3 @@
-/**
- * Server.js is the starting point file that gets executed when you start running the backend code.
- */
-
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");

@@ -1,4 +1,5 @@
 const express = require("express");
+const account = require("../model/account.js");
 const router = express.Router();
 
 let Account = require("../model/account.js");
@@ -17,15 +18,22 @@ router.post("/add", function (req, res) {
   let errors = req.validationErrors();
 
   if (errors) {
-    console.log(errors);
-  } else {
-    let account = new Account(req.body);
-    account.save(function (err) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.status(200).json({ msg: "account created", account });
-      }
+    return res.status(400).json({
+      status: "error",
+      message: "Mandatory field is not set",
+    });
+  }
+
+  try {
+    const account = new Account(req.body);
+    account.save();
+    return res
+      .status(200)
+      .json({ message: "account successfully added", account: account });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
     });
   }
 });
@@ -33,61 +41,65 @@ router.post("/add", function (req, res) {
 /**
  * Get all users
  */
-router.get("/", function (req, res) {
-  Account.find({}, function (err, accounts) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({ accounts: accounts });
-    }
-  });
+router.get("/", async function (req, res) {
+  try {
+    const accounts = await Account.find({});
+    return res.status(200).json(accounts);
+  } catch (e) {
+    return res.status(500).json(e);
+  }
 });
 
 /**
  * Edit the information of a specific user (given the user id)
  */
-router.post("/edit/:id", function (req, res) {
-  let account = req.body;
+router.post("/edit/:id", async function (req, res) {
+  let accountBody = req.body;
   let query = { _id: req.params.id };
 
-  Account.updateOne(query, account, function (err) {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res
-        .status(200)
-        .json({ msg: "account successfully updated", account: account });
-    }
-  });
+  if (Object.keys(accountBody).length === 0) {
+    return res.status(400).json({
+      status: "error",
+      message: "No field to update with",
+    });
+  }
+
+  try {
+    const account = await Account.updateOne(query, accountBody);
+    return res
+      .status(200)
+      .json({ msg: "account successfully updated", account: account });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
 });
 
 /**
  * Get the information of a specific user (given the user id)
  */
-router.get("/:id", function (req, res) {
+router.get("/:id", async function (req, res) {
   let id = req.params.id;
-  Account.findById(id, function (err, account) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json(account);
-    }
-  });
+
+  try {
+    const account = await Account.findById(id);
+    return res.status(200).json({ account: account });
+  } catch (e) {
+    return res.status(500).json({ message: "account not found" });
+  }
 });
 
 /**
  * Delete the information of a specific user (given the user id)
  */
-router.delete("/:id", function (req, res) {
+router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
-  Account.remove(query, function (err) {
-    if (err) {
-      console.log(err);
-    }
-    res.status(200).json({ msg: "account deleted successfully!" });
-  });
+  try {
+    await Account.remove(query);
+    res.status(200).json({ message: "account deleted successfully!" });
+  } catch (e) {
+    return res.status(500).json({ message: "account was not deleted" });
+  }
 });
 
 module.exports = router;

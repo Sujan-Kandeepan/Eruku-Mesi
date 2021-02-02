@@ -14,15 +14,25 @@ router.post("/add", function (req, res) {
   let errors = req.validationErrors();
 
   if (errors) {
-    console.log(errors);
-  } else {
-    let newsStory = new NewsStory(req.body);
-    newsStory.save(function (err) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.status(200).json({ msg: "newsStory created", newsStory });
-      }
+    return res.status(400).json({
+      status: "error",
+      message: "Mandatory field is not set",
+    });
+  }
+
+  try {
+    const newsStories = new NewsStory(req.body);
+    newsStories.save();
+    return res
+      .status(200)
+      .json({
+        message: "newsStories successfully added",
+        newsStories: newsStories,
+      });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
     });
   }
 });
@@ -30,61 +40,65 @@ router.post("/add", function (req, res) {
 /**
  * Edit a single newsStory (given the newsStory id)
  */
-router.post("/edit/:id", function (req, res) {
-  let newsStory = req.body;
+router.post("/edit/:id", async function (req, res) {
+  let newsStoryBody = req.body;
   let query = { _id: req.params.id };
 
-  NewsStory.updateOne(query, newsStory, function (err) {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res
-        .status(200)
-        .json({ msg: "newsStory successfully updated", newsStory: newsStory });
-    }
-  });
+  if (Object.keys(newsStoryBody).length === 0) {
+    return res.status(400).json({
+      status: "error",
+      message: "No field to update with",
+    });
+  }
+
+  try {
+    const newsStory = await NewsStory.updateOne(query, newsStoryBody);
+    return res
+      .status(200)
+      .json({ message: "newsStory successfully updated", newsStory: newsStory });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
 });
 
 /**
  * Get all newsStories
  */
-router.get("/", function (req, res) {
-  NewsStory.find({}, function (err, newsStories) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({ newsStories: newsStories });
-    }
-  });
+router.get("/", async function (req, res) {
+  try {
+    const newsStories = await NewsStory.find({});
+    return res.status(200).json(newsStories);
+  } catch (e) {
+    return res.status(500).json(e);
+  }
 });
 
 /**
  * Get the information of a specific newsStory (given the newsStory id)
  */
-router.get("/:id", function (req, res) {
+router.get("/:id", async function (req, res) {
   let id = req.params.id;
-  NewsStory.findById(id, function (err, newsStory) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json(newsStory);
-    }
-  });
+
+  try {
+    const newsStory = await NewsStory.findById(id);
+    return res.status(200).json({ newsStory: newsStory });
+  } catch (e) {
+    return res.status(500).json({ message: "newsStory not found" });
+  }
 });
 
 /**
  * Delete a newsStory (given the newsStory id)
  */
-router.delete("/:id", function (req, res) {
+router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
-  NewsStory.remove(query, function (err) {
-    if (err) {
-      console.log(err);
-    }
-    res.status(200).json({ msg: "newsStory deleted successfully!" });
-  });
+  try {
+    await NewsStory.remove(query);
+    res.status(200).json({ message: "newsStory deleted successfully!" });
+  } catch (e) {
+    return res.status(500).json({ message: "newsStory was not deleted" });
+  }
 });
 
 module.exports = router;

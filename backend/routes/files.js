@@ -13,15 +13,22 @@ router.post("/add", function (req, res) {
   let errors = req.validationErrors();
 
   if (errors) {
-    console.log(errors);
-  } else {
-    let file = new File(req.body);
-    file.save(function (err) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.status(200).json({ msg: "file created", file });
-      }
+    return res.status(400).json({
+      status: "error",
+      message: "Mandatory field is not set",
+    });
+  }
+
+  try {
+    const file = new File(req.body);
+    file.save();
+    return res
+      .status(200)
+      .json({ message: "file successfully added", file: file });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
     });
   }
 });
@@ -29,59 +36,65 @@ router.post("/add", function (req, res) {
 /**
  * Edit the information of a specific file (given the file id)
  */
-router.post("/edit/:id", function (req, res) {
-  let file = req.body;
+router.post("/edit/:id", async function (req, res) {
+  let fileBody = req.body;
   let query = { _id: req.params.id };
 
-  File.updateOne(query, file, function (err) {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.status(200).json({ msg: "file successfully updated", file: file });
-    }
-  });
+  if (Object.keys(fileBody).length === 0) {
+    return res.status(400).json({
+      status: "error",
+      message: "No field to update with",
+    });
+  }
+
+  try {
+    const file = await File.updateOne(query, fileBody);
+    return res
+      .status(200)
+      .json({ msg: "file successfully updated", file: file });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
 });
 
 /**
  * Get the information of all the files
  */
-router.get("/", function (req, res) {
-  File.find({}, function (err, files) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({ files: files });
-    }
-  });
+router.get("/", async function (req, res) {
+  try {
+    const files = await File.find({});
+    return res.status(200).json(files);
+  } catch (e) {
+    return res.status(500).json(e);
+  }
 });
 
 /**
  * Get the information of a specific file (given the file id)
  */
-router.get("/:id", function (req, res) {
+router.get("/:id", async function (req, res) {
   let id = req.params.id;
-  File.findById(id, function (err, file) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json(file);
-    }
-  });
+
+  try {
+    const file = await File.findById(id);
+    return res.status(200).json({ file: file });
+  } catch (e) {
+    return res.status(500).json({ message: "file not found" });
+  }
 });
 
 /**
  * Delete the information of a specific file (given the file id)
  */
-router.delete("/:id", function (req, res) {
+router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
-  File.remove(query, function (err) {
-    if (err) {
-      console.log(err);
-    }
-    res.status(200).json({ msg: "file deleted successfully!" });
-  });
+  try {
+    await File.remove(query);
+    res.status(200).json({ message: "file deleted successfully!" });
+  } catch (e) {
+    return res.status(500).json({ message: "file was not deleted" });
+  }
 });
 
 module.exports = router;
