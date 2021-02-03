@@ -7,7 +7,7 @@ let File = require("../model/file.js");
  * Upload a file if all required fields are not empty.
  */
 router.post("/add", async function (req, res) {
-  req.assert("name", "File: name must be set").notEmpty();
+  req.assert("title", "File: title must be set").notEmpty();
   req.assert("url", "File: url must be set").notEmpty();
 
   let errors = req.validationErrors();

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const settingsDB = mongoose.connection.useDb("Settings");
 
 let Setting = new Schema({
-  notificationOptIn: {
+  receiveNotifications: {
     type: Boolean,
     default: false,
   },

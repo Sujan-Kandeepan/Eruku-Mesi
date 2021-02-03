@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const eventDB = mongoose.connection.useDb("Events");
 
 let Event = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },

@@ -7,7 +7,7 @@ let Event = require("../model/event.js");
  * Add the information of a specific event if the required field is not empty.
  */
 router.post("/add", async function (req, res) {
-  req.assert("name", "Event: name must be set").notEmpty();
+  req.assert("title", "Event: title must be set").notEmpty();
   req.assert("date", "Event: date must be set").notEmpty();
 
   let errors = req.validationErrors();

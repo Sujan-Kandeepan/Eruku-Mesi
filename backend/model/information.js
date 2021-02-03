@@ -11,11 +11,11 @@ let Information = new Schema({
     type: String,
     required: true,
   },
-  topImage: {
+  imageTop: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Photo",
   },
-  bottomImage: {
+  imageBottom: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Photo",
   },

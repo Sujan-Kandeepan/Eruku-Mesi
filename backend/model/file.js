@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const mediaContentsDB = mongoose.connection.useDb("MediaContents");
 
 let File = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
