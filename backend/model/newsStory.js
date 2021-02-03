@@ -11,7 +11,7 @@ let NewsStory = new Schema({
     type: String,
     required: true,
   },
-  desc: {
+  description: {
     type: String,
   },
   publishedAt: {
@@ -20,7 +20,6 @@ let NewsStory = new Schema({
   },
   source: {
     type: String,
-    required: true,
   },
   topic: {
     type: String,
@@ -36,6 +35,11 @@ let NewsStory = new Schema({
       "sport",
     ],
     default: "featured",
+  },
+  media: {
+    type: [mongoose.Schema.Types.ObjectId],
+    default: [],
+    ref: "MediaContent",
   },
 });
 module.exports = NewsStoriesDB.model("NewsStory", NewsStory, "NewsStory");

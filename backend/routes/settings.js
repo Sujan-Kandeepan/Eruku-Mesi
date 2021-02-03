@@ -1,30 +1,27 @@
 const express = require("express");
 const router = express.Router();
 
-let File = require("../model/file.js");
+let Settings = require("../model/settings.js");
 
 /**
- * Upload a file if all required fields are not empty.
+ * Upload a setting if all required fields are not empty.
  */
 router.post("/add", async function (req, res) {
-  req.assert("title", "File: title must be set").notEmpty();
-  req.assert("url", "File: url must be set").notEmpty();
-
   let errors = req.validationErrors();
 
   if (errors) {
     return res.status(400).json({
       status: "error",
-      message: "Mandatory field is not set",
+      message: "Error in the fields",
     });
   }
 
   try {
-    const file = new File(req.body);
-    await file.save();
+    const setting = new Settings(req.body);
+    await setting.save();
     return res
       .status(200)
-      .json({ message: "file successfully added", file: file });
+      .json({ message: "setting successfully added", setting: setting });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -34,7 +31,7 @@ router.post("/add", async function (req, res) {
 });
 
 /**
- * Edit the information of a specific file (given the file id)
+ * Edit the information of a specific setting (given the setting id)
  */
 router.post("/edit/:id", async function (req, res) {
   let fileBody = req.body;
@@ -48,52 +45,52 @@ router.post("/edit/:id", async function (req, res) {
   }
 
   try {
-    const file = await File.updateOne(query, fileBody);
+    const setting = await Settings.updateOne(query, fileBody);
     return res
       .status(200)
-      .json({ msg: "file successfully updated", file: file });
+      .json({ msg: "setting successfully updated", setting: setting });
   } catch (e) {
     return res.status(500).json(e);
   }
 });
 
 /**
- * Get the information of all the files
+ * Get the information of all the settings
  */
 router.get("/", async function (req, res) {
   try {
-    const files = await File.find({});
-    return res.status(200).json(files);
+    const settings = await Settings.find({});
+    return res.status(200).json(settings);
   } catch (e) {
     return res.status(500).json(e);
   }
 });
 
 /**
- * Get the information of a specific file (given the file id)
+ * Get the information of a specific setting (given the setting id)
  */
 router.get("/:id", async function (req, res) {
   let id = req.params.id;
 
   try {
-    const file = await File.findById(id);
-    return res.status(200).json({ file: file });
+    const setting = await Settings.findById(id);
+    return res.status(200).json({ setting: setting });
   } catch (e) {
-    return res.status(500).json({ message: "file not found" });
+    return res.status(500).json({ message: "setting not found" });
   }
 });
 
 /**
- * Delete the information of a specific file (given the file id)
+ * Delete the information of a specific setting (given the setting id)
  */
 router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await File.remove(query);
-    res.status(200).json({ message: "file deleted successfully!" });
+    await Settings.remove(query);
+    res.status(200).json({ message: "setting deleted successfully!" });
   } catch (e) {
-    return res.status(500).json({ message: "file was not deleted" });
+    return res.status(500).json({ message: "setting was not deleted" });
   }
 });
 

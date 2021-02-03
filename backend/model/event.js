@@ -3,11 +3,26 @@ const Schema = mongoose.Schema;
 const eventDB = mongoose.connection.useDb("Events");
 
 let Event = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
-  desc: {
+  date: {
+    type: Date,
+    required: true,
+  },
+  location: {
+    city: {
+      type: String,
+    },
+    province: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+  },
+  description: {
     type: String,
   },
   createdAt: {

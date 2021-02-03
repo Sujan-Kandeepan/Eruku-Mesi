@@ -3,18 +3,18 @@ const Schema = mongoose.Schema;
 const mediaContentsDB = mongoose.connection.useDb("MediaContents");
 
 let Photo = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
-  desc: {
+  description: {
     type: String,
   },
   uploadedAt: {
     type: Date,
     default: Date.now,
   },
-  url: {
+  image: {
     type: String,
     required: true,
   },
