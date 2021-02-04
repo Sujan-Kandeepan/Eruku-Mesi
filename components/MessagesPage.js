@@ -76,7 +76,7 @@ export default function MessagesPage(props) {
             <IconButton {...props} style={{ marginLeft: 15 }} name='send' type='material'
               color={props.theme.colors.accent} onPress={() => {
                 if (newMessage.trim() === '') {
-                  props.snackbar('Message is empty', 146);
+                  props.snackbar('Message is empty');
                   return;
                 }
                 setMessages([...messages, {

@@ -1,19 +1,45 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import dayjs from 'dayjs';
 
 import AppPage from './AppPage';
-import EmptyPage from './EmptyPage';
 import EventForm from './EventForm';
-import { Button, Content, Feed } from '../shared/SharedComponents';
+import { Button, Content, Feed, Header } from '../shared/SharedComponents';
 import { get, showDate, showTime, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+// Common logic for scrolling events list on both tabs
+const EventsList = ({ data, fetched, header, localProps, pages, props }) =>
+  <Feed {...props} fetched={fetched} data={data} loadingText='Loading events...'
+    onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
+    keyExtractor={(item, index) => `${item ? item.id : index} ${index}`} header={header}
+    cardContent={item =>
+      // Display preview of event information
+      item &&
+      <>
+        <Text style={{
+          color: props.theme.colors.text,
+          fontWeight: 'bold', marginBottom: 10
+        }}>
+          {item.title}
+        </Text>
+        <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
+          <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
+          <Text style={{ color: props.theme.colors.disabled }}> | </Text>
+          <Text>{item.location}</Text>
+        </Text>
+        <Text style={{ color: props.theme.colors.text }}>
+          {item && truncate(item.description[0], 10)}
+        </Text>
+      </>} />;
 
 // Page for displaying upcoming events (feed + calendar view)
 export default function UpcomingEventsPage(props) {
@@ -29,6 +55,20 @@ export default function UpcomingEventsPage(props) {
   // State variables for display data and state (two-way data binding)
   const [events, setEvents] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [markedDates, setMarkedDates] = React.useState({});
+  const formatDate = date => dayjs(date).format(`YYYY-MM-DD`);
+  // Update calendar on data change
+  React.useEffect(() => {
+    let newMarkedDates = {};
+    // Update marked events with latest events data
+    events.map(event => event.date).forEach(date =>
+      newMarkedDates[`${formatDate(date)}`] = { marked: true });
+    // Update selected date with current date selection
+    newMarkedDates[`${formatDate(selectedDate)}`] =
+      { ...newMarkedDates[`${formatDate(selectedDate)}`], selected: true };
+    setMarkedDates(newMarkedDates);
+  }, [events, selectedDate]);
   // Initial load of events by calling useEffect with [] as second param to run once
   React.useEffect(() => {
     // Wait for all events and trigger update to list by setting flag
@@ -37,10 +77,13 @@ export default function UpcomingEventsPage(props) {
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&paras=2').then(description => {
           let newEvents = events;
-          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`, date: new Date(), description };
+          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`,
+            date: new Date(), location: 'Baltimore, MA, US', description };
+          newEvents[index].date.setDate(newEvents[index].date.getDate() + Math.floor(Math.random() * 20 - 10));
           setEvents(newEvents);
         })));
       setFetched(true);
+      setSelectedDate(new Date());
     };
     populate();
   }, []);
@@ -61,26 +104,40 @@ export default function UpcomingEventsPage(props) {
                   fontSize: 14, margin: 15, textAlignVertical: 'center'
                 }}}>
                   <Tab.Screen name={pages.listView} children={() =>
-                    <Feed {...props} fetched={fetched} data={events} loadingText='Loading events...'
-                      onItemPress={item => localProps.navigation.push(pages.viewEvent(item && item.id))}
-                      keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
-                      cardContent={item =>
-                        <>
-                          {/* Layout soon to change, title and text for now */}
-                          <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
-                            {item &&
-                              <>
-                                <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
-                                <Text style={{ color: props.theme.colors.disabled}}> | </Text>
-                                <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
-                              </>}
-                          </Text>
-                          <Text style={{ color: props.theme.colors.text }}>
-                            {item && truncate(item.description[0], 10)}
-                          </Text>
-                        </>} />} />
-                  <Tab.Screen name={pages.calendarView} children={(localProps) =>
-                    <EmptyPage {...props} {...localProps} nested tab />} />
+                    <EventsList data={events} fetched={fetched} pages={pages}
+                      localProps={localProps} props={props} />} />
+                  <Tab.Screen name={pages.calendarView} children={() =>
+                    <View style={{ flex: 1 }}>
+                      <EventsList data={events.filter(event =>
+                        formatDate(event.date) === formatDate(selectedDate))}
+                        fetched={fetched} pages={pages}
+                        localProps={localProps} props={props}
+                        header={
+                          <>
+                            {/* Reference: https://github.com/wix/react-native-calendars */}
+                            <View style={{ borderColor: props.theme.colors.border,
+                              borderWidth: 1, margin: 15 }}>
+                              <Calendar
+                                // Set key to update on theme change or date selection
+                                key={`${props.theme.dark} ${formatDate(selectedDate)}`}
+                                onDayPress={(day) => setSelectedDate(new Date(day.year, day.month - 1, day.day))}
+                                markedDates={markedDates} theme={{
+                                  arrowColor: props.theme.colors.accent,
+                                  calendarBackground: props.theme.colors.card,
+                                  dayTextColor: props.theme.colors.text,
+                                  dotColor: props.theme.colors.primary,
+                                  monthTextColor: props.theme.colors.text,
+                                  selectedDayBackgroundColor: props.theme.colors.accent,
+                                  textDisabledColor: props.theme.colors.disabled,
+                                  textSectionTitleColor: props.theme.colors.placeholder,
+                                  todayTextColor: props.theme.colors.accent
+                                }} />
+                            </View>
+                            <View style={{ marginTop: -15 }}>
+                              <Header {...props} text={'Events On This Day'} />
+                            </View>
+                          </>} />
+                    </View>} />
                 </Tab.Navigator>
               </NavigationContainer>
             </>} />
@@ -102,7 +159,7 @@ export default function UpcomingEventsPage(props) {
                     onPress={() => localProps.navigation.push(pages.deleteEvent(event.id))} />}
                 {/* Display for individual event */}
                 <Content {...props} {...localProps} title={event.title}
-                  subtitle={`${showDate(event.date, true)} @ ${showTime(event.date, true)}`}
+                  subtitle={`${showDate(event.date, true)} @ ${showTime(event.date, true)}\n${event.location}`}
                   content={event.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing events */}
@@ -116,7 +173,7 @@ export default function UpcomingEventsPage(props) {
             <Stack.Screen key={event.id} name={pages.deleteEvent(event.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
-                <Button {...props} {...localProps} text='Confirm' accent
+                <Button {...props} {...localProps} text='Confirm' color='danger'
                   onPress={() => setEvents(events.filter(e => e.id !== event.id))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {event.title}?

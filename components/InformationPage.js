@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import { BodyInput, Button, Content, IconButton } from '../shared/SharedComponents';
+import { BodyInput, Button, Content, IconButton, Media, MediaPicker } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
 import { get, paragraphs } from '../shared/SharedFunctions';
 
@@ -20,6 +20,8 @@ export default function InformationPage(props) {
   const [data, setData] = React.useState(pages.map(page => ({ title: page, content: ['Loading...'] })));
   const [originalText, setOriginalText] = React.useState('');
   const [editText, setEditText] = React.useState('');
+  const [imageTop, setImageTop] = React.useState(null);
+  const [imageBottom, setImageBottom] = React.useState(null);
   const [fetched, setFetched] = React.useState(false);
   const newSection = 'New Section';
   // Reference: https://stackoverflow.com/a/59875773
@@ -32,7 +34,7 @@ export default function InformationPage(props) {
       await Promise.all(pages.map((page, index) =>
         get('https://baconipsum.com/api/?type=meat-and-filler').then(content => {
           let newData = data;
-          newData[index] = { title: page, content };
+          newData[index] = { title: page, content, imageTop, imageBottom };
           setData(newData);
         })));
       setFetched(true);
@@ -61,7 +63,7 @@ export default function InformationPage(props) {
                   {props.admin &&
                     <Text style={{ marginLeft: 5, marginRight: -15 }}>
                       <IconButton style={SharedStyles.icon} onLongPress={drag}
-                        onPress={() => props.snackbar('Hold and drag to reorder list', 207)}
+                        onPress={() => props.snackbar('Hold and drag to reorder list')}
                         name='unfold-more' type='material' color={props.theme.colors.placeholder} />
                     </Text>}
                   {/* Inline edit interface for section name */}
@@ -78,7 +80,7 @@ export default function InformationPage(props) {
                         {/* Save changes and update state/data */}
                         <IconButton style={SharedStyles.icon} onPress={() => {
                           if (pages.includes(editText) && originalText !== editText) {
-                            props.snackbar('Duplicate sections not allowed', 224);
+                            props.snackbar('Duplicate sections not allowed');
                             return;
                           }
                           setPages(pages.map(page => page === originalText ? editText : page));
@@ -109,7 +111,7 @@ export default function InformationPage(props) {
                           }} name='edit' type='material' color={props.theme.colors.placeholder} />
                           {/* Press and hold for 3 seconds to delete entire section */}
                           <IconButton style={SharedStyles.icon}
-                            onPress={() => props.snackbar('Press and hold to delete', 183)}
+                            onPress={() => props.snackbar('Press and hold to delete')}
                             delayLongPress={3000} onLongPress={() => {
                               setPages(pages.filter(page => page !== item));
                               setData(data.filter(entry => entry.title !== item));
@@ -127,7 +129,7 @@ export default function InformationPage(props) {
                     <Button {...props} text='Add Section'
                       onPress={() => {
                         if (pages.includes(newSection)) {
-                          props.snackbar('Rename the previous new section first', 269);
+                          props.snackbar('Rename the previous new section first');
                           return;
                         }
                         setPages([...pages, newSection]);
@@ -146,29 +148,64 @@ export default function InformationPage(props) {
                   <Button {...props} {...localProps} text='Edit'
                     onPress={() => {
                       setEditText(data.find(entry => entry.title === page).content.join('\n\n'));
+                      setImageTop(data.find(entry => entry.title === page).imageTop || null);
+                      setImageBottom(data.find(entry => entry.title === page).imageBottom || null);
                       localProps.navigation.push(`Edit ${page}`);
                     }} />}
                 {/* Display of content for specific information section */}
                 <Content {...props} {...localProps} title={data.find(item => item.title === page).title}
+                  imageTop={data.find(item => item.title === page).imageTop}
+                  imageBottom={data.find(item => item.title === page).imageBottom} maxImageHeight={300}
                   content={data.find(entry => entry.title === page).content} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing info sections */}
           {props.admin && pages.map(page => `Edit ${page}`).map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
-              <AppPage {...props} {...localProps} nested cancel onReturn={() => setEditText('')}>
+              <AppPage {...props} {...localProps} nested cancel scroll onReturn={() => {
+                setEditText('');
+                setImageTop(null);
+                setImageBottom(null);
+              }}>
                 <View style={{ flex: 1 }}>
+                  {/* Top image with buttons to open image picker or delete image */}
+                  <View style={{ marginTop: 15 }}>
+                    <Media image={imageTop} scale={{ image: imageTop, maxHeight: 300 }}
+                      style={{ alignSelf: 'center', marginBottom: 15 }} />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 1 }}>
+                      <MediaPicker {...props} handleResult={setImageTop}
+                        text={imageTop ? 'Replace Image' : 'Choose Top Image (Optional)'} />
+                    </View>
+                    {imageTop &&
+                      <View style={{ flex: 1, marginLeft: -15, marginTop: -15 }}>
+                        <Button {...props} text='Delete Image' onPress={() => setImageTop(null)} />
+                      </View>}
+                  </View>
                   {/* All content editable within large text field */}
                   {/* Reference: https://reactnative.dev/docs/textinput */}
                   <BodyInput {...props} value={editText}
                     onChangeText={(value) => setEditText(value)}
                     width={width} onBlur={Keyboard.dismiss} />
+                  {/* Bottom image with buttons to open image picker or delete image */}
+                  <Media image={imageBottom} scale={{ image: imageBottom, maxHeight: 300 }}
+                    style={{ alignSelf: 'center', marginBottom: 15 }} />
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 1, marginBottom: 15 }}>
+                      <MediaPicker {...props} handleResult={setImageBottom}
+                        text={imageBottom ? 'Replace Image' : 'Choose Bottom Image (Optional)'} />
+                    </View>
+                    {imageBottom &&
+                      <View style={{ flex: 1, marginLeft: -15, marginTop: -15 }}>
+                        <Button {...props} text='Delete Image' onPress={() => setImageBottom(null)} />
+                      </View>}
+                  </View>
                   {/* Submit button with logic to update information section */}
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
-                    <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
-                      text='Save' onPress={() => {
+                    <Button {...props} color='accent' text='Save' onPress={() => {
                         setData(data.map(entry =>
                           page.includes(entry.title)
-                            ? { ...entry, content: paragraphs(editText) }
+                            ? { ...entry, content: paragraphs(editText), imageTop, imageBottom }
                             : entry));
                         setEditText('');
                         localProps.navigation.pop();

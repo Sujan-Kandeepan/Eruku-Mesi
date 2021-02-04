@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import MediaContentForm from './MediaContentForm';
-import { Button, Content, Feed } from '../shared/SharedComponents';
+import { Button, Content, Feed, Media } from '../shared/SharedComponents';
 import { get, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
@@ -27,12 +27,13 @@ export default function MediaContentPage(props) {
   // Initial load of posts by calling useEffect with [] as second param to run once
   React.useEffect(() => {
     // Wait for all posts and trigger update to list by setting flag
+    const image = { cancelled: false, height: 359, uri: 'https://bit.ly/3sAOAp8', type: 'image', width: 640 };
     const populate = async () => {
       // Using lorem ipsum data for now with 10 posts
       await Promise.all([...Array(10).keys()].map(index =>
         get('https://baconipsum.com/api/?type=all-meat&sentences=3').then(description => {
           let newPosts = posts;
-          newPosts[index] = { id: index + 1, title: `Post ${index + 1}`, description };
+          newPosts[index] = { id: index + 1, title: `Post ${index + 1}`, description, image };
           setPosts(newPosts);
         })));
       setFetched(true);
@@ -55,13 +56,16 @@ export default function MediaContentPage(props) {
                 keyExtractor={(item, index) => `${item ? item.id : index} ${index}`}
                 cardContent={item =>
                   <>
-                    {/* Layout soon to change, title and text for now */}
+                    {/* Display post title, truncated description, and image or video thumbnail */}
                     <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 10 }}>
                       {item && item.title}
                     </Text>
                     <Text style={{ color: props.theme.colors.text }}>
                       {item && truncate(item.description[0], 10)}
                     </Text>
+                    <Media image={item.image} thumbnail
+                      scale={{ image: item.image, marginHorizontal: 30, maxHeight: 200 }}
+                      style={{ alignSelf: 'center', marginTop: 15 }} />
                   </>} />
             </>} />
           {/* Static page route for posting media content */}
@@ -81,7 +85,7 @@ export default function MediaContentPage(props) {
                   <Button {...props} {...localProps} text='Delete'
                     onPress={() => localProps.navigation.push(pages.deleteMediaContent(post.id))} />}
                 {/* Display for individual post */}
-                <Content {...props} {...localProps} title={post.title}
+                <Content {...props} {...localProps} title={post.title} imageBottom={post.image}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}
@@ -95,7 +99,7 @@ export default function MediaContentPage(props) {
             <Stack.Screen key={post.id} name={pages.deleteMediaContent(post.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
-                <Button {...props} {...localProps} text='Confirm' accent
+                <Button {...props} {...localProps} text='Confirm' color='danger'
                   onPress={() => setPosts(posts.filter(p => p.id !== post.id))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {post.title}?

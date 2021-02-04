@@ -15,22 +15,22 @@ export default function FeedbackForm(props) {
   const maxLength = 2000;
   const textChanged = (value) => {
     if (value.length >= maxLength)
-      props.snackbar('Feedback message is too long', 222);
+      props.snackbar('Feedback message is too long');
     setText(value);
   };
   // Validate form and handle submit
   const handleSubmit = () => {
     if (text.trim() === '') {
-      props.snackbar('Feedback message is empty', 210);
+      props.snackbar('Feedback message is empty');
     } else {
       console.log(`Feedback submitted:\n${'-'.repeat(20)}\n${text}\n${'-'.repeat(20)}\n`);
-      props.snackbar('Feedback submitted', 160);
+      props.snackbar('Feedback submitted');
       Keyboard.dismiss();
       setText('');
     }
   }
   return (
-    <AppPage {...props}>
+    <AppPage {...props} scroll>
       <View style={{ flex: 1 }}>
         {/* Informational text above feedback input field */}
         <Text style={{ color: props.theme.colors.text, marginVertical: 25, textAlign: 'center' }}
@@ -46,8 +46,7 @@ export default function FeedbackForm(props) {
           value={text} onChangeText={textChanged} onBlur={Keyboard.dismiss} />
         {/* Button to validate and submit feedback */}
         <View style={{ marginHorizontal: 10, marginVertical: 25 }}>
-          <Button {...props} accent style={{ backgroundColor: props.theme.colors.primary }}
-            text='Submit' onPress={handleSubmit} />
+          <Button {...props} color='accent' text='Submit' onPress={handleSubmit} />
         </View>
       </View>
     </AppPage>
