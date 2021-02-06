@@ -11,7 +11,7 @@ export const get = async (url) => {
     console.error(error);
     throw error;
   }
-}
+};
 
 // Perform POST request to provided endpoint URL with body
 export const post = async (url, body) => {
@@ -29,7 +29,7 @@ export const post = async (url, body) => {
     console.error(error);
     throw error;
   }
-}
+};
 
 // Perform DELETE request to provided endpoint URL
 export const del = async (url) => {
@@ -46,7 +46,7 @@ export const del = async (url) => {
     console.error(error);
     throw error;
   }
-}
+};
 
 // Shorten text for compact display purposes
 export const truncate = (string, num) => {
@@ -54,7 +54,7 @@ export const truncate = (string, num) => {
   if (truncated.length < string.length)
     truncated = truncated.replace(/\. $/, '') + '...';
   return truncated;
-}
+};
 
 // Round current date to nearest minute; reference: https://stackoverflow.com/a/28037042
 export const currentDate = () => new Date(Math.round((new Date()).getTime() / 60000) * 60000);
