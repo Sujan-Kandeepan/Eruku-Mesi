@@ -1,4 +1,4 @@
-import { fetchMessages } from '../components/functions/MessageFunctions';
+import { fetchMessages, sendMessage } from '../components/functions/MessageFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
@@ -46,5 +46,35 @@ describe('Messages', () => {
         done(error);
       }
     });
+  });
+
+  test('Validates message content', () => {
+    let message = '';
+    let props = { snackbar: value => message = value };
+    let messages = [];
+    let setMessages = value => messages = value;
+    let newMessage = '';
+    let setNewMessage = value => newMessage = value;
+    let list = { scrollToEnd: () => { } };
+    sendMessage(props, messages, setMessages, newMessage, setNewMessage, list);
+    expect(fetch.mock.calls.length).toEqual(0);
+    expect(messages.length).toEqual(0);
+    expect(newMessage).toEqual('');
+    expect(message.toLowerCase()).toContain('empty');
+  });
+
+  test('Posts new message', () => {
+    let message = '';
+    let props = { snackbar: value => message = value };
+    let messages = [];
+    let setMessages = value => messages = value;
+    let newMessage = 'test';
+    let setNewMessage = value => newMessage = value;
+    let list = { scrollToEnd: () => { } };
+    sendMessage(props, messages, setMessages, newMessage, setNewMessage, list);
+    expect(fetch.mock.calls.length).toEqual(1);
+    expect(fetch.mock.calls[0][0]).toContain('messages/add');
+    expect(messages.length).toEqual(1);
+    expect(newMessage).toEqual('');
   });
 });
