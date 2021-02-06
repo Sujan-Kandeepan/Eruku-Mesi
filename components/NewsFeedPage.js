@@ -5,8 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import NewsStoryForm from './NewsStoryForm';
+import { fetchNewsStories } from './functions/NewsStoryFunctions';
 import { Button, Content, Feed } from '../shared/SharedComponents';
-import { del, get, paragraphs, truncate } from '../shared/SharedFunctions';
+import { del, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -24,16 +25,8 @@ export default function NewsFeedPage(props) {
   // State variables for display data and state (two-way data binding)
   const [stories, setStories] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
-  const fetchNewsStories = () => {
-    get(`${props.baseURL}/newsStories`)
-      .then(response =>
-        setStories(response.newsStories.map(item =>
-          ({ id: item._id, title: item.title, content: paragraphs(item.content) }))))
-      .catch(() => props.snackbar('Unable to fetch news stories'))
-      .finally(() => setFetched(true));
-  };
   // Initial load of new stories by calling useEffect with [] as second param to run once
-  React.useEffect(fetchNewsStories, []);
+  React.useEffect(() => fetchNewsStories(props, setStories, () => setFetched(true)), []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
@@ -65,7 +58,7 @@ export default function NewsFeedPage(props) {
               // Separate form with no payload to indicate new record
               <NewsStoryForm {...props} {...localProps}
                 stories={stories} setStories={setStories}
-                update={fetchNewsStories} />} />}
+                update={() => fetchNewsStories(props, setStories, () => setFetched(true))} />} />}
           {/* Generated page routes for viewing news stories */}
           {stories.map(story =>
             <Stack.Screen key={story.id} name={pages.viewNewsStory(story.id)} children={(localProps) =>
@@ -87,7 +80,7 @@ export default function NewsFeedPage(props) {
               // Separate form with existing record as payload
               <NewsStoryForm {...props} {...localProps}
                 stories={stories} setStories={setStories}
-                update={fetchNewsStories} payload={story} />} />)}
+                update={() => fetchNewsStories(props, setStories, () => setFetched(true))} payload={story} />} />)}
           {/* Generated page routes for deleting news stories */}
           {props.admin && stories.map(story =>
             <Stack.Screen key={story.id} name={pages.deleteNewsStory(story.id)} children={(localProps) =>
@@ -95,7 +88,7 @@ export default function NewsFeedPage(props) {
                 {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' color='danger'
                   onPress={() => del(`${props.baseURL}/newsStories/${story.id}`)
-                    .then(fetchNewsStories)
+                    .then(() => fetchNewsStories(props, setStories, () => setFetched(true)))
                     .catch(() => props.snackbar('Failed to update database'))} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {story.title}?
