@@ -6,7 +6,10 @@ import dayjs from 'dayjs';
 export const get = async (url) => {
   try {
     const response = await fetch(url);
-    return await response.json();
+    const json = await response.json();
+    if (!response.ok)
+      throw Error(`Returned ${response.status} with message: ${json.message}`);
+    return json;
   } catch (error) {
     console.error(error);
     throw error;
@@ -24,7 +27,10 @@ export const post = async (url, body) => {
       },
       body: JSON.stringify(body)
     });
-    return await response.json();
+    const json = await response.json();
+    if (!response.ok)
+      throw Error(`Returned ${response.status} with message: ${json.message}`);
+    return json;
   } catch (error) {
     console.error(error);
     throw error;
@@ -41,7 +47,10 @@ export const del = async (url) => {
         'Content-Type': 'application/json'
       }
     });
-    return await response.json();
+    const json = await response.json();
+    if (!response.ok)
+      throw Error(`Returned ${response.status} with message: ${json.message}`);
+    return json;
   } catch (error) {
     console.error(error);
     throw error;
