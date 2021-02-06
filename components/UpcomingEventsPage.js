@@ -8,8 +8,9 @@ import dayjs from 'dayjs';
 
 import AppPage from './AppPage';
 import EventForm from './EventForm';
+import { fetchEvents } from './functions/EventFunctions';
 import { Button, Content, Feed, Header } from '../shared/SharedComponents';
-import { get, showDate, showTime, truncate } from '../shared/SharedFunctions';
+import { paragraphs, showDate, showTime, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
@@ -70,23 +71,7 @@ export default function UpcomingEventsPage(props) {
     setMarkedDates(newMarkedDates);
   }, [events, selectedDate]);
   // Initial load of events by calling useEffect with [] as second param to run once
-  React.useEffect(() => {
-    // Wait for all events and trigger update to list by setting flag
-    const populate = async () => {
-      // Using lorem ipsum data for now with 10 events
-      await Promise.all([...Array(10).keys()].map(index =>
-        get('https://baconipsum.com/api/?type=all-meat&paras=2').then(description => {
-          let newEvents = events;
-          newEvents[index] = { id: index + 1, title: `Event ${index + 1}`,
-            date: new Date(), location: 'Baltimore, MA, US', description };
-          newEvents[index].date.setDate(newEvents[index].date.getDate() + Math.floor(Math.random() * 20 - 10));
-          setEvents(newEvents);
-        })));
-      setFetched(true);
-      setSelectedDate(new Date());
-    };
-    populate();
-  }, []);
+  React.useEffect(() => fetchEvents(props, setEvents, () => setFetched(true)), []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
