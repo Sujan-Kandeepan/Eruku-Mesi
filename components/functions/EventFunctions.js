@@ -5,7 +5,7 @@ export const fetchEvents = (props, setEvents, callback) => {
   get(`${props.baseURL}/events`)
     .then(response =>
       setEvents(response.map(item =>
-        ({ id: item._id, title: item.name, description: paragraphs(item.desc),
+        ({ id: item._id, title: item.name, description: paragraphs(item.description),
           date: new Date(), location: 'fix me' }))))
     .catch(() => props.snackbar('Unable to fetch events'))
     .finally(callback);

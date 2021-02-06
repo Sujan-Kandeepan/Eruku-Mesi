@@ -159,7 +159,7 @@ export default function UpcomingEventsPage(props) {
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' color='danger'
-                  onPress={() => deleteEvent(props, event, events, setEvents, setFetched, localProps.navigation.popToTop())} />
+                  onPress={() => deleteEvent(props, event, events, setEvents, setFetched, localProps.navigation.popToTop)} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {event.title}?
                 </Text>
