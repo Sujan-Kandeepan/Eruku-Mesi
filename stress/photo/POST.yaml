@@ -1,0 +1,14 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+scenarios: 
+  - flow:
+      - post:
+          url: "http://localhost:4000/photos/edit/5ffb5b2aee35744495bf590e"
+          json:
+                title: "This is a test!"
+                image: "Testing with IMAGE"
+          expect:
+            statusCode: 200

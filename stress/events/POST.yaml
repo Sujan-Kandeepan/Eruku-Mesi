@@ -1,0 +1,17 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+scenarios: 
+  - flow:
+      - post:
+          url: "http://localhost:4000/events/edit/5ffb5726ee35744495bf590b"
+          json:
+                title: "This is a test!"
+                date: 2021-01-10
+                description: "Testing with Stress"
+          expect:
+            statusCode: 200
+
+

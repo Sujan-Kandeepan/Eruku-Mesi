@@ -1,0 +1,11 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+scenarios: 
+  - flow:
+      - delete:
+          url: "http://localhost:4000/events/5ffb5726ee35744495bf590b"
+          expect:
+            statusCode: 200

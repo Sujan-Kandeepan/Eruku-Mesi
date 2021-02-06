@@ -1,0 +1,12 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+scenarios: 
+  - flow:
+      - get:
+          url: "/files/5ffbc7560896f9558090a1fc"
+        expect:
+            statusCode: 200
+
