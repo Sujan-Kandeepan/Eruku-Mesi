@@ -3,7 +3,7 @@ import { Dimensions, Keyboard, Platform, Text, View } from 'react-native';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 
 import AppPage from './AppPage';
-import { fetchMessages } from './functions/MessageFunctions';
+import { fetchMessages, sendMessage } from './functions/MessageFunctions';
 import { IconButton } from '../shared/SharedComponents';
 
 // Page for common messages forum (chat interface)
@@ -61,19 +61,8 @@ export default function MessagesPage(props) {
           {/* Submit button with logic to add new message */}
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <IconButton {...props} style={{ marginLeft: 15 }} name='send' type='material'
-              color={props.theme.colors.accent} onPress={() => {
-                if (newMessage.trim() === '') {
-                  props.snackbar('Message is empty');
-                  return;
-                }
-                setMessages([...messages, {
-                  id: messages.length,
-                  sender: 'You',
-                  content: newMessage
-                }]);
-                setNewMessage('');
-                setTimeout(() => list.scrollToEnd({ animated: true }), 250);
-              }} />
+              color={props.theme.colors.accent}
+              onPress={() => sendMessage(props, messages, setMessages, newMessage, setNewMessage, list)} />
           </View>
         </View>
       </View>

@@ -17,3 +17,18 @@ export const fetchMessages = (props, setMessages, callback) => {
     .catch(() => props.snackbar('Unable to fetch messages'))
     .finally(callback);
 };
+
+// Handle submit action to send a new message
+export const sendMessage = (props, messages, setMessages, newMessage, setNewMessage, list) => {
+  if (newMessage.trim() === '') {
+    props.snackbar('Message is empty');
+    return;
+  }
+  setMessages([...messages, {
+    id: messages.length,
+    sender: 'You',
+    content: newMessage
+  }]);
+  setNewMessage('');
+  setTimeout(() => list.scrollToEnd({ animated: true }), 250);
+}
