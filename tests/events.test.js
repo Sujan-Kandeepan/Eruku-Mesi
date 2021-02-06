@@ -28,6 +28,7 @@ describe('Upcoming Events', () => {
     fetchEvents(props, setEvents, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(1);
+        expect(fetch.mock.calls[0][0]).toContain('events');
         expect(events.length).toBe(1);
         expect(events[0]).toMatchObject({
           name: '2021 Reunion In Maryland',
