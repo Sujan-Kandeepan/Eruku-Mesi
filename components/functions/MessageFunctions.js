@@ -11,7 +11,9 @@ export const fetchMessages = (props, setMessages, callback) => {
             names[item.from] =
               account && account.account
                 ? `${account.account.firstName} ${account.account.lastName}`
-                : 'Unknown User')))
+                : 'Unknown User')
+          .catch(() => names[item.from] = 'Unknown User')
+        ))
         .then(() => setMessages(response.map(item => ({
           id: item._id,
           sender: names[item.from],
