@@ -5,9 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import NewsStoryForm from './NewsStoryForm';
-import { fetchNewsStories } from './functions/NewsStoryFunctions';
+import { fetchNewsStories, deleteNewsStory } from './functions/NewsStoryFunctions';
 import { Button, Content, Feed } from '../shared/SharedComponents';
-import { del, truncate } from '../shared/SharedFunctions';
+import { truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -87,9 +87,7 @@ export default function NewsFeedPage(props) {
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' color='danger'
-                  onPress={() => del(`${props.baseURL}/newsStories/${story.id}`)
-                    .then(() => fetchNewsStories(props, setStories, () => setFetched(true)))
-                    .catch(() => props.snackbar('Failed to update database'))} />
+                  onPress={() => deleteNewsStory(props, story, setStories, setFetched, localProps.navigation.popToTop)} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {story.title}?
                 </Text>

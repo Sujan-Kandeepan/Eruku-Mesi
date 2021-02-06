@@ -1,4 +1,4 @@
-import { get, paragraphs, post, text } from '../../shared/SharedFunctions';
+import { del, get, paragraphs, post, text } from '../../shared/SharedFunctions';
 
 // Fetch news stories and populate component state array
 export const fetchNewsStories = (props, setStories, callback) => {
@@ -33,4 +33,11 @@ export const submitNewsStory = (props, title, content, setSaving) => {
     // Display message if failed
     .catch(() => props.snackbar('Failed to update database'))
     .finally(() => setSaving(false));
-}
+};
+
+// Handle confirmation step to delete new story record
+export const deleteNewsStory = (props, story, setStories, setFetched, callback) => 
+  del(`${props.baseURL}/newsStories/${story.id}`)
+    .then(() => fetchNewsStories(props, setStories, () => setFetched(true)))
+    .catch(() => props.snackbar('Failed to update database'))
+    .finally(callback);

@@ -1,4 +1,4 @@
-import { fetchNewsStories, submitNewsStory } from '../components/functions/NewsStoryFunctions';
+import { deleteNewsStory, fetchNewsStories, submitNewsStory } from '../components/functions/NewsStoryFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
@@ -28,6 +28,7 @@ describe('News Feed', () => {
     fetchNewsStories(props, setStories, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(1);
+        expect(fetch.mock.calls[0][0]).toContain('newsStories');
         expect(stories.length).toBe(1);
         expect(stories[0]).toMatchObject({
           title: 'My First News Story',
@@ -82,5 +83,25 @@ describe('News Feed', () => {
     expect(fetch.mock.calls[0][0]).toContain('newsStories/edit/1');
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({ title: 'title', content: 'content' });
+  });
+
+  test('Deletes news story', done => {
+    let props = { snackbar: () => { } };
+    let story = { id: 1, title: 'title', content: ['content'] };
+    let setStories = () => { };
+    let setFetched = () => { };
+    fetch.mockResponseOnce(JSON.stringify({}));
+    fetch.mockResponseOnce(JSON.stringify([]));
+    deleteNewsStory(props, story, setStories, setFetched, () => {
+      try {
+        expect(fetch.mock.calls.length).toEqual(2);
+        expect(fetch.mock.calls[0][0]).toContain('newsStories');
+        expect(fetch.mock.calls[0][1].method).toBe('DELETE');
+        expect(fetch.mock.calls[1][0]).toContain('newsStories');
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
   });
 });
