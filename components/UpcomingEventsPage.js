@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 
 import AppPage from './AppPage';
 import EventForm from './EventForm';
-import { fetchEvents } from './functions/EventFunctions';
+import { deleteEvent, fetchEvents } from './functions/EventFunctions';
 import { Button, Content, Feed, Header } from '../shared/SharedComponents';
 import { paragraphs, showDate, showTime, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
@@ -159,7 +159,7 @@ export default function UpcomingEventsPage(props) {
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' color='danger'
-                  onPress={() => setEvents(events.filter(e => e.id !== event.id))} />
+                  onPress={() => deleteEvent(props, event, events, setEvents, setFetched, localProps.navigation.popToTop())} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {event.title}?
                 </Text>

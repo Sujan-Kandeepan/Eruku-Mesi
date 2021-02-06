@@ -1,4 +1,4 @@
-import { fetchEvents, submitEvent } from '../components/functions/EventFunctions';
+import { deleteEvent, fetchEvents, submitEvent } from '../components/functions/EventFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
@@ -98,5 +98,27 @@ describe('Upcoming Events', () => {
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body))
       .toMatchObject({ title: 'title', date: now, location: 'location', description: 'description' });
+  });
+
+  test('Deletes event', done => {
+    let now = new Date();
+    let props = { snackbar: () => { } };
+    let event = { id: 1, title: 'title', date: now, location: 'location', description: 'description' };
+    let events = [];
+    let setEvents = () => { };
+    let setFetched = () => { };
+    fetch.mockResponseOnce(JSON.stringify({}));
+    fetch.mockResponseOnce(JSON.stringify([]));
+    deleteEvent(props, event, events, setEvents, setFetched, () => {
+      try {
+        expect(fetch.mock.calls.length).toEqual(2);
+        expect(fetch.mock.calls[0][0]).toContain('events');
+        expect(fetch.mock.calls[0][1].method).toBe('DELETE');
+        expect(fetch.mock.calls[1][0]).toContain('events');
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
   });
 });

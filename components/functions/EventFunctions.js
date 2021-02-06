@@ -41,4 +41,10 @@ export const submitEvent = (props, title, date, location, description, setSaving
       ]);
   // Exit page, return to previous
   props.navigation.pop();
-}
+};
+
+// Handle confirmation step to delete event record
+export const deleteEvent = (props, event, events, setEvents, setFetched, callback) => {
+  setEvents(events.filter(e => e.id !== event.id));
+  callback();
+};
