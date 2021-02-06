@@ -7,15 +7,22 @@ export const fetchMessages = (props, setMessages, callback) => {
       let names = {};
       Promise.all(response.map(item =>
         get(`${props.baseURL}/accounts/${item.from}`)
-          .then(account => names[item.from] = `${account.account.firstName} ${account.account.lastName}`)))
+          .then(account =>
+            names[item.from] =
+              account && account.account
+                ? `${account.account.firstName} ${account.account.lastName}`
+                : 'Unknown User')))
         .then(() => setMessages(response.map(item => ({
           id: item._id,
           sender: names[item.from],
           content: item.message
-        }))));
+        }))))
+        .finally(callback);
     })
-    .catch(() => props.snackbar('Unable to fetch messages'))
-    .finally(callback);
+    .catch(() => {
+      props.snackbar('Unable to fetch messages');
+      callback
+    });
 };
 
 // Handle submit action to send a new message
