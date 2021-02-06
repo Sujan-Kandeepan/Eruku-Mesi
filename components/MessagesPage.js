@@ -3,8 +3,8 @@ import { Dimensions, Keyboard, Platform, Text, View } from 'react-native';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 
 import AppPage from './AppPage';
+import { fetchMessages } from './functions/MessageFunctions';
 import { IconButton } from '../shared/SharedComponents';
-import { get } from '../shared/SharedFunctions';
 
 // Page for common messages forum (chat interface)
 export default function MessagesPage(props) {
@@ -20,20 +20,7 @@ export default function MessagesPage(props) {
   const scroll = () => needsToScroll && list.scrollToEnd({ animated: true });
   const stopScroll = () => setTimeout(() => setNeedsToScroll(false), 1000);
   // Initial load of messages by calling useEffect with [] as second param to run once
-  React.useEffect(() => {
-    // Wait for all messages and trigger update to list by setting flag
-    const populate = async () => {
-      // Using lorem ipsum data for now with 20 messages
-      await Promise.all([...Array(20).keys()].map(index =>
-        get('https://baconipsum.com/api/?type=all-meat&sentences=1').then(content => {
-          let newMessages = messages;
-          newMessages[index] = { id: index, sender: 'You', content };
-          setMessages(newMessages);
-        })));
-      setFetched(true);
-    };
-    populate();
-  }, []);
+  React.useEffect(() => fetchMessages(props, setMessages, () => setFetched(true)), []);
   return (
     <AppPage {...props}>
       {/* Reference: https://stackoverflow.com/a/61980218 */}
