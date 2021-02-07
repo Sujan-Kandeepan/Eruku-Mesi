@@ -1,3 +1,4 @@
+import { Dimensions } from 'react-native';
 import { currentDate, del, get, paragraphs, post, scale, showDate, showTime, text, truncate }
   from '../shared/SharedFunctions';
 
@@ -90,7 +91,34 @@ describe('Shared Functions', () => {
   });
 
   describe('scale - scale/fix image for display', () => {
+    beforeEach(() => {
+      Dimensions.get = jest.fn().mockReturnValue({ width: 1200 });
+    });
 
+    test('Correct scaling with default options', () => {
+      expect(scale({ image: { height: 300, width: 400 } }))
+        .toMatchObject({ height: 877.5, width: 1170 });
+    });
+
+    test('Assumed square if dimensions missing', () => {
+      expect(scale({ image: {} }))
+        .toMatchObject({ height: 1170, width: 1170 });
+    });
+
+    test('Correct scaling with sideways rotation', () => {
+      expect(scale({ image: { height: 300, width: 400, rotation: 90 } }))
+        .toMatchObject({ height: 1560, width: 1170 });
+    });
+
+    test('Correct scaling with custom margin', () => {
+      expect(scale({ image: { height: 300, width: 400 }, marginHorizontal: 50 }))
+        .toMatchObject({ height: 825, width: 1100 });
+    });
+
+    test('Correct scaling with max height', () => {
+      expect(scale({ image: { height: 300, width: 400 }, maxHeight: 600 }))
+        .toMatchObject({ height: 600, width: 800 });
+    });
   });
 
   describe('showDate - print readable date format', () => {
