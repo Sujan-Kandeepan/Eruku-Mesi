@@ -95,7 +95,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await Account.remove(query);
+    await Account.deleteOne(query);
     res.status(200).json({ message: "account deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "account was not deleted" });

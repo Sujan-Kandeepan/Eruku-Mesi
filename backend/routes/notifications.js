@@ -93,7 +93,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await Notification.remove(query);
+    await Notification.deleteOne(query);
     res.status(200).json({ message: "notification deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "notification was not deleted" });

@@ -90,7 +90,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await Message.remove(query);
+    await Message.deleteOne(query);
     res.status(200).json({ msg: "message deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ msg: "message was not deleted" });
