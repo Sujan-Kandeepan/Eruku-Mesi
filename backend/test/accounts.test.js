@@ -1,5 +1,5 @@
 /**
- * Please ensure that the MongoDB events database has not been created before this script runs.
+ * Please ensure that the MongoDB accounts database has not been created before this script runs.
  */
 
 const request = require('supertest');
@@ -34,7 +34,7 @@ afterEach(async() => {
 })
 
 /**
- * ACCEPTANCE TEST - checks to see if we are able to GET for the /events endpoint
+ * ACCEPTANCE TEST - checks to see if we are able to GET for the /accounts endpoint
  * MATCHES TO: FR - 1
  */
 it("GET /accounts", async (done) => {
@@ -97,8 +97,8 @@ it("POST /accounts/add EXPECT ERROR", async (done) => {
 });
 
 /**
- * ACCEPTANCE TEST
- * GET with a specific ID
+ * ACCEPTANCE TEST - GET with a specific ID
+ * MATCHES TO: FR - 8
  */
 it("GET /accounts/:id", async (done) => {
     const response = await request(app).get('/accounts/' + documentId);
@@ -119,19 +119,38 @@ it("GET /accounts/:id", async (done) => {
 
 
 /**
- * TODO
- * Event.keys is not a function ??!?!?!?
+ * ACCEPTANCE TEST - checks if we are able to edit an account with a specific ID
+ * MATCHES TO: FR-14
  */
-// it("EDIT /accounts/:id EXPECT ERROR", async (done) => {
-//     // const response = await request(app).post('/accounts/edit/' + documentId).send({
-//     // });
-
-//     done();
-// });
+it("EDIT /accounts/:id", async (done) => {
+    const response = await request(app).post('/accounts/edit/' + documentId).send({
+        "username": "Edited Username"
+    });
+    const responseObj = JSON.parse(response.text);
+    console.log(responseObj)
+    expect(responseObj.msg).toBe('account successfully updated')
+    // console.log("responseObj",responseObj)
+    done();
+});
 
 
 /**
- * Still needs to be worked on
+ * UNIT TEST - checks to see if POST for the /accounts/edit/:id endpoint will fail due to missing info
+ */
+it("EDIT /accounts/:id EXPECT ERROR", async (done) => {
+    const response = await request(app).post('/accounts/edit/' + documentId).send({
+    });
+    const responseObj = JSON.parse(response.text);
+    expect(response.status).toBe(400);
+    expect(responseObj.status).toBe("error")
+    expect(responseObj.message).toBe("No field to update with")
+    done();
+});
+
+
+/**
+ * ACCEPTANCE TEST - checks if we are able to delete an post with a specific ID
+ * MATCHES TO: FR-15
  */
 it("DELETE /accounts/:id", async (done) => {
     const response = await request(app).delete('/accounts/' + documentId);
