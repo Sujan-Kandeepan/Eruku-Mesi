@@ -1,6 +1,6 @@
 /**
- * The following script tests the events page
- * Please ensure that the MongoDB events database has not been created before this script runs.
+ * The following script tests the photos page
+ * Please ensure that the MongoDB photos database has not been created before this script runs.
  */
 
 const request = require('supertest');
@@ -31,7 +31,6 @@ afterEach(async() => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /photos endpoint
- * MATCHES TO: FR - 1, FR - 8
  */
 it("GET /photos", async (done) => {
     const response = await request(app).get('/photos');
@@ -64,7 +63,6 @@ it("POST /photos/add EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to POST for the /photos/add endpoint
- * MATCHES TO: FR - 9
  */
   it("POST /photos/add", async (done) => {
  
@@ -82,7 +80,6 @@ it("POST /photos/add EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - GET with a specific ID
- * MATCHES TO: FR - 8
  */
 it("GET /photos/:id", async (done) => {
     const response = await request(app).get('/photos/' + documentId);
@@ -97,7 +94,6 @@ it("GET /photos/:id", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks if we are able to edit an photo with a specific ID
- * MATCHES TO: FR-10
  */
 it("EDIT /photos/:id", async (done) => {
     const response = await request(app).post('/photos/edit/' + documentId).send({
@@ -124,7 +120,6 @@ it("EDIT /photos/:id EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks if we are able to delete an photo with a specific ID
- * MATCHES TO: FR-11
  */
 it("DELETE /photos/:id", async (done) => {
     const response = await request(app).delete('/photos/' + documentId);
