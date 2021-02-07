@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 let Notification = require("../model/notification.js");
 
@@ -22,12 +23,10 @@ router.post("/add", async function (req, res) {
   try {
     const notification = new Notification(req.body);
     await notification.save();
-    return res
-      .status(200)
-      .json({
-        message: "notification successfully added",
-        notification: notification,
-      });
+    return res.status(200).json({
+      message: "notification successfully added",
+      notification: notification,
+    });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -54,8 +53,12 @@ router.post("/edit/:id", async function (req, res) {
     const notification = await Notification.updateOne(query, notificationBody);
     return res
       .status(200)
-      .json({ message: "notification successfully updated", notification: notification });
+      .json({
+        message: "notification successfully updated",
+        notification: notification,
+      });
   } catch (e) {
+    
     return res.status(500).json(e);
   }
 });
