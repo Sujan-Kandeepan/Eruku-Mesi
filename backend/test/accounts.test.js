@@ -23,7 +23,6 @@ beforeEach(async ()=> {
     const account = new Account(sample);
     await account.save();
     documentId = account._id;
-    // console.log('account', account)
 })
 
 /**
@@ -42,7 +41,6 @@ it("GET /accounts", async (done) => {
     expect(response.status).toBe(200);
     const responseArrayLength = response.body.length;
     const document = response.body[0];
-    // console.log(document)
     expect(responseArrayLength).toBe(1);
     expect(document.username).toBe('SampleUser')
     expect(document.firstName).toBe('SampleName')
@@ -85,7 +83,6 @@ it("POST /accounts/add EXPECT ERROR", async (done) => {
     });
     
     const responseObj = JSON.parse(response.text);
-    // console.log('message', responseObj);
     expect(response.status).toBe(200);
     expect(responseObj.account.username).toBe("SampleUser2")
     expect(responseObj.account.firstName).toBe("SampleName2")
@@ -102,12 +99,10 @@ it("POST /accounts/add EXPECT ERROR", async (done) => {
  */
 it("GET /accounts/:id", async (done) => {
     const response = await request(app).get('/accounts/' + documentId);
-    // console.log(documentId)
+
     expect(response.status).toBe(200);
     const responseArrayLength = response.body.length;
     const document = response.body.account;
-    // console.log(response.body)    
-    // expect(responseArrayLength).toBe(1);
     expect(document.username).toBe('SampleUser')
     expect(document.firstName).toBe('SampleName')
     expect(document.lastName).toBe('SampleLast')
@@ -129,7 +124,6 @@ it("EDIT /accounts/:id", async (done) => {
     const responseObj = JSON.parse(response.text);
     console.log(responseObj)
     expect(responseObj.msg).toBe('account successfully updated')
-    // console.log("responseObj",responseObj)
     done();
 });
 

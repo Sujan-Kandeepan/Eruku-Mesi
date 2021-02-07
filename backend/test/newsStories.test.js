@@ -20,7 +20,6 @@ beforeEach(async ()=> {
     const newsStory = new NewsStory(sample);
     await newsStory.save();
     documentId = newsStory._id;
-    // console.log('account', account)
 })
 
 /**
@@ -39,7 +38,6 @@ it("GET /newsStories", async (done) => {
     expect(response.status).toBe(200);
     const responseArrayLength = response.body.length;
     const document = response.body[0];
-    // console.log(document)
     expect(responseArrayLength).toBe(1);
     expect(document.title).toBe('SampleTitle')
     expect(document.content).toBe('SampleContent')
@@ -76,8 +74,6 @@ it("POST /newsStories/add EXPECT ERROR", async (done) => {
     });
     
     const responseObj = JSON.parse(response.text);
-    console.log('message', responseObj);
-    // expect(response.status).toBe(200);
     expect(responseObj.newsStories.title).toBe("SampleTitle2")
     expect(responseObj.newsStories.content).toBe("SampleContent2")
     expect(responseObj.newsStories.description).toBe("TESTdesc2")
@@ -90,13 +86,9 @@ it("POST /newsStories/add EXPECT ERROR", async (done) => {
 //  */
 it("GET /newsStories/:id", async (done) => {
     const response = await request(app).get('/newsStories/' + documentId);
-    console.log(documentId)
+    
     expect(response.status).toBe(200);
-    // const responseArrayLength = response.body.length;
-    // console.log(response.body)
     const document = response.body.newsStory;
-    // console.log(response.body.newsStory.title)    
-    // expect(responseArrayLength).toBe(1);
     expect(document.title).toBe('SampleTitle')
     expect(document.description).toBe('TESTdesc')
     expect(document.content).toBe('SampleContent')

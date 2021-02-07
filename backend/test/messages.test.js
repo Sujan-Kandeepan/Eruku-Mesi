@@ -74,7 +74,6 @@ it("POST /messages/add EXPECT ERROR", async (done) => {
     });
     
     const responseObj = JSON.parse(response.text);
-    console.log('message', responseObj);
     expect(response.status).toBe(200);
     expect(responseObj.msg).toBe("message successfully added")
     expect(responseObj.message.sender).toEqual("507f1f77bcf86cd799439011");
@@ -109,7 +108,7 @@ it("EDIT /messages/:id", async (done) => {
     });
     const responseObj = JSON.parse(response.text);
     expect(responseObj.msg).toBe('message successfully updated')
-    console.log("responseObj",responseObj)
+    
     done();
 });
 

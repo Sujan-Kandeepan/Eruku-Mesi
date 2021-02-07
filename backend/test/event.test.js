@@ -76,7 +76,6 @@ it("POST /events/add EXPECT ERROR", async (done) => {
     });
     
     const responseObj = JSON.parse(response.text);
-    // console.log('message', responseObj);
     expect(response.status).toBe(200);
     expect(responseObj.message).toBe("event successfully added")
     expect(responseObj.event.title).toBe("2021 Reunion In Maryland")

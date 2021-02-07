@@ -81,7 +81,6 @@ it("GET /feedback/:id", async (done) => {
     const response = await request(app).get('/feedback/' + documentId);
     expect(response.status).toBe(200);
     const document = response.body.feedback;
-    console.log(document.text)
     expect(document.text).toBe('2021 Feedback')
     done();
   });
@@ -97,7 +96,6 @@ it("EDIT /feedback/:id", async (done) => {
     });
     const responseObj = JSON.parse(response.text);
     expect(responseObj.msg).toBe('feedback successfully updated')
-    console.log("responseObj",responseObj)
     done();
 });
 
