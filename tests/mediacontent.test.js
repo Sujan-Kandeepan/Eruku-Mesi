@@ -74,7 +74,7 @@ describe('Media Content', () => {
     expect(fetch.mock.calls[0][0]).toContain('mediaContent/add');
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body))
-      .toMatchObject({ id: 1, title: 'title', description: 'description', image });
+      .toMatchObject({ title: 'title', description: 'description', image });
   });
 
   test('Makes request to update post', () => {
@@ -96,7 +96,7 @@ describe('Media Content', () => {
     expect(fetch.mock.calls[0][0]).toContain('mediaContent/edit/1');
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body))
-      .toMatchObject({ id: 1, title: 'title', description: 'description', image });
+      .toMatchObject({ title: 'title', description: 'description', image });
   });
 
   test('Deletes post', done => {
