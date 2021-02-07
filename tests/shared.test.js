@@ -122,11 +122,19 @@ describe('Shared Functions', () => {
   });
 
   describe('showDate - print readable date format', () => {
+    test('Returns expected short date format', () => {
+      expect(showDate(new Date(2021, 1, 7, 23, 30))).toEqual('Sun, Feb 7, 2021');
+    });
 
+    test('Returns expected long date format', () => {
+      expect(showDate(new Date(2021, 1, 7, 23, 30), true)).toEqual('Sunday, February 7, 2021');
+    });
   });
 
   describe('showTime - print readable time format', () => {
-
+    test('Returns expected time format', () => {
+      expect(showTime(new Date(2021, 1, 7, 23, 30))).toEqual('11:30 PM');
+    });
   });
 
   describe('paragraphs - get list of paragraphs from text', () => {
