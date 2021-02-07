@@ -43,9 +43,10 @@ export const del = async (url, body) =>
 
 // Shorten text for compact display purposes
 export const truncate = (string, num) => {
-  let truncated = string.split(' ').slice(0, num).join(' ');
-  if (truncated.length < string.length)
-    truncated = truncated.replace(/\. $/, '') + '...';
+  let words = string.split(/\s+/);
+  let truncated = words.slice(0, num).join(' ');
+  if (words.length > num)
+    truncated = truncated.replace(/\.$/, '') + '...';
   return truncated;
 };
 

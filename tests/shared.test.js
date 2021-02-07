@@ -36,7 +36,33 @@ describe('Shared Functions', () => {
   describe('del - HTTP DELETE request', () => testRequests(del));
 
   describe('truncate - truncate string for display', () => {
+    test('Truncates string with too many words', () => {
+      expect(truncate('Here are four words', 3)).toEqual('Here are four...');
+    });
 
+    test('Preserves string with as many words as limit', () => {
+      expect(truncate('Here are four words', 4)).toEqual('Here are four words');
+    });
+
+    test('Preserves string with fewer words than limit', () => {
+      expect(truncate('Here are four words', 5)).toEqual('Here are four words');
+    });
+
+    test('Handles string with consecutive spaces', () => {
+      expect(truncate('Here   are   four   words', 4)).toEqual('Here are four words');
+    });
+
+    test('Handles string with various types of spaces', () => {
+      expect(truncate('Here\tare\rfour\nwords', 4)).toEqual('Here are four words');
+    });
+
+    test('Truncation replaces period with ellipsis', () => {
+      expect(truncate('Ending with period.', 2)).toEqual('Ending with...');
+    });
+
+    test('Truncation handles period and trailing space', () => {
+      expect(truncate('Ending with period and space. ', 4)).toEqual('Ending with period and...');
+    });
   });
 
   describe('currentDate - get current date/time accurate to seconds', () => {
