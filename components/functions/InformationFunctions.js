@@ -22,7 +22,7 @@ export const addInfoSection = (props, pages, setPages, data, setData, setOrigina
     return;
   }
   setPages([...pages, newSection]);
-  setData([...data, { title: newSection, content: [] }]);
+  setData([...data, { title: newSection, content: [], imageTop: null, imageBottom: null }]);
   setOriginalText(newSection);
   setEditText(newSection);
 };
