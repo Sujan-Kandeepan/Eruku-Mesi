@@ -44,5 +44,7 @@ export const submitMediaContent = (props, title, description, image, setSaving) 
 };
 
 // Handle confirmation step to delete new story record
-export const deleteMediaContent = (props, post, posts, setPosts, setFetched, callback) =>
+export const deleteMediaContent = (props, post, posts, setPosts, setFetched, callback) => {
   setPosts(posts.filter(p => p.id !== post.id));
+  callback();
+}
