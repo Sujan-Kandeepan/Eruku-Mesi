@@ -2,7 +2,7 @@ import { fetchMediaContent, submitMediaContent, deleteMediaContent } from '../co
 
 require('jest-fetch-mock').enableMocks();
 
-describe('Messages', () => {
+describe('Media Content', () => {
   beforeEach(() => {
     fetch.resetMocks()
   });
