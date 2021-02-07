@@ -93,7 +93,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await NewsStory.remove(query);
+    await NewsStory.deleteOne(query);
     res.status(200).json({ message: "newsStory deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "newsStory was not deleted" });
