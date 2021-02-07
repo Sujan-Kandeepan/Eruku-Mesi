@@ -138,10 +138,46 @@ describe('Shared Functions', () => {
   });
 
   describe('paragraphs - get list of paragraphs from text', () => {
+    test('Empty string gives no paragraphs', () => {
+      expect(paragraphs('')).toEqual([]);
+    });
 
+    test('Single sentence gives one paragraph', () => {
+      expect(paragraphs('This is a sentence.')).toEqual(['This is a sentence.']);
+    });
+
+    test('Single sentence has surrounding spaces removed', () => {
+      expect(paragraphs('   This is a sentence.\n')).toEqual(['This is a sentence.']);
+    });
+
+    test('Multiple sentences give one paragraph', () => {
+      expect(paragraphs('This is a sentence. This is another sentence.'))
+        .toEqual(['This is a sentence. This is another sentence.']);
+    });
+
+    test('Text with line breaks gives multiple paragraphs', () => {
+      expect(paragraphs('This is a sentence.\nThis is another sentence.'))
+        .toEqual(['This is a sentence.', 'This is another sentence.']);
+    });
+
+    test('Text with superfluous whitespace is handled properly', () => {
+      expect(paragraphs('\t This is a sentence.\r\n\r\nThis is another sentence.   '))
+        .toEqual(['This is a sentence.', 'This is another sentence.']);
+    });
   });
 
   describe('text - get text from list of paragraphs', () => {
+    test('Empty list of paragraphs gives empty text', () => {
+      expect(text([])).toEqual('');
+    });
 
+    test('Singleton list of paragraphs gives one line', () => {
+      expect(text(['This is a sentence.'])).toEqual('This is a sentence.');
+    });
+
+    test('Longer list of paragraphs gives multiple lines', () => {
+      expect(text(['This is a sentence.', 'This is another sentence.']))
+        .toEqual('This is a sentence.\n\nThis is another sentence.');
+    });
   });
 });

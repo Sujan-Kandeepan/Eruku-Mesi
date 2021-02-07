@@ -76,7 +76,7 @@ export const showDate = (date, long) =>
 export const showTime = (date) => dayjs(date).format('h:mm A');
 
 // Extract list of paragraphs from large input field value containing text
-export const paragraphs = text => text.split('\n').filter(s => s !== '').map(s => s.trim());
+export const paragraphs = text => text.split('\n').filter(s => s.trim() !== '').map(s => s.trim());
 
 // Merge list of paragraphs back into single text string
 export const text = paragraphs => paragraphs.join('\n\n');
