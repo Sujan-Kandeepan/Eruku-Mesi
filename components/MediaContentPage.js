@@ -26,7 +26,7 @@ export default function MediaContentPage(props) {
   const [posts, setPosts] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
   // Initial load of posts by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchMediaContent(props, posts, setPosts, () => setFetched(true)), []);
+  React.useEffect(() => fetchMediaContent(props, setPosts, () => setFetched(true)), []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>

@@ -1,20 +1,14 @@
 import { get, paragraphs } from '../../shared/SharedFunctions';
 
 // Fetch posts and populate component state array
-export const fetchMediaContent = (props, posts, setPosts, callback) => {
+export const fetchMediaContent = (props, setPosts, callback) => {
   // Wait for all posts and trigger update to list by setting flag
   const image = { cancelled: false, height: 359, uri: 'https://bit.ly/3sAOAp8', type: 'image', width: 640 };
-  const populate = async () => {
-    // Using lorem ipsum data for now with 10 posts
-    await Promise.all([...Array(10).keys()].map(index =>
-      get('https://baconipsum.com/api/?type=all-meat&sentences=3').then(description => {
-        let newPosts = posts;
-        newPosts[index] = { id: index + 1, title: `Post ${index + 1}`, description, image };
-        setPosts(newPosts);
-      })));
-    callback();
-  };
-  populate();
+  // Using lorem ipsum data for now with single post
+  get('https://baconipsum.com/api/?type=all-meat&sentences=3')
+    .then(description => setPosts([{ id: 1, title: `Example Post`, description, image }]))
+    .catch(() => props.snackbar('Unable to fetch posts'))
+    .finally(callback)
 };
 
 // Handle submit of media content form to create or update media content record
