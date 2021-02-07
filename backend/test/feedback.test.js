@@ -104,25 +104,25 @@ it("EDIT /feedback/:id", async (done) => {
 // /**
 //  * UNIT TEST - checks to see if POST for the /feedback/edit/:id endpoint will fail due to missing info
 //  */
-// it("EDIT /feedback/:id EXPECT ERROR", async (done) => {
-//     const response = await request(app).post('/feedback/edit/' + documentId).send({
-//     });
-//     const responseObj = JSON.parse(response.text);
-//     expect(response.status).toBe(400);
-//     expect(responseObj.status).toBe("error")
-//     expect(responseObj.message).toBe("No field to update with")
-//     done();
-// });
+it("EDIT /feedback/:id EXPECT ERROR", async (done) => {
+    const response = await request(app).post('/feedback/edit/' + documentId).send({
+    });
+    const responseObj = JSON.parse(response.text);
+    expect(response.status).toBe(400);
+    expect(responseObj.status).toBe("error")
+    expect(responseObj.message).toBe("No field to update with")
+    done();
+});
 
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to delete an feedback with a specific ID
-//  * MATCHES TO: FR-11
+//  * MATCHES TO: FR-30
 //  */
-// it("DELETE /feedback/:id", async (done) => {
-//     const response = await request(app).delete('/feedback/' + documentId);
-//     const responseObj = response.body;
-//     expect(response.status).toBe(200);
-//     expect(responseObj.message).toBe("feedback deleted successfully!")
-//     done();
-// });
+it("DELETE /feedback/:id", async (done) => {
+    const response = await request(app).delete('/feedback/' + documentId);
+    const responseObj = response.body;
+    expect(response.status).toBe(200);
+    expect(responseObj.message).toBe("feedback deleted successfully!")
+    done();
+});
