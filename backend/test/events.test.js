@@ -83,18 +83,15 @@ it("POST /events/add EXPECT ERROR", async (done) => {
     expect(responseObj.event.date).toBe("2021-01-10T19:39:21.903Z")
 
     done();
-    
-  });
+});
 
 /**
  * ACCEPTANCE TEST
  * GET with a specific ID
  */
 it("GET /events/:id", async (done) => {
-    // const newEventId = JSON.parse(response.text);
     const response = await request(app).get('/events/' + documentId);
     expect(response.status).toBe(200);
-    // console.log('response', response.body)
     const document = response.body.event;
     expect(document.title).toBe('2021 Reunion In Maryland')
     expect(document.date).toBe('2021-01-10T19:39:21.903Z')
@@ -104,39 +101,25 @@ it("GET /events/:id", async (done) => {
   });
 
 
-// it("EDIT /events/add", async (done) => {
- 
-   
-//     // const newEventId = JSON.parse(response.text);
-//     const response = await request(app).post('/events/edit/' + documentId).send({
-//         title: "2021 Reunion In Maryland",
-//         date: "2021-01-10T19:39:21.903Z"
-//     });
-//     console.log('message', responseObj);
-//     expect(response.status).toBe(200);
-//     expect(responseObj.message).toBe("event successfully added")
-//     expect(responseObj.event.title).toBe("2021 Reunion In Maryland")
-//     expect(responseObj.event.date).toBe("2021-01-10T19:39:21.903Z")
-
-//     done();
-    
-//   });
-
-
-  /**
-   * Still needs to be worked on
-   */
-  it("DELETE /events/add", async (done) => {
- 
-   
-    // const newEventId = JSON.parse(response.text);
-    const response = await request(app).delete('/events/delete/' + documentId);
-    // console.log('YOLO', documentId, response.body, response.text);
-    // expect(response.status).toBe(200);
-    // expect(responseObj.message).toBe("event successfully added")
-    // expect(responseObj.event.title).toBe("2021 Reunion In Maryland")
-    // expect(responseObj.event.date).toBe("2021-01-10T19:39:21.903Z")
+/**
+ * TODO
+ * Event.keys is not a function ??!?!?!?
+ */
+it("EDIT /events/:id EXPECT ERROR", async (done) => {
+    // const response = await request(app).post('/events/edit/' + documentId).send({
+    // });
 
     done();
-    
-  });
+});
+
+
+/**
+ * Still needs to be worked on
+ */
+it("DELETE /events/:id", async (done) => {
+    const response = await request(app).delete('/events/' + documentId);
+    const responseObj = response.body;
+    expect(response.status).toBe(200);
+    expect(responseObj.message).toBe("event deleted successfully!")
+    done();
+});
