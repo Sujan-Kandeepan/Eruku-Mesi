@@ -1,11 +1,11 @@
 import { Dimensions } from 'react-native';
 import dayjs from 'dayjs';
 
-// Perform GET request to provided endpoint URL
+// Shared logic for HTTP requests in functions to export
 // Reference: https://reactnative.dev/docs/network
-export const get = async (url) => {
+const request = async (url, params) => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, params);
     const json = await response.json();
     if (!response.ok)
       throw Error(`Returned ${response.status} with message: ${json.message}`);
@@ -15,47 +15,31 @@ export const get = async (url) => {
     throw error;
   }
 };
+
+// Perform GET request to provided endpoint URL
+export const get = async url => request(url);
 
 // Perform POST request to provided endpoint URL with body
-export const post = async (url, body) => {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-    const json = await response.json();
-    if (!response.ok)
-      throw Error(`Returned ${response.status} with message: ${json.message}`);
-    return json;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+export const post = async (url, body) =>
+  request(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
 
-// Perform DELETE request to provided endpoint URL
-export const del = async (url) => {
-  try {
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-    const json = await response.json();
-    if (!response.ok)
-      throw Error(`Returned ${response.status} with message: ${json.message}`);
-    return json;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+// Perform DELETE request to provided endpoint URL with body
+export const del = async (url, body) =>
+  request(url, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
 
 // Shorten text for compact display purposes
 export const truncate = (string, num) => {
