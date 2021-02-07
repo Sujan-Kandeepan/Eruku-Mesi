@@ -65,8 +65,28 @@ describe('Shared Functions', () => {
     });
   });
 
-  describe('currentDate - get current date/time accurate to seconds', () => {
-
+  describe('currentDate - get current date/time accurate to minutes', () => {
+    test('Current date is accurate to minutes', () => {
+      // Reference: https://codewithhugo.com/mocking-the-current-date-in-jest-tests/
+      const now = new Date();
+      const realDate = Date;
+      global.Date = class extends Date {
+        constructor(date) {
+          return date ? super(date) : now;
+        }
+      }
+      const returned = currentDate();
+      const actual = new Date();
+      expect(returned.getFullYear()).toEqual(actual.getFullYear());
+      expect(returned.getMonth()).toEqual(actual.getMonth());
+      expect(returned.getDate()).toEqual(actual.getDate());
+      expect(returned.getDay()).toEqual(actual.getDay());
+      expect(returned.getHours()).toEqual(actual.getHours());
+      expect(returned.getMinutes()).toEqual(actual.getMinutes());
+      expect(returned.getSeconds()).toEqual(0);
+      expect(returned.getMilliseconds()).toEqual(0);
+      global.Date = realDate;
+    });
   });
 
   describe('scale - scale/fix image for display', () => {

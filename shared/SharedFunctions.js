@@ -51,7 +51,7 @@ export const truncate = (string, num) => {
 };
 
 // Round current date to nearest minute; reference: https://stackoverflow.com/a/28037042
-export const currentDate = () => new Date(Math.round((new Date()).getTime() / 60000) * 60000);
+export const currentDate = () => new Date(Math.floor((new Date()).getTime() / 60000) * 60000);
 
 // Scale image to screen width or to maximum height with customizable horizontal margin
 export const scale = ({ image, marginHorizontal, maxHeight }) => {
