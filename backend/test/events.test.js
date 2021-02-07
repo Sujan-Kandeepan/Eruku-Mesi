@@ -1,4 +1,5 @@
 /**
+ * The following script tests the events page
  * Please ensure that the MongoDB events database has not been created before this script runs.
  */
 
@@ -21,7 +22,6 @@ beforeEach(async ()=> {
     const event = new Event(sample);
     await event.save();
     documentId = event._id;
-    // console.log('event', event)
 })
 
 /**
@@ -33,7 +33,7 @@ afterEach(async() => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /events endpoint
- * MATCHES TO: FR - 1
+ * MATCHES TO: FR - 1, FR - 8
  */
 it("GET /events", async (done) => {
     const response = await request(app).get('/events');
@@ -86,8 +86,8 @@ it("POST /events/add EXPECT ERROR", async (done) => {
 });
 
 /**
- * ACCEPTANCE TEST
- * GET with a specific ID
+ * ACCEPTANCE TEST - GET with a specific ID
+ * MATCHES TO: FR - 8
  */
 it("GET /events/:id", async (done) => {
     const response = await request(app).get('/events/' + documentId);
@@ -102,19 +102,36 @@ it("GET /events/:id", async (done) => {
 
 
 /**
- * TODO
- * Event.keys is not a function ??!?!?!?
+ * ACCEPTANCE TEST - checks if we are able to edit an event with a specific ID
+ * MATCHES TO: FR-10
+ */
+it("EDIT /events/:id", async (done) => {
+    const response = await request(app).post('/events/edit/' + documentId).send({
+        "title": "2021 Reunion In Toronto"
+    });
+    const responseObj = JSON.parse(response.text);
+    expect(responseObj.msg).toBe('event successfully updated')
+    console.log("responseObj",responseObj)
+    done();
+});
+
+/**
+ * UNIT TEST - checks to see if POST for the /events/edit/:id endpoint will fail due to missing info
  */
 it("EDIT /events/:id EXPECT ERROR", async (done) => {
-    // const response = await request(app).post('/events/edit/' + documentId).send({
-    // });
-
+    const response = await request(app).post('/events/edit/' + documentId).send({
+    });
+    const responseObj = JSON.parse(response.text);
+    expect(response.status).toBe(400);
+    expect(responseObj.status).toBe("error")
+    expect(responseObj.message).toBe("No field to update with")
     done();
 });
 
 
 /**
- * Still needs to be worked on
+ * ACCEPTANCE TEST - checks if we are able to delete an event with a specific ID
+ * MATCHES TO: FR-11
  */
 it("DELETE /events/:id", async (done) => {
     const response = await request(app).delete('/events/' + documentId);
