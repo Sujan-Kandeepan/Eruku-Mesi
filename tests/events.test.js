@@ -16,9 +16,9 @@ describe('Upcoming Events', () => {
         {
           media: [],
           _id: '5ffb5726ee35744495bf590b',
-          name: '2021 Reunion In Maryland',
+          title: '2021 Reunion In Maryland',
           type: 'reunion',
-          desc: '2021 Reunion In Maryland by EPU North America, INC',
+          description: '2021 Reunion In Maryland by EPU North America, INC',
           date: '2021-01-10T19:39:21.903Z',
           location: 'Maryland',
           createdAt: '2021-01-10T19:39:21.903Z'
@@ -31,9 +31,9 @@ describe('Upcoming Events', () => {
         expect(fetch.mock.calls[0][0]).toContain('events');
         expect(events.length).toBe(1);
         expect(events[0]).toMatchObject({
-          name: '2021 Reunion In Maryland',
-          desc: '2021 Reunion In Maryland by EPU North America, INC',
-          date: '2021-01-10T19:39:21.903Z',
+          title: '2021 Reunion In Maryland',
+          description: ['2021 Reunion In Maryland by EPU North America, INC'],
+          date: new Date('2021-01-10T19:39:21.903Z'),
           location: 'Maryland',
         });
         done();
