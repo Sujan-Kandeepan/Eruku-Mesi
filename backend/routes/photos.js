@@ -7,8 +7,8 @@ let Photo = require("../model/photo.js");
  * Upload a photo if all required fields are not empty.
  */
 router.post("/add", async function (req, res) {
-  req.assert("image", "Photo: username must be set").notEmpty();
-  req.assert("title", "Photo: lastname must be set").notEmpty();
+  req.assert("title", "Photo: title must be set").notEmpty();
+  req.assert("image", "Photo: image must be set").notEmpty();
 
   let errors = req.validationErrors();
 
@@ -91,7 +91,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await Photo.remove(query);
+    await Photo.deleteOne(query);
     res.status(200).json({ message: "photo deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "photo was not deleted" });

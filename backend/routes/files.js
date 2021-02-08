@@ -90,7 +90,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await File.remove(query);
+    await File.deleteOne(query);
     res.status(200).json({ message: "file deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "file was not deleted" });

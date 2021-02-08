@@ -39,7 +39,7 @@ router.post("/edit/:id", async function (req, res) {
   let eventBody = req.body;
   let query = { _id: req.params.id };
 
-  if (eventBody.length === 0) {
+  if (Object.keys(eventBody).length === 0) {
     return res.status(400).json({
       status: "error",
       message: "No field to update with",
@@ -89,7 +89,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await Event.remove(query);
+    await Event.deleteOne(query);
     res.status(200).json({ message: "event deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "event was not deleted" });

@@ -15,7 +15,7 @@ router.post("/add", async function (req, res) {
   if (errors) {
     return res.status(400).json({
       status: "error",
-      message: "Mandatory field is not set",
+      msg: "Mandatory field is not set",
     });
   }
 
@@ -24,11 +24,11 @@ router.post("/add", async function (req, res) {
     await message.save();
     return res
       .status(200)
-      .json({ message: "message successfully added", message: message });
+      .json({ msg: "message successfully added", message: message });
   } catch (error) {
     return res.status(500).json({
       status: "error",
-      message: "Internal Server Error",
+      msg: "Internal Server Error",
     });
   }
 });
@@ -43,7 +43,7 @@ router.post("/edit/:id", async function (req, res) {
   if (Object.keys(messageBody).length === 0) {
     return res.status(400).json({
       status: "error",
-      message: "No field to update with",
+      msg: "No field to update with",
     });
   }
 
@@ -79,7 +79,7 @@ router.get("/:id", async function (req, res) {
     const message = await Message.findById(id);
     return res.status(200).json({ message: message });
   } catch (e) {
-    return res.status(500).json({ message: "message not found" });
+    return res.status(500).json({ msg: "message not found" });
   }
 });
 
@@ -90,10 +90,10 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await Message.remove(query);
-    res.status(200).json({ message: "message deleted successfully!" });
+    await Message.deleteOne(query);
+    res.status(200).json({ msg: "message deleted successfully!" });
   } catch (e) {
-    return res.status(500).json({ message: "message was not deleted" });
+    return res.status(500).json({ msg: "message was not deleted" });
   }
 });
 module.exports = router;

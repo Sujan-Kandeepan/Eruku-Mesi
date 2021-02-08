@@ -89,7 +89,7 @@ router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
 
   try {
-    await Information.remove(query);
+    await Information.deleteOne(query);
     res.status(200).json({ message: "information deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "information was not deleted" });
