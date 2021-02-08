@@ -30,8 +30,7 @@ afterEach(async() => {
 })
 
 /**
- * ACCEPTANCE TEST - checks to see if we are able to GET for the /accounts endpoint
- * MATCHES TO: FR - 1
+ * ACCEPTANCE TEST - checks to see if we are able to GET for the /newsStories endpoint
  */
 it("GET /newsStories", async (done) => {
     const response = await request(app).get('/newsStories');
@@ -46,7 +45,7 @@ it("GET /newsStories", async (done) => {
 });
 
 // /**
-//  * UNIT TEST - checks to see if POST for the /accounts/add endpoint will fail due to missing arguments
+//  * UNIT TEST - checks to see if POST for the /newsStories/add endpoint will fail due to missing arguments
 //  */
 it("POST /newsStories/add EXPECT ERROR", async (done) => {
  
@@ -62,8 +61,7 @@ it("POST /newsStories/add EXPECT ERROR", async (done) => {
 
 
 // /**
-//  * ACCEPTANCE TEST - checks to see if we are able to POST for the /accounts/add endpoint
-//  * MATCHES TO: FR - 9
+//  * ACCEPTANCE TEST - checks to see if we are able to POST for the /newsStories/add endpoint
 //  */
   it("POST /newsStories/add", async (done) => {
  
@@ -82,7 +80,6 @@ it("POST /newsStories/add EXPECT ERROR", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to get a newsStory with a specific ID
-// *  MATCHES TO: FR-8
 //  */
 it("GET /newsStories/:id", async (done) => {
     const response = await request(app).get('/newsStories/' + documentId);
@@ -110,7 +107,6 @@ it("EDIT /newsStories/:id EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks if we are able to edit an newsStory with a specific ID
- * MATCHES TO: FR-10
  */
 it("EDIT /newsStories/:id", async (done) => {
     const response = await request(app).post('/newsStories/edit/' + documentId).send({
@@ -124,7 +120,6 @@ it("EDIT /newsStories/:id", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to delete an newsStory with a specific ID
-//  * MATCHES TO: FR - 15
 //  */
 it("DELETE /newsStories/:id", async (done) => {
     const response = await request(app).delete('/newsStories/' + documentId);

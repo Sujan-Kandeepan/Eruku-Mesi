@@ -30,7 +30,6 @@ afterEach(async () => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /settings endpoint
- * MATCHES TO: FR - 30
  */
 it("GET /settings", async (done) => {
   const response = await request(app).get("/settings");
@@ -56,7 +55,6 @@ it("POST /settings/add", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks to see if we are able to POST for the /settings/add endpoint
-//  * MATCHES TO: FR - 30
 //  */
 it("POST /settings/add", async (done) => {
   const response = await request(app).post("/settings/add").send({
@@ -72,7 +70,6 @@ it("POST /settings/add", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - GET with a specific ID
-//  * MATCHES TO: FR - 30
 //  */
 it("GET /settings/:id", async (done) => {
   const response = await request(app).get("/settings/" + documentId);
@@ -86,7 +83,6 @@ it("GET /settings/:id", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to edit an settings with a specific ID
-//  * MATCHES TO: FR-10
 //  */
 it("EDIT /settings/:id", async (done) => {
   const response = await request(app)
@@ -116,7 +112,6 @@ it("EDIT /settings/:id EXPECT ERROR", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to delete an settings with a specific ID
-//  * MATCHES TO: FR-30
 //  */
 it("DELETE /settings/:id", async (done) => {
   const response = await request(app).delete("/settings/" + documentId);

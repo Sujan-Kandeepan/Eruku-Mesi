@@ -34,7 +34,6 @@ afterEach(async() => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /accounts endpoint
- * MATCHES TO: FR - 1
  */
 it("GET /accounts", async (done) => {
     const response = await request(app).get('/accounts');
@@ -69,7 +68,6 @@ it("POST /accounts/add EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to POST for the /accounts/add endpoint
- * MATCHES TO: FR - 9
  */
   it("POST /accounts/add", async (done) => {
  
@@ -95,7 +93,6 @@ it("POST /accounts/add EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - GET with a specific ID
- * MATCHES TO: FR - 8
  */
 it("GET /accounts/:id", async (done) => {
     const response = await request(app).get('/accounts/' + documentId);
@@ -115,7 +112,6 @@ it("GET /accounts/:id", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks if we are able to edit an account with a specific ID
- * MATCHES TO: FR-14
  */
 it("EDIT /accounts/:id", async (done) => {
     const response = await request(app).post('/accounts/edit/' + documentId).send({
@@ -143,8 +139,7 @@ it("EDIT /accounts/:id EXPECT ERROR", async (done) => {
 
 
 /**
- * ACCEPTANCE TEST - checks if we are able to delete an post with a specific ID
- * MATCHES TO: FR-15
+ * ACCEPTANCE TEST - checks if we are able to delete an account with a specific ID
  */
 it("DELETE /accounts/:id", async (done) => {
     const response = await request(app).delete('/accounts/' + documentId);

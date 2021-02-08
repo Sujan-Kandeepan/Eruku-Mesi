@@ -33,7 +33,6 @@ afterEach(async() => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /events endpoint
- * MATCHES TO: FR - 1, FR - 8
  */
 it("GET /events", async (done) => {
     const response = await request(app).get('/events');
@@ -66,7 +65,6 @@ it("POST /events/add EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to POST for the /events/add endpoint
- * MATCHES TO: FR - 9
  */
   it("POST /events/add", async (done) => {
  
@@ -86,7 +84,6 @@ it("POST /events/add EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - GET with a specific ID
- * MATCHES TO: FR - 8
  */
 it("GET /events/:id", async (done) => {
     const response = await request(app).get('/events/' + documentId);
@@ -102,7 +99,6 @@ it("GET /events/:id", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks if we are able to edit an event with a specific ID
- * MATCHES TO: FR-10
  */
 it("EDIT /events/:id", async (done) => {
     const response = await request(app).post('/events/edit/' + documentId).send({
@@ -130,7 +126,6 @@ it("EDIT /events/:id EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks if we are able to delete an event with a specific ID
- * MATCHES TO: FR-11
  */
 it("DELETE /events/:id", async (done) => {
     const response = await request(app).delete('/events/' + documentId);

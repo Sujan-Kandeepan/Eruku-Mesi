@@ -29,7 +29,6 @@ afterEach(async() => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /feedback endpoint
- * MATCHES TO: FR - 30
  */
 it("GET /feedback", async (done) => {
     const response = await request(app).get('/feedback');
@@ -59,7 +58,6 @@ it("POST /feedback/add EXPECT ERROR", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks to see if we are able to POST for the /feedback/add endpoint
-//  * MATCHES TO: FR - 30
 //  */
   it("POST /feedback/add", async (done) => {
  
@@ -75,7 +73,6 @@ it("POST /feedback/add EXPECT ERROR", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - GET with a specific ID
-//  * MATCHES TO: FR - 30
 //  */
 it("GET /feedback/:id", async (done) => {
     const response = await request(app).get('/feedback/' + documentId);
@@ -88,7 +85,6 @@ it("GET /feedback/:id", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to edit an feedback with a specific ID
-//  * MATCHES TO: FR-10
 //  */
 it("EDIT /feedback/:id", async (done) => {
     const response = await request(app).post('/feedback/edit/' + documentId).send({
@@ -115,7 +111,6 @@ it("EDIT /feedback/:id EXPECT ERROR", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to delete an feedback with a specific ID
-//  * MATCHES TO: FR-30
 //  */
 it("DELETE /feedback/:id", async (done) => {
     const response = await request(app).delete('/feedback/' + documentId);

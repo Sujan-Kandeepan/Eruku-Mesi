@@ -31,7 +31,6 @@ afterEach(async () => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /information endpoint
- * MATCHES TO: FR - 30
  */
 it("GET /information", async (done) => {
   const response = await request(app).get("/information");
@@ -61,7 +60,6 @@ it("POST /information/add", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks to see if we are able to POST for the /information/add endpoint
-//  * MATCHES TO: FR - 30
 //  */
 it("POST /information/add", async (done) => {
   const response = await request(app).post("/information/add").send({
@@ -81,7 +79,6 @@ it("POST /information/add", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - GET with a specific ID
-//  * MATCHES TO: FR - 30
 //  */
 it("GET /information/:id", async (done) => {
   const response = await request(app).get("/information/" + documentId);
@@ -97,7 +94,6 @@ it("GET /information/:id", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to edit an information with a specific ID
-//  * MATCHES TO: FR-10
 //  */
 it("EDIT /information/:id", async (done) => {
   const response = await request(app)
@@ -127,7 +123,6 @@ it("EDIT /information/:id EXPECT ERROR", async (done) => {
 
 // /**
 //  * ACCEPTANCE TEST - checks if we are able to delete an information with a specific ID
-//  * MATCHES TO: FR-30
 //  */
 it("DELETE /information/:id", async (done) => {
   const response = await request(app).delete("/information/" + documentId);

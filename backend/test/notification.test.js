@@ -30,7 +30,6 @@ afterEach(async () => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /notifications endpoint
- * MATCHES TO: FR - 1, FR - 8
  */
 it("GET /notifications", async (done) => {
   const response = await request(app).get("/notifications");
@@ -62,7 +61,6 @@ it("POST /notifications/add EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks to see if we are able to POST for the /notifications/add endpoint
- * MATCHES TO: FR - 9
  */
 it("POST /notifications/add", async (done) => {
   const response = await request(app)
@@ -80,7 +78,6 @@ it("POST /notifications/add", async (done) => {
 
 /**
  * ACCEPTANCE TEST - GET with a specific ID
- * MATCHES TO: FR - 8
  */
 it("GET /notifications/:id", async (done) => {
   const response = await request(app).get("/notifications/" + documentId);
@@ -93,8 +90,7 @@ it("GET /notifications/:id", async (done) => {
 });
 
 /**
- * ACCEPTANCE TEST - checks if we are able to edit an event with a specific ID
- * MATCHES TO: FR-10
+ * ACCEPTANCE TEST - checks if we are able to edit a notification with a specific ID
  */
 it("EDIT /notifications/edit/:id", async (done) => {
   const response = await request(app)
@@ -123,7 +119,6 @@ it("EDIT /notifications/edit/:id EXPECT ERROR", async (done) => {
 
 /**
  * ACCEPTANCE TEST - checks if we are able to delete an notification with a specific ID
- * MATCHES TO: FR-11
  */
 it("DELETE /notifications/:id", async (done) => {
   const response = await request(app).delete("/notifications/" + documentId);
