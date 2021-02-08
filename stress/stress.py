@@ -15,8 +15,7 @@ except OSError as e:
 	if e.errno != errno.ENOENT: # checks ENOENT != errno.ENOENT(no such file exists)
 		raise # only executed when a different error occurred 
 
-os.system('echo "---- Beginning of Tests ----\n"')
-
+print("---- Beginning Stress Tests ----\n")
 
 requests = ["DELETE", "GET", "GET_2", "POST", "POST_2"]
 routes = [
@@ -40,5 +39,5 @@ for route in routes:
 		count += 1
 		file = route + "/" + request + ext
 		print("---- Stress Testing " + file + " " + str(count) + "/" + str(total) + " ----")
-		os.system('echo "---- Stress Tesing" ' + file + " " + str(count) + "/" + str(total) + " ---- >> report.txt" )
+		os.system('echo ---- Stress Testing ' + file + " " + str(count) + "/" + str(total) + " ---- >> report.txt" )
 		os.system('artillery run --config config.yaml ' + file + " >> report.txt")
