@@ -2,8 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 
 import AppPage from './AppPage';
+import { submitNewsStory } from './functions/NewsStoryFunctions';
 import { BodyInput, Button, TitleInput } from '../shared/SharedComponents';
-import { paragraphs, post, text } from '../shared/SharedFunctions';
+import { text } from '../shared/SharedFunctions';
 
 // Form for creating or updating a news story record
 export default function NewsStoryForm(props) {
@@ -28,29 +29,8 @@ export default function NewsStoryForm(props) {
           onChangeText={(value) => setContent(value)} width={width} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15, marginTop: -15 }}>
-          <Button {...props} color='accent' text='Save' disabled={saving} onPress={() => {
-            // Check for required fields
-            if (title.trim() === '') {
-              props.snackbar('News story title is required');
-              return;
-            }
-            if (content.trim() === '') {
-              props.snackbar('News story content is required');
-              return;
-            }
-            // Update database with new or modified record
-            setSaving(true);
-            post(`${props.baseURL}/newsStories/${props.payload ? `edit/${props.payload.id}` : 'add'}`,
-              { title, content: text(paragraphs(content)), source: 'admin' })
-              // Update locally and return to previous page
-              .then(() => {
-                props.update && props.update();
-                props.navigation.pop();
-              })
-              // Display message if failed
-              .catch(() => props.snackbar('Failed to update database'))
-              .finally(() => setSaving(false));
-          }} />
+          <Button {...props} color='accent' text='Save' disabled={saving}
+            onPress={() => submitNewsStory(props, title, content, setSaving)} />
         </View>
       </View>
     </AppPage>

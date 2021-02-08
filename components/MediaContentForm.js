@@ -2,8 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 
 import AppPage from './AppPage';
+import { submitMediaContent } from './functions/MediaContentFunctions';
 import { BodyInput, Button, Media, MediaPicker, TitleInput } from '../shared/SharedComponents';
-import { paragraphs } from '../shared/SharedFunctions';
 
 // Form for creating or updating a media content record
 export default function MediaContentForm(props) {
@@ -32,36 +32,8 @@ export default function MediaContentForm(props) {
           allowVideo handleResult={setImage} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15 }}>
-          <Button {...props} color='accent' text='Save' onPress={() => {
-              // Check for required fields
-              if (title.trim() === '') {
-                props.snackbar('Post title is required');
-                return;
-              }
-              if (description.trim() === '') {
-                props.snackbar('Post description is required');
-                return;
-              }
-              if (!image) {
-                props.snackbar('No photo or video selected');
-                return;
-              }
-              // Create or update record depending on whether an existing record was given as payload
-              props.setPosts(
-                props.payload
-                  // Find and update existing record
-                  ? props.posts.map(post =>
-                    post.id === props.payload.id
-                      ? { ...post, title, description: paragraphs(description), image }
-                      : post)
-                  // Append new record
-                  : [
-                    ...props.posts,
-                    { id: props.posts.length + 1, title, description: paragraphs(description), image }
-                  ]);
-              // Exit page, return to previous
-              props.navigation.pop();
-            }} />
+          <Button {...props} color='accent' text='Save'
+            onPress={() => submitMediaContent(props, title, description, image, () => {})} />
         </View>
       </View>
     </AppPage>

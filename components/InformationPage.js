@@ -6,9 +6,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
+import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection, fetchInformation }
+  from './functions/InformationFunctions';
 import { BodyInput, Button, Content, IconButton, Media, MediaPicker } from '../shared/SharedComponents';
 import SharedStyles from '../shared/SharedStyles';
-import { get, paragraphs } from '../shared/SharedFunctions';
 
 // Initialize stack navigator
 const Stack = createStackNavigator();
@@ -28,19 +29,7 @@ export default function InformationPage(props) {
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
   // Initial load of data by calling useEffect with [] as second param to run once
-  React.useEffect(() => {
-    // Wait for all content and trigger update to list by setting flag
-    const populate = async () => {
-      await Promise.all(pages.map((page, index) =>
-        get('https://baconipsum.com/api/?type=meat-and-filler').then(content => {
-          let newData = data;
-          newData[index] = { title: page, content, imageTop, imageBottom };
-          setData(newData);
-        })));
-      setFetched(true);
-    };
-    populate();
-  }, []);
+  React.useEffect(() => fetchInformation(props, pages, data, setData, () => setFetched(true)), []);
   // Ignore warnings about nested ScrollViews (small list, not to worry) and YellowBox itself
   React.useEffect(() => YellowBox.ignoreWarnings([
     'VirtualizedLists should never be nested',
@@ -78,17 +67,10 @@ export default function InformationPage(props) {
                       onBlur={Keyboard.dismiss} />
                       <Text style={{ marginHorizontal: 10 }}>
                         {/* Save changes and update state/data */}
-                        <IconButton style={SharedStyles.icon} onPress={() => {
-                          if (pages.includes(editText) && originalText !== editText) {
-                            props.snackbar('Duplicate sections not allowed');
-                            return;
-                          }
-                          setPages(pages.map(page => page === originalText ? editText : page));
-                          setData(data.map(entry =>
-                            entry.title === originalText ? { ...entry, title: editText } : entry));
-                          setOriginalText('');
-                          setEditText('');
-                        }} name='check' type='material' color={props.theme.colors.accent} />
+                        <IconButton style={SharedStyles.icon}
+                          onPress={() => editInfoSection(props, pages, setPages,
+                            data, setData, originalText, setOriginalText, editText, setEditText)}
+                          name='check' type='material' color={props.theme.colors.accent} />
                         {/* Discard changes and collapse edit interface */}
                         <IconButton style={SharedStyles.icon} onPress={() => {
                           setOriginalText('');
@@ -111,11 +93,9 @@ export default function InformationPage(props) {
                           }} name='edit' type='material' color={props.theme.colors.placeholder} />
                           {/* Press and hold for 3 seconds to delete entire section */}
                           <IconButton style={SharedStyles.icon}
-                            onPress={() => props.snackbar('Press and hold to delete')}
-                            delayLongPress={3000} onLongPress={() => {
-                              setPages(pages.filter(page => page !== item));
-                              setData(data.filter(entry => entry.title !== item));
-                          }} name='delete' type='material' color={props.theme.colors.danger} />
+                            onPress={() => props.snackbar('Press and hold to delete')} delayLongPress={3000}
+                            onLongPress={() => deleteInfoSection(props, pages, setPages, data, setData, item)}
+                            name='delete' type='material' color={props.theme.colors.danger} />
                         </Text>}
                     </>}
                 </View>}
@@ -127,16 +107,8 @@ export default function InformationPage(props) {
                 {props.admin &&
                   <View style={{ marginBottom: 15 }}>
                     <Button {...props} text='Add Section'
-                      onPress={() => {
-                        if (pages.includes(newSection)) {
-                          props.snackbar('Rename the previous new section first');
-                          return;
-                        }
-                        setPages([...pages, newSection]);
-                        setData([...data, { title: newSection, content: [] }]);
-                        setOriginalText(newSection);
-                        setEditText(newSection);
-                      }} />
+                      onPress={() => addInfoSection(props, pages, setPages,
+                        data, setData, setOriginalText, setEditText, newSection)} />
                     </View>}
               </ScrollView>} />
           {/* Generated page routes for viewing info sections */}
@@ -200,16 +172,11 @@ export default function InformationPage(props) {
                         <Button {...props} text='Delete Image' onPress={() => setImageBottom(null)} />
                       </View>}
                   </View>
-                  {/* Submit button with logic to update information section */}
+                  {/* Submit button with logic to update information section content */}
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
-                    <Button {...props} color='accent' text='Save' onPress={() => {
-                        setData(data.map(entry =>
-                          page.includes(entry.title)
-                            ? { ...entry, content: paragraphs(editText), imageTop, imageBottom }
-                            : entry));
-                        setEditText('');
-                        localProps.navigation.pop();
-                      }} />
+                    <Button {...props} color='accent' text='Save'
+                      onPress={() => editInfoContent(props, localProps, page, data, setData,
+                        imageTop, imageBottom, editText, setEditText)} />
                   </View>
                 </View>
               </AppPage>} />)}

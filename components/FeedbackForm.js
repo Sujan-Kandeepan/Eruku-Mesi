@@ -2,6 +2,7 @@ import React from 'react';
 import { Keyboard, Text, TextInput, View } from 'react-native';
 
 import AppPage from './AppPage';
+import { feedbackTextChanged, submitFeedback } from './functions/FeedbackFunctions';
 import { Button } from '../shared/SharedComponents';
 
 // Form for submitting user feedback/issues
@@ -13,22 +14,6 @@ export default function FeedbackForm(props) {
   React.useEffect(() => setWidth('auto'));
   // Ensure text does not exceed max length
   const maxLength = 2000;
-  const textChanged = (value) => {
-    if (value.length >= maxLength)
-      props.snackbar('Feedback message is too long');
-    setText(value);
-  };
-  // Validate form and handle submit
-  const handleSubmit = () => {
-    if (text.trim() === '') {
-      props.snackbar('Feedback message is empty');
-    } else {
-      console.log(`Feedback submitted:\n${'-'.repeat(20)}\n${text}\n${'-'.repeat(20)}\n`);
-      props.snackbar('Feedback submitted');
-      Keyboard.dismiss();
-      setText('');
-    }
-  }
   return (
     <AppPage {...props} scroll>
       <View style={{ flex: 1 }}>
@@ -43,10 +28,12 @@ export default function FeedbackForm(props) {
           style={{ backgroundColor: props.theme.colors.card,
             color: props.theme.colors.text, flex: 1, marginHorizontal: 25,
             padding: 20, textAlignVertical: 'top', width }}
-          value={text} onChangeText={textChanged} onBlur={Keyboard.dismiss} />
+          onChangeText={value => feedbackTextChanged(props, value, setText, maxLength)}
+          value={text} onBlur={Keyboard.dismiss} />
         {/* Button to validate and submit feedback */}
         <View style={{ marginHorizontal: 10, marginVertical: 25 }}>
-          <Button {...props} color='accent' text='Submit' onPress={handleSubmit} />
+          <Button {...props} color='accent' text='Submit'
+            onPress={() => submitFeedback(props, text, setText, Keyboard)} />
         </View>
       </View>
     </AppPage>
