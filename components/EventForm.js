@@ -3,6 +3,7 @@ import { Text, View, YellowBox } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import AppPage from './AppPage';
+import { submitEvent } from './functions/EventFunctions';
 import { BodyInput, Button, SimpleInput, TitleInput } from '../shared/SharedComponents';
 import { currentDate, paragraphs, showDate, showTime } from '../shared/SharedFunctions';
 
@@ -62,36 +63,8 @@ export default function EventForm(props) {
           onChangeText={(value) => setDescription(value)} width={width} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15, marginTop: -15 }}>
-          <Button {...props} color='accent' text='Save' onPress={() => {
-              // Check for required fields
-              if (title.trim() === '') {
-                props.snackbar('Event title is required');
-                return;
-              }
-              if (location.trim() === '') {
-                props.snackbar('Event location is required');
-                return;
-              }
-              if (description.trim() === '') {
-                props.snackbar('Event description is required');
-                return;
-              }
-              // Create or update record depending on whether an existing record was given as payload
-              props.setEvents(
-                props.payload
-                  // Find and update existing record
-                  ? props.events.map(event =>
-                    event.id === props.payload.id
-                      ? { ...event, title, date, location, description: paragraphs(description) }
-                      : event)
-                  // Append new record
-                  : [
-                    ...props.events,
-                    { id: props.events.length + 1, title, date, location, description: paragraphs(description) }
-                  ]);
-              // Exit page, return to previous
-              props.navigation.pop();
-            }} />
+          <Button {...props} color='accent' text='Save'
+            onPress={() => submitEvent(props, title, date, location, description, () => {})} />
         </View>
       </View>
     </AppPage>
