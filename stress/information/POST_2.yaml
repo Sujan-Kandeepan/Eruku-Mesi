@@ -1,0 +1,14 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+scenarios: 
+  - flow:
+      - post:
+          url: "http://localhost:4000/information/add/"
+          json:
+                title: "This is a test!edit"
+                content: "TESTING"
+          expect:
+            statusCode: 200

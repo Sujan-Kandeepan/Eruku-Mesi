@@ -42,7 +42,7 @@ router.post("/edit/:id", async function (req, res) {
   let notificationBody = req.body;
   let query = { _id: req.params.id };
 
-  if (Object.keys(notificationBody).length === 0) {
+  if (notificationBody.length === 0) {
     return res.status(400).json({
       status: "error",
       message: "No field to update with",
