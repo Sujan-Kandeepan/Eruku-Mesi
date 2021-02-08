@@ -6,9 +6,9 @@ config:
 scenarios: 
   - flow:
       - post:
-          url: "http://localhost:4000/messages/edit/5ffb5406ee35744495bf5908"
+          url: "http://localhost:4000/messages/edit/faultyID"
           json:
                 sender: "5ffb4dbeee35744495bf58fc"
                 message: "editted content"
           expect:
-            statusCode: 200
+            statusCode: 500

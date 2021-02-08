@@ -6,11 +6,11 @@ config:
 scenarios: 
   - flow:
       - post:
-          url: "http://localhost:4000/files/edit/5ffbc7560896f9558090a1fc"
+          url: "http://localhost:4000/files/edit/faultyID"
           json:
                 tile: "This is a test !"
                 url: "www.stresstesting.testing.testing"
           expect:
-            statusCode: 200
+            statusCode: 500
 
 

@@ -6,6 +6,6 @@ config:
 scenarios: 
   - flow:
       - delete:
-          url: "http://localhost:4000/information/601efc23fc59f747183ee6e7"
+          url: "http://localhost:4000/information/faultyID"
           expect:
-            statusCode: 200
+            statusCode: 500

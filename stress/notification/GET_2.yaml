@@ -5,7 +5,7 @@ config:
       arrivalRate: 1
 scenarios: 
   - flow:
-      - delete:
-          url: "http://localhost:4000/messages/faultyID"
-          expect:
+      - get:
+          url: "/notifications/faultyID"
+        expect:
             statusCode: 500

@@ -6,6 +6,6 @@ config:
 scenarios: 
   - flow:
       - delete:
-          url: "http://localhost:4000/messages/faultyID"
+          url: "http://localhost:4000/notifications/faultyID"
           expect:
             statusCode: 500

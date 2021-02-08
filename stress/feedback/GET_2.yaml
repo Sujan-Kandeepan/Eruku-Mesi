@@ -6,7 +6,7 @@ config:
 scenarios: 
   - flow:
       - get:
-          url: "/feedback/601ef4e1131f86304cb22760"
+          url: "/feedback/faultyID"
         expect:
-            statusCode: 200
+            statusCode: 500
 

@@ -6,7 +6,7 @@ config:
 scenarios: 
   - flow:
       - get:
-          url: "/files/5ffbc7560896f9558090a1fc"
+          url: "/files/faultyID"
         expect:
-            statusCode: 200
+            statusCode: 500
 

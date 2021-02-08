@@ -6,10 +6,10 @@ config:
 scenarios: 
   - flow:
       - post:
-          url: "http://localhost:4000/feedback/edit/601ef4e3131f86304cb22762"
+          url: "http://localhost:4000/feedback/edit/faultyID"
           json:
                 text: "This is a test edited!"
           expect:
-            statusCode: 200
+            statusCode: 500
 
 

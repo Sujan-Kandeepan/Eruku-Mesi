@@ -6,6 +6,6 @@ config:
 scenarios: 
   - flow:
       - get:
-          url: "/messages/5ffb521eee35744495bf5905"
+          url: "/messages/faultyID"
         expect:
-            statusCode: 200
+            statusCode: 500
