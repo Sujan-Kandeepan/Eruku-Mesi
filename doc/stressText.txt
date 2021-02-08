@@ -1,4 +1,0 @@
-1. install artillery
-2. setup config and scenario in yaml file
-3. run test definiton by using command 
-	"artillery run --output report.json <script-name>.yaml"
