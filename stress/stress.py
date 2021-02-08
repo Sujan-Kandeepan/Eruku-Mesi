@@ -12,7 +12,7 @@ filename = 'report.txt'
 try:
     os.remove(filename)
 except OSError as e: 
-	if e.errno != errno.ENOENT: # checks ENOENT = errno.ENOENT = no such file exists 
+	if e.errno != errno.ENOENT: # checks ENOENT = errno.ENOENT(no such file exists)
 		raise # only executed when a different error occurred 
 
 os.system('echo "---- Beginning of Tests ----\n"')
