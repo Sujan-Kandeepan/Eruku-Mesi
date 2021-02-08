@@ -39,7 +39,7 @@ router.post("/edit/:id", async function (req, res) {
   let eventBody = req.body;
   let query = { _id: req.params.id };
 
-  if (Event.keys(eventBody).length === 0) {
+  if (eventBody.length === 0) {
     return res.status(400).json({
       status: "error",
       message: "No field to update with",
@@ -50,7 +50,7 @@ router.post("/edit/:id", async function (req, res) {
     const event = await Event.updateOne(query, eventBody);
     return res
       .status(200)
-      .json({ msg: "event successfully updated", event: event });
+      .json({ eventBody: eventBody, msg: "event successfully updated", event: event });
   } catch (e) {
     return res.status(500).json(e);
   }
