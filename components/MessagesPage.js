@@ -62,7 +62,7 @@ export default function MessagesPage(props) {
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <IconButton {...props} style={{ marginLeft: 15 }} name='send' type='material'
               color={props.theme.colors.accent}
-              onPress={() => sendMessage(props, messages, setMessages, newMessage, setNewMessage, list)} />
+              onPress={() => sendMessage(props, setMessages, newMessage, setNewMessage, list)} />
           </View>
         </View>
       </View>
