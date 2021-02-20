@@ -1,4 +1,4 @@
-import { get, paragraphs } from '../../shared/SharedFunctions';
+import { del, get, paragraphs, post } from '../../shared/SharedFunctions';
 
 // Fetch events and populate component state array
 export const fetchEvents = (props, setEvents, callback) => {
@@ -26,25 +26,23 @@ export const submitEvent = (props, title, date, location, description, setSaving
     props.snackbar('Event description is required');
     return;
   }
-  // Create or update record depending on whether an existing record was given as payload
-  props.setEvents(
-    props.payload
-      // Find and update existing record
-      ? props.events.map(event =>
-        event.id === props.payload.id
-          ? { ...event, title, date, location, description: paragraphs(description) }
-          : event)
-      // Append new record
-      : [
-        ...props.events,
-        { id: props.events.length + 1, title, date, location, description: paragraphs(description) }
-      ]);
-  // Exit page, return to previous
-  props.navigation.pop();
+  // Update database with new or modified record
+  setSaving(true);
+  post(`${props.baseURL}/events/${props.payload ? `edit/${props.payload.id}` : 'add'}`,
+    { title, date, location, description })
+    // Update locally and return to previous page
+    .then(() => {
+      props.update && props.update();
+      props.navigation.pop();
+    })
+    // Display message if failed
+    .catch(() => props.snackbar('Failed to update database'))
+    .finally(() => setSaving(false));
 };
 
 // Handle confirmation step to delete event record
-export const deleteEvent = (props, event, events, setEvents, setFetched, callback) => {
-  setEvents(events.filter(e => e.id !== event.id));
-  callback();
-};
+export const deleteEvent = (props, event, setEvents, setFetched, callback) => 
+  del(`${props.baseURL}/events/${event.id}`)
+    .then(() => fetchEvents(props, setEvents, () => setFetched(true)))
+    .catch(() => props.snackbar('Failed to update database'))
+    .finally(callback);

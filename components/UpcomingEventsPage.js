@@ -130,7 +130,8 @@ export default function UpcomingEventsPage(props) {
           {props.admin &&
             <Stack.Screen name={pages.createEvent} children={(localProps) =>
               // Separate form with no payload to indicate new record
-              <EventForm {...props} {...localProps} events={events} setEvents={setEvents} />} />}
+              <EventForm {...props} {...localProps} events={events} setEvents={setEvents}
+                update={() => fetchEvents(props, setEvents, () => setFetched(true))} />} />}
           {/* Generated page routes for viewing events */}
           {events.map(event =>
             <Stack.Screen key={event.id} name={pages.viewEvent(event.id)} children={(localProps) =>
@@ -152,14 +153,15 @@ export default function UpcomingEventsPage(props) {
             <Stack.Screen key={event.id} name={pages.editEvent(event.id)} children={(localProps) =>
               // Separate form with existing record as payload
               <EventForm {...props} {...localProps}
-                events={events} setEvents={setEvents} payload={event} />} />)}
+                events={events} setEvents={setEvents} payload={event}
+                update={() => fetchEvents(props, setEvents, () => setFetched(true))} />} />)}
           {/* Generated page routes for deleting events */}
           {props.admin && events.map(event =>
             <Stack.Screen key={event.id} name={pages.deleteEvent(event.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' color='danger'
-                  onPress={() => deleteEvent(props, event, events, setEvents, setFetched, localProps.navigation.popToTop)} />
+                  onPress={() => deleteEvent(props, event, setEvents, setFetched, localProps.navigation.popToTop)} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {event.title}?
                 </Text>
