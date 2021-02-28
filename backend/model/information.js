@@ -12,12 +12,10 @@ let Information = new Schema({
     required: true,
   },
   imageTop: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Photo",
+    type: String,
   },
   imageBottom: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Photo",
+    type: String,
   },
 });
 module.exports = informationDB.model("Information", Information, "Information");
