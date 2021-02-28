@@ -49,13 +49,12 @@ app.use(
 const accounts = require("./routes/accounts");
 const events = require("./routes/events");
 const feedback = require("./routes/feedback");
-const files = require("./routes/files");
 const information = require("./routes/information");
 const messages = require("./routes/messages");
 const newsStories = require("./routes/newsStories");
 const notifications = require("./routes/notifications");
-const photos = require("./routes/photos");
 const settings = require("./routes/settings");
+const mediaContent = require("./routes/mediaContent");
 
 /**
  * Creating the routes through the router.
@@ -64,13 +63,12 @@ const settings = require("./routes/settings");
 app.use("/accounts", accounts);
 app.use("/events", events);
 app.use("/feedback", feedback);
-app.use("/files", files);
 app.use("/information", information);
 app.use("/messages", messages);
 app.use("/newsStories", newsStories);
 app.use("/notifications", notifications);
-app.use("/photos", photos);
 app.use("/settings", settings);
+app.use("/mediaContent", mediaContent)
 
 // app.listen(PORT, function () {
 //   console.log("Server is running on port: " + PORT);

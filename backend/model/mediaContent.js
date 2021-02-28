@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const mediaContentsDB = mongoose.connection.useDb("MediaContents");
+const mediaContentDB = mongoose.connection.useDb("MediaContent");
 
-let File = new Schema({
+let MediaContent = new Schema({
   title: {
     type: String,
     required: true,
@@ -18,5 +18,10 @@ let File = new Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    enum: ["photo", "file"],
+    required: true,
+  }
 });
-module.exports = mediaContentsDB.model("File", File, "File");
+module.exports = mediaContentDB.model("MediaContent", MediaContent, "MediaContent");

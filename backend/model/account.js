@@ -40,15 +40,7 @@ let Account = new Schema({
     default: null,
   },
   location: {
-    city: {
-      type: String,
-    },
-    province: {
-      type: String,
-    },
-    country: {
-      type: String,
-    },
+    type: String,
   },
   accountType: {
     type: String,
