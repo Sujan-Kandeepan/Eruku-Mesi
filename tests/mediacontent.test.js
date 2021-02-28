@@ -104,11 +104,11 @@ describe('Media Content', () => {
     let props = { snackbar: () => { } };
     let post = { id: 1, title: 'title', description: 'description', image };
     let posts = [];
-    let setPosts = () => { };
+    let setPosts = value => posts = value;
     let setFetched = () => { };
     fetch.mockResponseOnce(JSON.stringify({}));
     fetch.mockResponseOnce(JSON.stringify([]));
-    deleteMediaContent(props, post, posts, setPosts, setFetched, () => {
+    deleteMediaContent(props, post, setPosts, setFetched, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(2);
         expect(fetch.mock.calls[0][0]).toContain('mediaContent');
