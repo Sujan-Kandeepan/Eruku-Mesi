@@ -12,12 +12,6 @@ let Notification = new Schema({
     type: String,
     required: true,
   },
-  readBy: [
-    {
-      readerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      readAt: { type: Date, default: Date.now },
-    },
-  ],
   createdAt: {
     type: Date,
     default: Date.now,

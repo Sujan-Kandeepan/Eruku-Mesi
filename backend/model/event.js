@@ -12,15 +12,7 @@ let Event = new Schema({
     required: true,
   },
   location: {
-    city: {
-      type: String,
-    },
-    province: {
-      type: String,
-    },
-    country: {
-      type: String,
-    },
+    type: String,
   },
   description: {
     type: String,
@@ -33,9 +25,8 @@ let Event = new Schema({
     type: String,
   },
   media: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [ String ],
     default: [],
-    ref: "MediaContent",
   },
 });
 module.exports = eventDB.model("Event", Event, "Event");

@@ -37,9 +37,8 @@ let NewsStory = new Schema({
     default: "featured",
   },
   media: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [ String ],
     default: [],
-    ref: "MediaContent",
   },
 });
 module.exports = NewsStoriesDB.model("NewsStory", NewsStory, "NewsStory");
