@@ -7,10 +7,7 @@ describe('Messages', () => {
     fetch.resetMocks()
   });
 
-  test('Fetches messages', done => {
-    let props = { snackbar: () => { } };
-    let messages = [];
-    let setMessages = value => messages = value;
+  const mockMessages = () => {
     fetch.mockResponseOnce(JSON.stringify(
       [
         {
@@ -30,6 +27,13 @@ describe('Messages', () => {
         }
       }
     ));
+  };
+
+  test('Fetches messages', done => {
+    let props = { snackbar: () => { } };
+    let messages = [];
+    let setMessages = value => messages = value;
+    mockMessages();
     fetchMessages(props, setMessages, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(2);
@@ -56,25 +60,31 @@ describe('Messages', () => {
     let newMessage = '';
     let setNewMessage = value => newMessage = value;
     let list = { scrollToEnd: () => { } };
-    sendMessage(props, messages, setMessages, newMessage, setNewMessage, list);
+    sendMessage(props, setMessages, newMessage, setNewMessage, list);
     expect(fetch.mock.calls.length).toEqual(0);
     expect(messages.length).toEqual(0);
     expect(newMessage).toEqual('');
     expect(message.toLowerCase()).toContain('empty');
   });
 
-  test('Posts new message', () => {
+  test('Posts new message', done => {
     let message = '';
     let props = { snackbar: value => message = value };
     let messages = [];
     let setMessages = value => messages = value;
-    let newMessage = 'test';
+    let newMessage = 'SAMPLE MESSAGE BY ADMIN USER.';
     let setNewMessage = value => newMessage = value;
     let list = { scrollToEnd: () => { } };
-    sendMessage(props, messages, setMessages, newMessage, setNewMessage, list);
-    expect(fetch.mock.calls.length).toEqual(1);
-    expect(fetch.mock.calls[0][0]).toContain('messages/add');
-    expect(messages.length).toEqual(1);
-    expect(newMessage).toEqual('');
+    fetch.mockResponseOnce(JSON.stringify({}));
+    mockMessages();
+    sendMessage(props, setMessages, newMessage, setNewMessage, list, () => {
+      expect(fetch.mock.calls.length).toEqual(3);
+      expect(fetch.mock.calls[0][0]).toContain('messages/add');
+      expect(fetch.mock.calls[1][0]).toContain('messages');
+      expect(fetch.mock.calls[2][0]).toContain('accounts/5ffb4dbeee35744495bf58fc');
+      expect(messages.length).toEqual(1);
+      expect(newMessage).toEqual('');
+      done();
+    });
   });
 });

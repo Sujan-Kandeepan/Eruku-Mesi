@@ -1,59 +1,98 @@
-import { get, paragraphs } from '../../shared/SharedFunctions';
+import { del, get, paragraphs, post } from '../../shared/SharedFunctions';
 
 // Fetch information and populate component state array
-export const fetchInformation = (props, pages, data, setData, callback) => {
-  // Wait for all content and trigger update to list by setting flag
-  const populate = async () => {
-    await Promise.all(pages.map((page, index) =>
-      get('https://baconipsum.com/api/?type=meat-and-filler').then(content => {
-        let newData = data;
-        newData[index] = { title: page, content, imageTop: null, imageBottom: null };
-        setData(newData);
-      })));
-    callback();
-  };
-  populate();
+export const fetchInformation = (props, setPages, setData, callback) => {
+  get(`${props.baseURL}/information`)
+    .then(response => {
+        setPages(response.map(item => item.title));
+        setData(response.map(item =>
+          ({ id: item._id, title: item.title, content: paragraphs(item.content),
+            imageTop: null, imageBottom: null })));
+      })
+    .catch(() => props.snackbar('Unable to fetch information'))
+    .finally(callback);
 };
 
 // Add new information section and update interface upon success
-export const addInfoSection = (props, pages, setPages, data, setData, setOriginalText, setEditText, newSection) => {
+export const addInfoSection = (props, pages, setPages, data, setData,
+  setOriginalText, setEditText, newSection, callback) => {
   if (pages.includes(newSection)) {
     props.snackbar('Rename the previous new section first');
     return;
   }
-  setPages([...pages, newSection]);
-  setData([...data, { title: newSection, content: [], imageTop: null, imageBottom: null }]);
-  setOriginalText(newSection);
-  setEditText(newSection);
+  post(`${props.baseURL}/information/add`,
+    { title: newSection, content: 'Nothing here yet...', imageTop: null, imageBottom: null })
+    // Update locally within same page
+    .then(() => {
+      fetchInformation(props, setPages, setData, () => {
+        setOriginalText(newSection);
+        setEditText(newSection);
+        callback && callback();
+      });
+    })
+    // Display message if failed
+    .catch(() => {
+      props.snackbar('Failed to update database');
+      callback && callback();
+    });
 };
 
 // Edit information section name and update interface upon success
 export const editInfoSection = (props, pages, setPages, data, setData,
-  originalText, setOriginalText, editText, setEditText) => {
+  originalText, setOriginalText, editText, setEditText, callback) => {
   if (pages.includes(editText) && originalText !== editText) {
     props.snackbar('Duplicate sections not allowed');
     return;
   }
-  setPages(pages.map(page => page === originalText ? editText : page));
-  setData(data.map(entry =>
-    entry.title === originalText ? { ...entry, title: editText } : entry));
-  setOriginalText('');
-  setEditText('');
+  const found = data.find(entry => entry.title == originalText);
+  post(`${props.baseURL}/information/edit/${found.id}`, { title: editText })
+    // Update locally within same page
+    .then(() => {
+      fetchInformation(props, setPages, setData, () => {
+        setOriginalText('');
+        setEditText('');
+        callback && callback();
+      });
+    })
+    // Display message if failed
+    .catch(() => {
+      props.snackbar('Failed to update database');
+      callback && callback();
+    });
 };
 
 // Delete information section and update interface upon success
-export const deleteInfoSection = (props, pages, setPages, data, setData, item) => {
-  setPages(pages.filter(page => page !== item));
-  setData(data.filter(entry => entry.title !== item));
+export const deleteInfoSection = (props, pages, setPages, data, setData, item, callback) => {
+  const found = data.find(entry => entry.title == item);
+  del(`${props.baseURL}/information/${found.id}`, found)
+    // Update locally within same page
+    .then(() => {
+      fetchInformation(props, setPages, setData, callback);
+    })
+    // Display message if failed
+    .catch(() => {
+      props.snackbar('Failed to update database');
+      callback && callback();
+    });
 };
 
 // Edit information section content and return to content view
-export const editInfoContent = (props, localProps, page, data, setData,
-  imageTop, imageBottom, editText, setEditText) => {
-  setData(data.map(entry =>
-    page.includes(entry.title)
-      ? { ...entry, content: paragraphs(editText), imageTop, imageBottom }
-      : entry));
-  setEditText('');
-  localProps.navigation.pop();
+export const editInfoContent = (props, localProps, page, setPages, data, setData,
+  imageTop, imageBottom, editText, setEditText, callback) => {
+  const found = data.find(entry => page.includes(entry.title));
+  post(`${props.baseURL}/information/edit/${found.id}`, { content: editText, imageTop, imageBottom })
+    // Update locally within same page
+    .then(() => {
+      fetchInformation(props, setPages, setData, () => {
+        setEditText('');
+        localProps.navigation.pop();
+        callback && callback();
+      });
+    })
+    // Display message if failed
+    .catch((error) => {
+      console.log(error);
+      props.snackbar('Failed to update database');
+      callback && callback();
+    });
 };

@@ -14,6 +14,8 @@ export default function MediaContentForm(props) {
   const [image, setImage] = React.useState(props.payload ? props.payload.image : null);
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
+  // Disable save button while database operation processing
+  const [saving, setSaving] = React.useState(false);
   React.useEffect(() => setWidth('auto'));
   return (
     <AppPage {...props} nested cancel scroll>
@@ -33,7 +35,7 @@ export default function MediaContentForm(props) {
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15 }}>
           <Button {...props} color='accent' text='Save'
-            onPress={() => submitMediaContent(props, title, description, image, () => {})} />
+            onPress={() => submitMediaContent(props, title, description, image, setSaving)} />
         </View>
       </View>
     </AppPage>

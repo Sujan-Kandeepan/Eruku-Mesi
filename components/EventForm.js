@@ -19,6 +19,8 @@ export default function EventForm(props) {
   const [show, setShow] = React.useState(false);
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
+  // Disable save button while database operation processing
+  const [saving, setSaving] = React.useState(false);
   React.useEffect(() => setWidth('auto'));
   // Ignore warnings about date picker (still works, warning is superfluous) and YellowBox itself
   React.useEffect(() => YellowBox.ignoreWarnings([
@@ -63,8 +65,8 @@ export default function EventForm(props) {
           onChangeText={(value) => setDescription(value)} width={width} />
         {/* Submit button with form validation */}
         <View style={{ marginBottom: 15, marginTop: -15 }}>
-          <Button {...props} color='accent' text='Save'
-            onPress={() => submitEvent(props, title, date, location, description, () => {})} />
+          <Button {...props} color='accent' text='Save' disabled={saving}
+            onPress={() => submitEvent(props, title, date, location, description, setSaving)} />
         </View>
       </View>
     </AppPage>

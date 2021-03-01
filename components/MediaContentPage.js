@@ -48,7 +48,7 @@ export default function MediaContentPage(props) {
                       {item && item.title}
                     </Text>
                     <Text style={{ color: props.theme.colors.text }}>
-                      {item && truncate(item.description[0], 10)}
+                      {item && truncate(item.description.length ? item.description[0] : "", 10)}
                     </Text>
                     <Media image={item.image} thumbnail
                       scale={{ image: item.image, marginHorizontal: 30, maxHeight: 200 }}
@@ -59,7 +59,8 @@ export default function MediaContentPage(props) {
           {props.admin &&
             <Stack.Screen name={pages.postMediaContent} children={(localProps) =>
               // Separate form with no payload to indicate new record
-              <MediaContentForm {...props} {...localProps} posts={posts} setPosts={setPosts} />} />}
+              <MediaContentForm {...props} {...localProps} posts={posts} setPosts={setPosts}
+              update={() => fetchMediaContent(props, setPosts, () => setFetched(true))} />} />}
           {/* Generated page routes for viewing media content */}
           {posts.map(post => 
             <Stack.Screen key={post.id} name={pages.viewMediaContent(post.id)} children={(localProps) =>
@@ -80,14 +81,15 @@ export default function MediaContentPage(props) {
             <Stack.Screen key={post.id} name={pages.editMediaContent(post.id)} children={(localProps) =>
               // Separate form with existing record as payload
               <MediaContentForm {...props} {...localProps}
-                posts={posts} setPosts={setPosts} payload={post} />} />)}
+                posts={posts} setPosts={setPosts}
+                update={() => fetchMediaContent(props, setPosts, () => setFetched(true))} payload={post} />} />)}
           {/* Generated page routes for deleting media content */}
           {props.admin && posts.map(post =>
             <Stack.Screen key={post.id} name={pages.deleteMediaContent(post.id)} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel>
                 {/* Confirm button with prompt, cancel button inherited */}
                 <Button {...props} {...localProps} text='Confirm' color='danger'
-                  onPress={() => deleteMediaContent(props, post, posts, setPosts, setFetched, localProps.navigation.popToTop)} />
+                  onPress={() => deleteMediaContent(props, post, setPosts, setFetched, localProps.navigation.popToTop)} />
                 <Text style={{ color: props.theme.colors.text, margin: 15, textAlign: 'center' }}>
                   Are you sure you want to delete {post.title}?
                 </Text>

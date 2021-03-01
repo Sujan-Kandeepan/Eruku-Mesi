@@ -43,7 +43,7 @@ describe('Feedback', () => {
     expect(text).toEqual('');
   });
 
-  test('Submits feedback message if not empty', () => {
+  test('Submits feedback message if not empty', done => {
     let message = '';
     let props = { snackbar: value => message = value };
     let text = 'feedback';
@@ -54,14 +54,16 @@ describe('Feedback', () => {
       text: 'feedback',
       __v: 0
     }));
-    submitFeedback(props, text, setText, keyboard);
-    expect(fetch.mock.calls.length).toEqual(1);
-    expect(fetch.mock.calls[0][0]).toContain('feedback');
-    expect(fetch.mock.calls[0][1].method).toBe('POST');
-    expect(JSON.parse(fetch.mock.calls[0][1].body))
-      .toMatchObject({ text: 'feedback' });
-    expect(message.toLowerCase()).toMatch(/.*(feedback|submitted|received|success).*/);
-    expect(keyboard.dismiss).toHaveBeenCalled();
-    expect(text).toEqual('');
+    submitFeedback(props, text, setText, keyboard, () => {
+      expect(fetch.mock.calls.length).toEqual(1);
+      expect(fetch.mock.calls[0][0]).toContain('feedback/add');
+      expect(fetch.mock.calls[0][1].method).toBe('POST');
+      expect(JSON.parse(fetch.mock.calls[0][1].body))
+        .toMatchObject({ text: 'feedback' });
+      expect(message.toLowerCase()).toMatch(/.*(feedback|submitted|received|success).*/);
+      expect(keyboard.dismiss).toHaveBeenCalled();
+      expect(text).toEqual('');
+      done();
+    });
   });
 });

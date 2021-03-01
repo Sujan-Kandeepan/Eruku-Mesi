@@ -17,8 +17,8 @@ const Stack = createStackNavigator();
 // Page for displaying informational content under a modifiable list of sections
 export default function InformationPage(props) {
   // State variables for dynamic page information (two-way data binding)
-  const [pages, setPages] = React.useState(['General', 'About Us', 'History', 'Contact']);
-  const [data, setData] = React.useState(pages.map(page => ({ title: page, content: ['Loading...'] })));
+  const [pages, setPages] = React.useState([]);
+  const [data, setData] = React.useState([]);
   const [originalText, setOriginalText] = React.useState('');
   const [editText, setEditText] = React.useState('');
   const [imageTop, setImageTop] = React.useState(null);
@@ -29,7 +29,7 @@ export default function InformationPage(props) {
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
   // Initial load of data by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchInformation(props, pages, data, setData, () => setFetched(true)), []);
+  React.useEffect(() => fetchInformation(props, setPages, setData, () => setFetched(true)), []);
   // Ignore warnings about nested ScrollViews (small list, not to worry) and YellowBox itself
   React.useEffect(() => YellowBox.ignoreWarnings([
     'VirtualizedLists should never be nested',
@@ -45,6 +45,10 @@ export default function InformationPage(props) {
             // Implementation with no warnings (bug persists which is fixed by nested scroll views):
             // https://nyxo.app/fixing-virtualizedlists-should-never-be-nested-inside-plain-scrollviews
             <ScrollView>
+              {!fetched &&
+                <Text style={{ color: props.theme.colors.text, marginTop: 15, textAlign: 'center' }}>
+                  Loading information...
+                </Text>}
               {/* Draggable version of FlatList displaying individual sections with options */}
               {/* Reference: https://github.com/computerjazz/react-native-draggable-flatlist */}
               <DraggableFlatList scrollEnabled={false} data={pages} renderItem={({ drag, item }) =>
@@ -104,7 +108,7 @@ export default function InformationPage(props) {
                 // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
                 extraData={{ originalText, editText }} />
                 {/* Add new section and update state/data */}
-                {props.admin &&
+                {props.admin && fetched &&
                   <View style={{ marginBottom: 15 }}>
                     <Button {...props} text='Add Section'
                       onPress={() => addInfoSection(props, pages, setPages,
@@ -175,7 +179,7 @@ export default function InformationPage(props) {
                   {/* Submit button with logic to update information section content */}
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
                     <Button {...props} color='accent' text='Save'
-                      onPress={() => editInfoContent(props, localProps, page, data, setData,
+                      onPress={() => editInfoContent(props, localProps, page, setPages, data, setData,
                         imageTop, imageBottom, editText, setEditText)} />
                   </View>
                 </View>

@@ -76,7 +76,7 @@ describe('Upcoming Events', () => {
     expect(fetch.mock.calls[0][0]).toContain('events/add');
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body))
-      .toMatchObject({ title: 'title', date: now, location: 'location', description: 'description' });
+      .toMatchObject({ title: 'title', date: now.toISOString(), location: 'location', description: 'description' });
   });
 
   test('Makes request to update event', () => {
@@ -92,13 +92,13 @@ describe('Upcoming Events', () => {
     let saving = false;
     let setSaving = value => saving = value;
     fetch.mockResponseOnce(JSON.stringify({}));
-    submitEvent(props, 'title', new Date(), 'location', 'description', setSaving);
+    submitEvent(props, 'title', now, 'location', 'description', setSaving);
     expect(saving).toBe(true);
     expect(fetch.mock.calls.length).toEqual(1);
     expect(fetch.mock.calls[0][0]).toContain('events/edit/1');
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body))
-      .toMatchObject({ title: 'title', date: now, location: 'location', description: 'description' });
+      .toMatchObject({ title: 'title', date: now.toISOString(), location: 'location', description: 'description' });
   });
 
   test('Deletes event', done => {
@@ -110,7 +110,7 @@ describe('Upcoming Events', () => {
     let setFetched = () => { };
     fetch.mockResponseOnce(JSON.stringify({}));
     fetch.mockResponseOnce(JSON.stringify([]));
-    deleteEvent(props, event, events, setEvents, setFetched, () => {
+    deleteEvent(props, event, setEvents, setFetched, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(2);
         expect(fetch.mock.calls[0][0]).toContain('events');

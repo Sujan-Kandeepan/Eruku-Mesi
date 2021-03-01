@@ -1,14 +1,14 @@
-import { get, paragraphs } from '../../shared/SharedFunctions';
+import { del, get, paragraphs, post } from '../../shared/SharedFunctions';
 
 // Fetch posts and populate component state array
 export const fetchMediaContent = (props, setPosts, callback) => {
-  // Wait for all posts and trigger update to list by setting flag
-  const image = { cancelled: false, height: 359, uri: 'https://bit.ly/3sAOAp8', type: 'image', width: 640 };
-  // Using lorem ipsum data for now with single post
-  get('https://baconipsum.com/api/?type=all-meat&sentences=3')
-    .then(description => setPosts([{ id: 1, title: `Example Post`, description, image }]))
+  get(`${props.baseURL}/mediaContent`)
+    .then(response =>
+      setPosts(response.map(item =>
+        ({ id: item._id, title: item.title, description: paragraphs(item.description || ""),
+          image: { uri: item.url } }))))
     .catch(() => props.snackbar('Unable to fetch posts'))
-    .finally(callback)
+    .finally(callback);
 };
 
 // Handle submit of media content form to create or update media content record
@@ -26,25 +26,23 @@ export const submitMediaContent = (props, title, description, image, setSaving) 
     props.snackbar('No photo or video selected');
     return;
   }
-  // Create or update record depending on whether an existing record was given as payload
-  props.setPosts(
-    props.payload
-      // Find and update existing record
-      ? props.posts.map(post =>
-        post.id === props.payload.id
-          ? { ...post, title, description: paragraphs(description), image }
-          : post)
-      // Append new record
-      : [
-        ...props.posts,
-        { id: props.posts.length + 1, title, description: paragraphs(description), image }
-      ]);
-  // Exit page, return to previous
-  props.navigation.pop();
+  // Update database with new or modified record
+  setSaving(true);
+  post(`${props.baseURL}/mediaContent/${props.payload ? `edit/${props.payload.id}` : 'add'}`,
+    { title, description: description, image, url: image.uri, type: "photo" })
+    // Update locally and return to previous page
+    .then(() => {
+      props.update && props.update();
+      props.navigation.pop();
+    })
+    // Display message if failed
+    .catch(() => props.snackbar('Failed to update database'))
+    .finally(() => setSaving(false));
 };
 
 // Handle confirmation step to delete new story record
-export const deleteMediaContent = (props, post, posts, setPosts, setFetched, callback) => {
-  setPosts(posts.filter(p => p.id !== post.id));
-  callback();
-}
+export const deleteMediaContent = (props, post, setPosts, setFetched, callback) =>
+  del(`${props.baseURL}/mediaContent/${post.id}`)
+    .then(() => fetchMediaContent(props, setPosts, () => setFetched(true)))
+    .catch(() => props.snackbar('Failed to update database'))
+    .finally(callback);
