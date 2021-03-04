@@ -19,17 +19,19 @@ let Account = new Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
   phoneVerified: {
     type: Boolean,
     default: false,
   },
   hash: {
     type: String,
-    required: true,
   },
   salt: {
     type: String,
-    required: true,
   },
   passwordResetToken: {
     type: String,
