@@ -12,8 +12,7 @@ router.post("/add", async function (req, res) {
   req.assert("firstName", "Account: firstName must have content").notEmpty();
   req.assert("lastName", "Account: lastname must be set").notEmpty();
   req.assert("phone", "Account: phone must have content").notEmpty();
-  req.assert("hash", "Account: hash must be set").notEmpty();
-  req.assert("salt", "Account: salt must have content").notEmpty();
+  req.assert("email", "Account: email must be set").notEmpty();
 
   let errors = req.validationErrors();
 
