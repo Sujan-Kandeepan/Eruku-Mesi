@@ -6,17 +6,17 @@ export const fetchMessages = (props, setMessages, callback) => {
     .then(response => {
       let names = {};
       Promise.all(response.map(item =>
-        get(`${props.baseURL}/accounts/${item.from}`)
+        get(`${props.baseURL}/accounts/${item.sender}`)
           .then(account =>
-            names[item.from] =
+            names[item.sender] =
               account && account.account
                 ? `${account.account.firstName} ${account.account.lastName}`
                 : 'Unknown User')
-          .catch(() => names[item.from] = 'Unknown User')
+          .catch(() => names[item.sender] = 'Unknown User')
         ))
         .then(() => setMessages(response.map(item => ({
           id: item._id,
-          sender: names[item.from],
+          sender: names[item.sender],
           content: item.message
         }))))
         .finally(callback);
@@ -33,7 +33,7 @@ export const sendMessage = (props, setMessages, newMessage, setNewMessage, list,
     props.snackbar('Message is empty');
     return;
   }
-  post(`${props.baseURL}/messages/add`, { sender: '5ffb51c8ee35744495bf5903', message: newMessage })
+  post(`${props.baseURL}/messages/add`, { sender: props.user._id, message: newMessage })
     // Clear message input field and scroll to bottom
     .then(() => {
       setNewMessage('');

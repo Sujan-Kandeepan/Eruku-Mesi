@@ -11,7 +11,7 @@ import SharedStyles from '../shared/SharedStyles';
 const Stack = createStackNavigator();
 
 // Common layout/logic for all app pages, accept some props for slight customization/variance
-export default function AppPage({ cancel, children, navigation, nested, onReturn, route, scroll, theme }) {
+export default function AppPage({ cancel, children, navigation, nested, onReturn, route, scroll, tab, theme }) {
   // Monitor drawer state (check for toggleDrawer function to see if exists) and close keyboard whenever opened
   // References: https://stackoverflow.com/a/64249361 and https://stackoverflow.com/a/39772206
   const drawerOpen = navigation.toggleDrawer && useIsDrawerOpen();
@@ -48,7 +48,7 @@ export default function AppPage({ cancel, children, navigation, nested, onReturn
                 onPress={() => Keyboard.dismiss()} noFeedback />
         }} children={() => // Display back/cancel button if needed, then children
           <>
-            {nested &&
+            {nested && !tab &&
               <Button theme={theme} text={cancel ? 'Cancel' : 'Go Back'}
                 // Optionally specify callback function for return button
                 onPress={(...args) => { navigation.pop(); if (onReturn) onReturn(...args); }} />}

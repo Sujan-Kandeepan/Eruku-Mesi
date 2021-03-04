@@ -15,7 +15,11 @@ export default function SettingsPage(props) {
         value={props.theme.dark} onValueChange={props.toggleTheme} />
       <Header {...props} text={'Account'} />
       <Button {...props} textStyle={{ color: props.theme.colors.dangerText }} text={'Sign Out'}
-        onPress={() => props.snackbar('Signed out')} />
+        onPress={() => {
+          props.setUser(null);
+          props.setAdmin(false);
+          props.snackbar('Signed out');
+        }} />
     </AppPage>
   );
 };

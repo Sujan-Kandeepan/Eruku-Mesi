@@ -57,6 +57,24 @@ export const Toggle = (props) =>
       value={props.value} onValueChange={props.onValueChange} />
   </Card>;
 
+// Switch with accompanying label text and no background
+export const ToggleWithoutCard = (props) =>
+  <View style={props.style}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      {/* Text pushed to left and aligned with switch */}
+      <Text style={{ alignSelf: 'flex-start', color: props.theme.colors.text, fontSize: 16 }}>
+        {props.text}
+      </Text>
+      {/* Switch pushed to right and aligned with text */}
+      {/* Reference: https://reactnative.dev/docs/switch */}
+      <Switch style={{ alignSelf: 'flex-end' }}
+        thumbColor={props.value ? props.theme.colors.primary : props.theme.colors.text}
+        activeThumbColor={props.theme.colors.primary}
+        trackColor={{ false: props.theme.colors.disabled, true: props.theme.colors.accent }}
+        value={props.value} onValueChange={props.onValueChange} />
+    </View>
+  </View>;
+
 // Image or video component with given image source and properties
 export const Media = (props) =>
  <>
@@ -168,17 +186,21 @@ export const TitleInput = (props) =>
     autoFocus={props.autoFocus} autoCapitalize='words' editable spellCheck
     onFocus={props.onFocus} onBlur={props.onBlur} style={{
       backgroundColor: props.theme.colors.card,
+      borderColor: props.theme.colors.border, borderWidth: 1,
       color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
-      margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
+      margin: 15, marginBottom: 0, paddingHorizontal: 10, paddingVertical: 5, textAlign: 'center'
     }} value={props.value} onChangeText={props.onChangeText} />;
 
 // Component to input simple field in form
 export const SimpleInput = (props) =>
   <TextInput placeholder={props.placeholder} placeholderTextColor={props.theme.colors.placeholder}
     autoFocus={props.autoFocus} autoCapitalize={props.autoCapitalize} editable spellCheck
-    onFocus={props.onFocus} onBlur={props.onBlur} style={{
-      backgroundColor: props.theme.colors.card, color: props.theme.colors.text,
-      margin: 15, marginBottom: 0, padding: 5, textAlign: 'center'
+    secureTextEntry={props.password} autoCompleteType={props.autoCompleteType}
+    keyboardType={props.keyboardType} onFocus={props.onFocus} onBlur={props.onBlur} style={{
+      backgroundColor: props.theme.colors.card,
+      borderColor: props.theme.colors.border, borderWidth: 1, color: props.theme.colors.text,
+      margin: 15, marginBottom: 0, paddingHorizontal: 10, paddingVertical: 5,
+      textAlign: props.left ? 'left' : 'center'
     }} value={props.value} onChangeText={props.onChangeText} />;
 
 // Component to input body field in form
@@ -187,6 +209,7 @@ export const BodyInput = (props) =>
     autoFocus={props.autoFocus} multiline editable spellCheck
     onFocus={props.onFocus} onBlur={props.onBlur} style={{
       backgroundColor: props.theme.colors.card,
+      borderColor: props.theme.colors.border, borderWidth: 1,
       color: props.theme.colors.text, flex: 1, margin: 15,
       padding: 20, textAlignVertical: 'top', width: props.width
     }} value={props.value} onChangeText={props.onChangeText} />;

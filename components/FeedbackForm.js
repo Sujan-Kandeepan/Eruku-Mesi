@@ -26,6 +26,7 @@ export default function FeedbackForm(props) {
         {/* Reference: https://reactnative.dev/docs/textinput */}
         <TextInput autoFocus multiline editable spellCheck maxLength={maxLength}
           style={{ backgroundColor: props.theme.colors.card,
+            borderColor: props.theme.colors.border, borderWidth: 1,
             color: props.theme.colors.text, flex: 1, marginHorizontal: 25,
             padding: 20, textAlignVertical: 'top', width }}
           onChangeText={value => feedbackTextChanged(props, value, setText, maxLength)}

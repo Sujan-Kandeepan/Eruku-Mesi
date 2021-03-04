@@ -65,6 +65,7 @@ export default function InformationPage(props) {
                       {/* Text input for new section name */}
                       <TextInput autoFocus autoCapitalize='words' style={{
                         backgroundColor: props.theme.colors.card,
+                        borderColor: props.theme.colors.border, borderWidth: 1,
                         color: props.theme.colors.text, flex: 1, height: 50,
                         marginBottom: 1, marginLeft: 15, marginTop: 15, textAlign: 'center'
                       }} value={editText} onChangeText={value => setEditText(value)}

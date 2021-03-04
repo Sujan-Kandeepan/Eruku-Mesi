@@ -54,6 +54,7 @@ export default function MessagesPage(props) {
           {/* Input field for new message */}
           <TextInput autoFocus multiline editable spellCheck style={{
               backgroundColor: props.theme.colors.card,
+              borderColor: props.theme.colors.border, borderWidth: 1,
               color: props.theme.colors.text, flex: 1, padding: 10
             }} placeholder='Enter your message' placeholderTextColor={props.theme.colors.placeholder}
             value={newMessage} onChangeText={value => setNewMessage(value)}

@@ -15,6 +15,7 @@ import MediaContentPage from './components/MediaContentPage';
 import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 import FeedbackForm from './components/FeedbackForm';
+import AuthenticationForm from './components/AuthenticationForm';
 
 // Base URL for API wherever hosted (computer's IP for now)
 // Reference: https://stackoverflow.com/a/56943681
@@ -89,8 +90,8 @@ const CustomDrawerContent = (props) =>
         uri: 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
       }} size={50} style={{ alignSelf: 'center' }} />
       <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
-        <Title>John Smith</Title>
-        <Caption>@username</Caption>
+        <Title>{props.user.firstName} {props.user.lastName}</Title>
+        <Caption>@{props.user.username}</Caption>
       </View>
     </CustomDrawer.Section>
     {/* Add divider above first section by creating empty section */}
@@ -131,8 +132,10 @@ export default function App() {
     setSnackbarVisible(true);
   }
 
-  // Temporary flag for admin vs. standard user
+  // User data as object and admin status
+  let [user, setUser] = React.useState(null);
   let [admin, setAdmin] = React.useState(true);
+  const updateUser = data => setUser({ ...user, ...data });
 
   // Toggle event notifications and display snackbar message on change
   let [receiveNotifications, setReceiveNotifications] = React.useState(true);
@@ -147,8 +150,8 @@ export default function App() {
   const toggleTheme = () => setTheme(theme === darkTheme ? lightTheme : darkTheme);
 
   // Props to expose to nested child components, extra for settings
-  const sharedProps = { admin, baseURL, snackbar, theme };
-  const settingsProps = { receiveNotifications, toggleNotifications, toggleTheme };
+  const sharedProps = { admin, baseURL, setAdmin, snackbar, theme, user };
+  const settingsProps = { receiveNotifications, setUser, toggleNotifications, toggleTheme, updateUser };
 
   // Refactored variable for duplicate code in platform-specific snackbar below
   const snackbarView =
@@ -162,25 +165,27 @@ export default function App() {
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
       <NavigationContainer theme={theme}>
-        <Drawer.Navigator initialRouteName={pages.newsFeed}
-          drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
-          drawerContent={props => <CustomDrawerContent {...props} theme={theme} />}>
-          <Drawer.Screen name={pages.newsFeed}
-            children={(props) => <NewsFeedPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.upcomingEvents}
-            children={(props) => <UpcomingEventsPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.messages}
-            children={(props) => <MessagesPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.mediaContent}
-            children={(props) => <MediaContentPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.information}
-            children={(props) => <InformationPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.settings}
-            children={(props) => <SettingsPage {...props} {...sharedProps} {...settingsProps} />} />
-          <Drawer.Screen name={pages.feedback}
-            children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
-        </Drawer.Navigator>
-      </NavigationContainer>
+        {user ? // Drawer nav containing all app pages if authenticated
+          <Drawer.Navigator initialRouteName={pages.newsFeed}
+            drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
+            drawerContent={props => <CustomDrawerContent {...props} theme={theme} user={user} />}>
+            <Drawer.Screen name={pages.newsFeed}
+              children={(props) => <NewsFeedPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.upcomingEvents}
+              children={(props) => <UpcomingEventsPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.messages}
+              children={(props) => <MessagesPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.mediaContent}
+              children={(props) => <MediaContentPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.information}
+              children={(props) => <InformationPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.settings}
+              children={(props) => <SettingsPage {...props} {...sharedProps} {...settingsProps} />} />
+            <Drawer.Screen name={pages.feedback}
+              children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
+          </Drawer.Navigator> : // Authentication form if not authenticated
+          <AuthenticationForm {...sharedProps} {...settingsProps} />}
+        </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
       {Platform.OS === 'ios' ? snackbarView :
