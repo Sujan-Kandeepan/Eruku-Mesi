@@ -86,9 +86,10 @@ const CustomDrawerContent = (props) =>
   <DrawerContentScrollView {...props}
     contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
     <CustomDrawer.Section style={{ flexDirection: 'row', marginHorizontal: 15, marginVertical: 5 }}>
-      <Avatar.Image source={{ // For local image: source={require('./assets/image.jpg')}
-        uri: 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
-      }} size={50} style={{ alignSelf: 'center' }} />
+      <Avatar.Image size={50} style={{ alignSelf: 'center' }}
+        source={props.user.profilePicture
+          ? { uri: props.user.profilePicture }
+          : require('./assets/default-user.png')} />
       <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
         <Title>{props.user.firstName} {props.user.lastName}</Title>
         <Caption>@{props.user.username}</Caption>

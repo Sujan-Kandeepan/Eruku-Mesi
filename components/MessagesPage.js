@@ -1,9 +1,11 @@
 import React from 'react';
 import { Dimensions, Keyboard, Platform, Text, View } from 'react-native';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
+import { Avatar } from 'react-native-paper';
 
 import AppPage from './AppPage';
 import { fetchMessages, sendMessage } from './functions/MessageFunctions';
+import { showDate, showTime } from '../shared/SharedFunctions';
 import { IconButton } from '../shared/SharedComponents';
 
 // Page for common messages forum (chat interface)
@@ -36,15 +38,22 @@ export default function MessagesPage(props) {
             <View style={{
               borderColor: props.theme.colors.border, borderBottomWidth: 1,
               backgroundColor: props.theme.colors.background,
-              paddingHorizontal: 15, paddingVertical: 5
+              flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 5
             }}>
-              {/* Basic layout for now, might enhance later */}
-              <Text style={{ fontWeight: 'bold', color: props.theme.colors.text, marginBottom: 5 }}>
-                {item.sender}
-              </Text>
-              <Text style={{ color: props.theme.colors.text }}>
-                {item.content}
-              </Text>
+              <Avatar.Image size={50} style={{ alignSelf: 'center' }}
+                source={props.user.profilePicture
+                  ? { uri: props.user.profilePicture }
+                  : require('../assets/default-user.png')} />
+              <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0 }}>
+                {/* Basic layout for now, might enhance later */}
+                <Text style={{ color: props.theme.colors.text, flexDirection: 'row', marginBottom: 5 }}>
+                  <Text style={{ fontWeight: 'bold' }}>{item.sender}</Text>
+                  <Text> [{showDate(item.sentAt)} at {showTime(item.sentAt)}]</Text>
+                </Text>
+                <Text style={{ color: props.theme.colors.text }}>
+                  {item.message}
+                </Text>
+              </View>
             </View>} keyExtractor={(item, index) => `${item ? item.id : index} ${index}`} extraData={fetched}
             // Set reference and automatically scroll to bottom when list populates
             ref={ref => setList(ref)} onContentSizeChange={scroll} onLayout={scroll} onEndReached={stopScroll} />

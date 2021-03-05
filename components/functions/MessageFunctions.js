@@ -17,7 +17,10 @@ export const fetchMessages = (props, setMessages, callback) => {
         .then(() => setMessages(response.map(item => ({
           id: item._id,
           sender: names[item.sender],
-          content: item.message
+          message: item.message,
+          sentAt: item.sentAt,
+          profilePicture: item.profilePicture
+            || 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
         }))))
         .finally(callback);
     })
