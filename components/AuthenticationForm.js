@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import { Button, Header, SimpleInput, ToggleWithoutCard } from '../shared/SharedComponents';
+import { validEmail, validPassword, validPhone } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize tab navigator
@@ -26,29 +27,6 @@ const fakeUser = {
   "salt": "1234567890",
   "createdAt": "2021-03-02T05:37:40.838Z",
   "__v": 0
-};
-
-// Phone number validation logic
-const validPhone = (phone) => phone.length >= 10;
-
-// Email validation logic
-const validEmail = (email) => email.match(/[A-Za-z0-9\.\-]+@([A-Za-z0-9\-]+\.)+[A-Za-z0-9]+/g);
-
-// Password validation logic
-const validPassword = (password, setError) => {
-  let valid = false;
-  if (password.length < 8)
-    setError('Password must be at least 8 characters long.');
-  else if (!password.split('').some(c => c.match(/[A-Z]/g)))
-    setError('Password must contain at least one uppercase letter.');
-  else if (!password.split('').some(c => c.match(/[a-z]/g)))
-    setError('Password must contain at least one lowercase letter.');
-  else if (!password.split('').some(c => c.match(/[0-9]/g)))
-    setError('Password must contain at least one digit.');
-  else if (!password.split('').some(c => !c.match(/[A-Za-z0-9\s]/g)))
-    setError('Password must contain at least one special character.');
-  else valid = true
-  return valid;
 };
 
 // Shared logic for both tabs on authentication form
@@ -99,9 +77,9 @@ export default function AuthenticationForm(props) {
   const fakeSignup = () => {
     if (newUsername.trim() == '') {
       setSignupError('Please specify a username.');
-    } else if (newPassword.trim() == '') {
+    } else if (newPassword == '') {
       setSignupError('Please specify a password.');
-    } else if (confirmPassword.trim() == '') {
+    } else if (confirmPassword == '') {
       setSignupError('Please re-enter your password.');
     } else if (firstName.trim() == '' || lastName.trim() == '') {
       setSignupError('Please enter your first and last name.');
@@ -109,7 +87,7 @@ export default function AuthenticationForm(props) {
       setSignupError('Please enter your phone number.');
     } else if (email.trim() == '') {
       setSignupError('Please enter your email address.');
-    } else if (newPassword.trim() !== confirmPassword.trim()) {
+    } else if (newPassword !== confirmPassword) {
       setSignupError('Entered passwords do not match.');
     } else if (!validPhone(phone)) {
       setSignupError('Please enter a valid phone number.');
@@ -145,10 +123,10 @@ export default function AuthenticationForm(props) {
         <Tab.Screen name={'Log In'} children={(localProps) =>
           <AuthTab {...props} {...localProps} children={
             <View style={{ marginBottom: Platform.select({ web: '10%', default: '30%' }) }}>
-              <Header {...props} {...localProps} text={'Email or Username'} />
+              <Header {...props} {...localProps} label text={'Email or Username'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='username' autoCapitalize='none'
                 value={username} onChangeText={value => setUsername(value)} />
-              <Header {...props} {...localProps} text={'Password'} />
+              <Header {...props} {...localProps} label text={'Password'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='password' password
                 value={password} onChangeText={value => setPassword(value)} />
               <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>
@@ -160,25 +138,25 @@ export default function AuthenticationForm(props) {
         <Tab.Screen name={'Sign Up'} children={(localProps) =>
           <AuthTab {...props} {...localProps} children={
             <View>
-              <Header {...props} {...localProps} text={'New Username'} />
+              <Header {...props} {...localProps} label text={'New Username'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='username' autoCapitalize='none'
                 value={newUsername} onChangeText={value => setNewUsername(value)} />
-              <Header {...props} {...localProps} text={'New Password'} />
+              <Header {...props} {...localProps} label text={'New Password'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='password' password
                 value={newPassword} onChangeText={value => setNewPassword(value)} />
-              <Header {...props} {...localProps} text={'Confirm Password'} />
+              <Header {...props} {...localProps} label text={'Confirm Password'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='password' password
                 value={confirmPassword} onChangeText={value => setConfirmPassword(value)} />
-              <Header {...props} {...localProps} text={'First Name'} />
+              <Header {...props} {...localProps} label text={'First Name'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='name'
                 value={firstName} onChangeText={value => setFirstName(value)} />
-              <Header {...props} {...localProps} text={'Last Name'} />
+              <Header {...props} {...localProps} label text={'Last Name'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='name'
                 value={lastName} onChangeText={value => setLastName(value)} />
-              <Header {...props} {...localProps} text={'Phone Number'} />
+              <Header {...props} {...localProps} label text={'Phone Number'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='tel' keyboardType='number-pad'
                 value={phone} onChangeText={value => setPhone(value)} />
-              <Header {...props} {...localProps} text={'Email Address'} />
+              <Header {...props} {...localProps} label text={'Email Address'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='email' autoCapitalize='none'
                 value={email} onChangeText={value => setEmail(value)} />
               <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>

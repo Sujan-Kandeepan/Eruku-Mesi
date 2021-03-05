@@ -16,7 +16,7 @@ const noRepeat = f => f && debounce(f, 500, { leading: true, trailing: false });
 export const Header = (props) =>
   <Text style={{
     color: props.theme.colors.text, fontSize: 16, fontWeight: 'bold',
-    marginHorizontal: 15, marginTop: 15
+    marginBottom: props.label ? -7.5 : 0, marginHorizontal: 15, marginTop: 15
   }}>{props.text}</Text>;
 
 // Button component with card style

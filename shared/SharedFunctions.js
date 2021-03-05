@@ -80,3 +80,26 @@ export const paragraphs = text => text.split('\n').filter(s => s.trim() !== '').
 
 // Merge list of paragraphs back into single text string
 export const text = paragraphs => paragraphs.join('\n\n');
+
+// Phone number validation logic
+export const validPhone = (phone) => phone.split('').filter(c => c.match(/[0-9]/g)).length >= 10;
+
+// Email validation logic
+export const validEmail = (email) => email.match(/[A-Za-z0-9\.\-]+@([A-Za-z0-9\-]+\.)+[A-Za-z0-9]+/g);
+
+// Password validation logic
+export const validPassword = (password, setError) => {
+  let valid = false;
+  if (password.length < 8)
+    setError('Password must be at least 8 characters long.');
+  else if (!password.split('').some(c => c.match(/[A-Z]/g)))
+    setError('Password must contain at least one uppercase letter.');
+  else if (!password.split('').some(c => c.match(/[a-z]/g)))
+    setError('Password must contain at least one lowercase letter.');
+  else if (!password.split('').some(c => c.match(/[0-9]/g)))
+    setError('Password must contain at least one digit.');
+  else if (!password.split('').some(c => !c.match(/[A-Za-z0-9\s]/g)))
+    setError('Password must contain at least one special character.');
+  else valid = true
+  return valid;
+};
