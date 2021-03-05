@@ -21,11 +21,12 @@ export default function SettingsPage(props) {
   };
   return (
     <AppPage {...props} scroll>
-      {/* Most common logic here extracted into shared components */}
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {/* Main settings page */}
           <Stack.Screen name={props.route.name} children={(localProps) =>
             <View>
+              {/* Most common logic here extracted into shared components */}
               <Header {...props} text={'Preferences'} />
               <Toggle {...props} text={'Receive Event Notifications'}
                 value={props.receiveNotifications} onValueChange={props.toggleNotifications} />
@@ -43,8 +44,10 @@ export default function SettingsPage(props) {
                   props.snackbar('Signed out');
                 }} />
             </View>} />
+          {/* Form for editing user info */}
           <Stack.Screen name={pages.personalInformation} children={(localProps) =>
             <PersonalInformationForm {...props} {...localProps} />} />
+          {/* Form for changing password */}
           <Stack.Screen name={pages.changePassword} children={(localProps) =>
             <ChangePasswordForm {...props} {...localProps} />} />
         </Stack.Navigator>
