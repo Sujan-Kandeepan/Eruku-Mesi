@@ -10,7 +10,7 @@ export const fetchMessages = (props, setMessages, callback) => {
           .then(account =>
             names[item.sender] =
               account && account.account
-                ? `${account.account.firstName} ${account.account.lastName}`
+                ? `${account.account.firstName} ${account.account.lastName} (@${account.account.username})`
                 : 'Unknown User')
           .catch(() => names[item.sender] = 'Unknown User')
         ))

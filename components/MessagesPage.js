@@ -46,11 +46,11 @@ export default function MessagesPage(props) {
                   : require('../assets/default-user.png')} />
               <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0 }}>
                 {/* Basic layout for now, might enhance later */}
-                <Text style={{ color: props.theme.colors.text, flexDirection: 'row', marginBottom: 5 }}>
-                  <Text style={{ fontWeight: 'bold' }}>{item.sender}</Text>
-                  <Text> [{showDate(item.sentAt)} at {showTime(item.sentAt)}]</Text>
+                <Text style={{ color: props.theme.colors.text, flexDirection: 'row', fontWeight: 'bold' }}>
+                  {item.sender}
                 </Text>
-                <Text style={{ color: props.theme.colors.text }}>
+                <Text style={{ fontSize: 10 }}>{showDate(item.sentAt)} at {showTime(item.sentAt)}</Text>
+                <Text style={{ color: props.theme.colors.text, marginVertical: 5 }}>
                   {item.message}
                 </Text>
               </View>
