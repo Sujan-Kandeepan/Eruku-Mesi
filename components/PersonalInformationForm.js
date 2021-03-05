@@ -2,12 +2,13 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import AppPage from './AppPage';
-import { Button, Header, SimpleInput } from '../shared/SharedComponents';
+import { Button, Header, Media, MediaPicker, SimpleInput } from '../shared/SharedComponents';
 import { validEmail, validPhone } from '../shared/SharedFunctions';
 
 // Form for editing user info in separate component to reset state on exit
 export default function PersonalInformationForm(props) {
   // State variables for form fields (two-way data binding)
+  const [profilePicture, setProfilePicture] = React.useState(props.user.profilePicture);
   const [username, setUsername] = React.useState(props.user.username);
   const [firstName, setFirstName] = React.useState(props.user.firstName);
   const [lastName, setLastName] = React.useState(props.user.lastName);
@@ -30,12 +31,25 @@ export default function PersonalInformationForm(props) {
       setEditInfoError('Please enter a valid email address.');
     } else {
       setEditInfoError('');
-      props.setUser({ ...props.user, username, firstName, lastName, phone, email });
+      props.setUser({ ...props.user, profilePicture, username, firstName, lastName, phone, email });
       navigation.pop();
     }
   };
   return (
     <AppPage {...props} nested cancel scroll>
+      <Header {...props} label text={'Profile Picture'} />
+      <Media image={profilePicture} scale={{ image: profilePicture, maxHeight: 300 }}
+        style={{ alignSelf: 'center', marginTop: 15 }} />
+      <View style={{ flexDirection: 'row', marginBottom: -15, marginTop: 15 }}>
+        <View style={{ flex: 1, marginBottom: 15 }}>
+          <MediaPicker {...props} handleResult={setProfilePicture}
+            text={profilePicture ? 'Replace' : 'Upload'} />
+        </View>
+        {profilePicture &&
+          <View style={{ flex: 1, marginLeft: -15, marginTop: -15 }}>
+            <Button {...props} text='Delete' onPress={() => setProfilePicture(null)} />
+          </View>}
+      </View>
       <Header {...props} label text={'Username'} />
       <SimpleInput {...props} left autoCompleteType='username' autoCapitalize='none'
         value={username} onChangeText={value => setUsername(value)} />

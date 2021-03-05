@@ -42,7 +42,7 @@ export default function MessagesPage(props) {
             }}>
               <Avatar.Image size={50} style={{ alignSelf: 'center' }}
                 source={props.user.profilePicture
-                  ? { uri: props.user.profilePicture }
+                  ? { uri: props.user.profilePicture.uri }
                   : require('../assets/default-user.png')} />
               <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0 }}>
                 {/* Basic layout for now, might enhance later */}

@@ -88,7 +88,7 @@ const CustomDrawerContent = (props) =>
     <CustomDrawer.Section style={{ flexDirection: 'row', marginHorizontal: 15, marginVertical: 5 }}>
       <Avatar.Image size={50} style={{ alignSelf: 'center' }}
         source={props.user.profilePicture
-          ? { uri: props.user.profilePicture }
+          ? { uri: props.user.profilePicture.uri }
           : require('./assets/default-user.png')} />
       <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
         <Title>{props.user.firstName} {props.user.lastName}</Title>
