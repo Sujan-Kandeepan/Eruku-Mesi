@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 import AppPage from './AppPage';
 import { Button, Header, SimpleInput } from '../shared/SharedComponents';
@@ -46,6 +46,7 @@ export default function ChangePasswordForm(props) {
       </Text>
       <Button {...props} color='accent' text='Submit'
         onPress={() => fakePasswordChange(props.navigation)} />
+      <View style={{ height: 15 }} />
     </AppPage>
   );
 };
