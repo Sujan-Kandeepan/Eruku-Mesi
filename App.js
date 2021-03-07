@@ -138,11 +138,14 @@ export default function App() {
 
   // User data as object and admin status
   let [user, setUser] = React.useState(null);
-  let [admin, setAdmin] = React.useState(true);
+  let [admin, setAdmin] = React.useState(false);
   const updateUser = data => setUser({ ...user, ...data });
   React.useEffect(() => {
-    if (user && (Platform.OS !== 'web'))
-      SecureStore.setItemAsync('user', user._id);
+    if (user) {
+      setAdmin(user.accountType === 'admin');
+      if (Platform.OS !== 'web')
+        SecureStore.setItemAsync('user', user._id);
+    }
   }, [user]);
 
   // Toggle event notifications and display snackbar message on change
