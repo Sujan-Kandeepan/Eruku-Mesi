@@ -18,6 +18,7 @@ import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 import FeedbackForm from './components/FeedbackForm';
 import AuthenticationForm from './components/AuthenticationForm';
+import { get } from './shared/SharedFunctions';
 
 // Base URL for API wherever hosted (computer's IP for now)
 // Reference: https://stackoverflow.com/a/56943681
@@ -141,7 +142,7 @@ export default function App() {
   const updateUser = data => setUser({ ...user, ...data });
   React.useEffect(() => {
     if (user && (Platform.OS !== 'web'))
-      SecureStore.setItemAsync('user', JSON.stringify(user));
+      SecureStore.setItemAsync('user', user._id);
   }, [user]);
 
   // Toggle event notifications and display snackbar message on change
@@ -175,8 +176,11 @@ export default function App() {
       // Stay on splash screen until finished
       SplashScreen.preventAutoHideAsync();
       SecureStore.getItemAsync('user')
-        .then(key => setUser(JSON.parse(key)))
-        .finally(SplashScreen.hideAsync);
+        .then(item => item
+          ? get(`${baseURL}/accounts/${item}`)
+              .then(res => setUser(res.account))
+              .finally(SplashScreen.hideAsync)
+          : SplashScreen.hideAsync());
     }
   }, []);
 
