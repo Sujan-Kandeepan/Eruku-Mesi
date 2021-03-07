@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Platform, Text, View } from 'react-native';
@@ -168,12 +169,16 @@ export default function App() {
     </Snackbar>;
 
   // Check for secure store 'user' key containing user data to authenticate
-  const [checkedKey, setCheckedKey] = React.useState(Platform.OS == 'web');
   React.useEffect(() => {
-    Platform.OS !== 'web' && SecureStore.getItemAsync('user')
-      .then(key => setUser(JSON.parse(key)))
-      .finally(() => setCheckedKey(true));
-    }, []);
+    // Not supported on web
+    if (Platform.OS !== 'web') {
+      // Stay on splash screen until finished
+      SplashScreen.preventAutoHideAsync();
+      SecureStore.getItemAsync('user')
+        .then(key => setUser(JSON.parse(key)))
+        .finally(SplashScreen.hideAsync);
+    }
+  }, []);
 
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
@@ -198,7 +203,7 @@ export default function App() {
             <Drawer.Screen name={pages.feedback}
               children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
           </Drawer.Navigator> : // Authentication form if not authenticated
-          checkedKey && <AuthenticationForm {...sharedProps} {...settingsProps} />}
+          <AuthenticationForm {...sharedProps} {...settingsProps} />}
         </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
