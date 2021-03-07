@@ -1,5 +1,6 @@
+import * as SecureStore from 'expo-secure-store';
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -41,6 +42,7 @@ export default function SettingsPage(props) {
                 onPress={() => {
                   props.setUser(null);
                   props.setAdmin(false);
+                  Platform.OS !== 'web' && SecureStore.deleteItemAsync('user');
                   props.snackbar('Signed out');
                 }} />
             </View>} />

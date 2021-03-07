@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Platform, Text, View } from 'react-native';
@@ -137,6 +138,10 @@ export default function App() {
   let [user, setUser] = React.useState(null);
   let [admin, setAdmin] = React.useState(true);
   const updateUser = data => setUser({ ...user, ...data });
+  React.useEffect(() => {
+    if (user && (Platform.OS !== 'web'))
+      SecureStore.setItemAsync('user', JSON.stringify(user));
+  }, [user]);
 
   // Toggle event notifications and display snackbar message on change
   let [receiveNotifications, setReceiveNotifications] = React.useState(true);
@@ -162,6 +167,14 @@ export default function App() {
       <Text>{snackbarText}</Text>
     </Snackbar>;
 
+  // Check for secure store 'user' key containing user data to authenticate
+  const [checkedKey, setCheckedKey] = React.useState(Platform.OS == 'web');
+  React.useEffect(() => {
+    Platform.OS !== 'web' && SecureStore.getItemAsync('user')
+      .then(key => setUser(JSON.parse(key)))
+      .finally(() => setCheckedKey(true));
+    }, []);
+
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
@@ -185,7 +198,7 @@ export default function App() {
             <Drawer.Screen name={pages.feedback}
               children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
           </Drawer.Navigator> : // Authentication form if not authenticated
-          <AuthenticationForm {...sharedProps} {...settingsProps} />}
+          checkedKey && <AuthenticationForm {...sharedProps} {...settingsProps} />}
         </NavigationContainer>
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
