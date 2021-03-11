@@ -1,3 +1,4 @@
+import React from 'react';
 import { Dimensions } from 'react-native';
 import dayjs from 'dayjs';
 
@@ -40,6 +41,16 @@ export const del = async (url, body) =>
     },
     body: JSON.stringify(body)
   });
+
+// Call function both initially and at an interval (periodic data refresh)
+// Reference: https://upmostly.com/tutorials/setinterval-in-react-components-using-hooks
+export const periodic = (f, delay) => {
+  React.useEffect(() => {
+    f();
+    const interval = setInterval(f, delay || 60000);
+    return () => clearInterval(interval);
+  }, []);
+}
 
 // Shorten text for compact display purposes
 export const truncate = (string, num) => {

@@ -7,7 +7,7 @@ import AppPage from './AppPage';
 import NewsStoryForm from './NewsStoryForm';
 import { fetchNewsStories, deleteNewsStory } from './functions/NewsStoryFunctions';
 import { Button, Content, Feed } from '../shared/SharedComponents';
-import { truncate } from '../shared/SharedFunctions';
+import { periodic, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -25,8 +25,7 @@ export default function NewsFeedPage(props) {
   // State variables for display data and state (two-way data binding)
   const [stories, setStories] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
-  // Initial load of new stories by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchNewsStories(props, setStories, () => setFetched(true)), []);
+  periodic(() => fetchNewsStories(props, setStories, () => setFetched(true)));
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>

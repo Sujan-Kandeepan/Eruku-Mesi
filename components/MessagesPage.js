@@ -5,7 +5,7 @@ import { Avatar } from 'react-native-paper';
 
 import AppPage from './AppPage';
 import { fetchMessages, sendMessage } from './functions/MessageFunctions';
-import { showDate, showTime } from '../shared/SharedFunctions';
+import { periodic, showDate, showTime } from '../shared/SharedFunctions';
 import { IconButton } from '../shared/SharedComponents';
 
 // Page for common messages forum (chat interface)
@@ -21,8 +21,7 @@ export default function MessagesPage(props) {
   const [needsToScroll, setNeedsToScroll] = React.useState(true);
   const scroll = () => needsToScroll && list.scrollToEnd({ animated: true });
   const stopScroll = () => setTimeout(() => setNeedsToScroll(false), 1000);
-  // Initial load of messages by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchMessages(props, setMessages, () => setFetched(true)), []);
+  periodic(() => fetchMessages(props, setMessages, () => setFetched(true)));
   return (
     <AppPage {...props}>
       {/* Reference: https://stackoverflow.com/a/61980218 */}

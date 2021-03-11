@@ -9,6 +9,7 @@ import AppPage from './AppPage';
 import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection, fetchInformation }
   from './functions/InformationFunctions';
 import { BodyInput, Button, Content, IconButton, Media, MediaPicker } from '../shared/SharedComponents';
+import { periodic } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -28,8 +29,7 @@ export default function InformationPage(props) {
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
-  // Initial load of data by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchInformation(props, setPages, setData, () => setFetched(true)), []);
+  periodic(() => fetchInformation(props, setPages, setData, () => setFetched(true)));
   // Ignore warnings about nested ScrollViews (small list, not to worry) and YellowBox itself
   React.useEffect(() => YellowBox.ignoreWarnings([
     'VirtualizedLists should never be nested',

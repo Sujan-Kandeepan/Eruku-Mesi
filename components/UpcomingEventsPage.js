@@ -10,7 +10,7 @@ import AppPage from './AppPage';
 import EventForm from './EventForm';
 import { deleteEvent, fetchEvents } from './functions/EventFunctions';
 import { Button, Content, Feed, Header } from '../shared/SharedComponents';
-import { showDate, showTime, truncate } from '../shared/SharedFunctions';
+import { periodic, showDate, showTime, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
@@ -70,8 +70,7 @@ export default function UpcomingEventsPage(props) {
       { ...newMarkedDates[`${formatDate(selectedDate)}`], selected: true };
     setMarkedDates(newMarkedDates);
   }, [events, selectedDate]);
-  // Initial load of events by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchEvents(props, setEvents, () => setFetched(true)), []);
+  periodic(() => fetchEvents(props, setEvents, () => setFetched(true)));
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>

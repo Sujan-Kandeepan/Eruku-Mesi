@@ -7,7 +7,7 @@ import AppPage from './AppPage';
 import MediaContentForm from './MediaContentForm';
 import { deleteMediaContent, fetchMediaContent } from './functions/MediaContentFunctions';
 import { Button, Content, Feed, Media } from '../shared/SharedComponents';
-import { get, truncate } from '../shared/SharedFunctions';
+import { periodic, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -25,8 +25,7 @@ export default function MediaContentPage(props) {
   // State variables for display data and state (two-way data binding)
   const [posts, setPosts] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
-  // Initial load of posts by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchMediaContent(props, setPosts, () => setFetched(true)), []);
+  periodic(() => fetchMediaContent(props, setPosts, () => setFetched(true)));
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
