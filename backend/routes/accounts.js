@@ -138,9 +138,10 @@ router.post('/signup', (req, res, next) => {
 
 // User login api 
 router.post('/login', (req, res) => { 
-
-    // Find user with requested email 
-    Account.findOne({ email : req.body.email }, function(err, user) { 
+    if (req.body.username != null)
+    {
+      // Find user with requested username 
+        Account.findOne({'username': req.body.username}, function(err, user) { 
         if (user === null) { 
             return res.status(400).send({ 
                 message : "User not found."
@@ -158,7 +159,31 @@ router.post('/login', (req, res) => {
                 }); 
             } 
         } 
-    }); 
+        }); 
+    }
+    else
+    {
+      // Find user with requested email 
+      Account.findOne({'email': req.body.email}, function(err, user) { 
+          if (user === null) { 
+              return res.status(400).send({ 
+                  message : "User not found."
+              }); 
+          } 
+          else { 
+              if (user.validPassword(req.body.password)) { 
+                  return res.status(201).send({ 
+                      message : "User Logged In", 
+                  }) 
+              } 
+              else { 
+                  return res.status(400).send({ 
+                      message : "Wrong Password"
+                  }); 
+              } 
+          } 
+      });
+    } 
 }); 
 
 module.exports = router;
