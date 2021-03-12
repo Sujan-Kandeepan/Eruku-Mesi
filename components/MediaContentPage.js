@@ -49,9 +49,11 @@ export default function MediaContentPage(props) {
                     <Text style={{ color: props.theme.colors.text }}>
                       {item && truncate(item.description.length ? item.description[0] : "", 10)}
                     </Text>
-                    <Media image={item.image} thumbnail
-                      scale={{ image: item.image, marginHorizontal: 30, maxHeight: 200 }}
-                      style={{ alignSelf: 'center', marginTop: 15 }} />
+                    {item.type === 'photo' ?
+                      <Media image={{ ...item.metadata, uri: item.url }} thumbnail
+                        scale={{ image: { ...item.metadata, uri: item.url }, marginHorizontal: 30, maxHeight: 200 }}
+                        style={{ alignSelf: 'center', marginTop: 15 }} /> :
+                      <Text>{item.metadata.name}</Text>}
                   </>} />
             </>} />
           {/* Static page route for posting media content */}
@@ -72,7 +74,8 @@ export default function MediaContentPage(props) {
                   <Button {...props} {...localProps} text='Delete'
                     onPress={() => localProps.navigation.push(pages.deleteMediaContent(post.id))} />}
                 {/* Display for individual post */}
-                <Content {...props} {...localProps} title={post.title} imageBottom={post.image}
+                <Content {...props} {...localProps} title={post.title}
+                  imageBottom={{ ...post.metadata, uri: post.url, type: post.type }}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}

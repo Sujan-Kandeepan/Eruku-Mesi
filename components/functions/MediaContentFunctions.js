@@ -5,14 +5,15 @@ export const fetchMediaContent = (props, setPosts, callback) => {
   get(`${props.baseURL}/mediaContent`)
     .then(response =>
       setPosts(response.map(item =>
-        ({ id: item._id, title: item.title, description: paragraphs(item.description || ""),
-          image: { uri: item.url } }))))
+        ({ id: item._id, title: item.title, description: paragraphs(item.description || ''),
+          metadata: { ...item.metadata, name: item.metadata ? item.metadata.name : item.url.replace(/.*\//g, '') },
+          type: item.type, url: item.url }))))
     .catch(() => props.snackbar('Unable to fetch posts'))
     .finally(callback);
 };
 
 // Handle submit of media content form to create or update media content record
-export const submitMediaContent = (props, title, description, image, setSaving) => {
+export const submitMediaContent = (props, title, description, image, file, setSaving) => {
   // Check for required fields
   if (title.trim() === '') {
     props.snackbar('Post title is required');
@@ -22,14 +23,15 @@ export const submitMediaContent = (props, title, description, image, setSaving) 
     props.snackbar('Post description is required');
     return;
   }
-  if (!image) {
-    props.snackbar('No photo or video selected');
+  if (!image && !file) {
+    props.snackbar('Nothing selected for upload');
     return;
   }
   // Update database with new or modified record
   setSaving(true);
   post(`${props.baseURL}/mediaContent/${props.payload ? `edit/${props.payload.id}` : 'add'}`,
-    { title, description: description, image, url: image.uri, type: "photo" })
+    { title, description: description, metadata: { ...image, ...file, uri: undefined },
+      url: image ? image.uri : file.uri, type: image ? 'photo' : 'file' })
     // Update locally and return to previous page
     .then(() => {
       props.update && props.update();

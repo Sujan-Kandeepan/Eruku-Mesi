@@ -3,6 +3,7 @@ import React from 'react';
 import { Image, Text, TextInput, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { FlatList, Switch, TouchableOpacity } from 'react-native-gesture-handler';
+import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import debounce from 'lodash/debounce';
 
@@ -78,7 +79,7 @@ export const ToggleWithoutCard = (props) =>
 // Image or video component with given image source and properties
 export const Media = (props) =>
  <>
-    {props.image && (props.image.type === 'image'
+    {props.image && (props.image.type === 'image' || props.image.type === 'photo'
       || props.image.uri.startsWith('data:image') || props.thumbnail) &&
       <Image source={{ uri: props.image.uri }}
         style={{ ...scale(props.scale), ...props.style }} />}
@@ -89,6 +90,7 @@ export const Media = (props) =>
         style={{ ...scale(props.scale), ...props.style }} />}
  </>;
 
+// Image/video picker component exposing system file explorer
 export const MediaPicker = (props) =>
   <View style={{ marginTop: -15 }}>
     <Button {...props} text={props.text} onPress={async () => {
@@ -105,6 +107,23 @@ export const MediaPicker = (props) =>
       } catch (error) {
         console.log(error);
         props.snackbar(`File selected is not a valid photo${props.allowVideo ? ' or video' : ''}`)
+      }
+    }} />
+  </View>;
+
+// Document picker component exposing system file explorer
+export const FilePicker = (props) =>
+  <View style={{ marginTop: -15 }}>
+    <Button {...props} text={props.text} onPress={async () => {
+      try {
+        // Reference: https://docs.expo.io/versions/latest/sdk/document-picker/
+        let result = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' });
+        if (!result.cancelled) {
+          props.handleResult(result);
+        }
+      } catch (error) {
+        console.log(error);
+        props.snackbar(`Currently only .pdf files allowed`)
       }
     }} />
   </View>;
