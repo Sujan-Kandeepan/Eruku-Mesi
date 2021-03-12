@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import MediaContentForm from './MediaContentForm';
 import { deleteMediaContent, fetchMediaContent } from './functions/MediaContentFunctions';
-import { Button, Content, Feed, Media } from '../shared/SharedComponents';
+import { Button, Content, Feed, FileDownload, Media } from '../shared/SharedComponents';
 import { periodic, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
@@ -75,7 +75,10 @@ export default function MediaContentPage(props) {
                     onPress={() => localProps.navigation.push(pages.deleteMediaContent(post.id))} />}
                 {/* Display for individual post */}
                 <Content {...props} {...localProps} title={post.title}
-                  imageBottom={{ ...post.metadata, uri: post.url, type: post.type }}
+                  imageBottom={post.type === 'photo' && { ...post.metadata, uri: post.url, type: post.type }}
+                  extraContent={post.type === 'file' &&
+                    <FileDownload {...props} text={`Download ${post.metadata && post.metadata.name}`} source={post.url}
+                      destination={post.metadata ? post.metadata.name : post.url.replace(/.*\//g, '')} />}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}

@@ -1,10 +1,13 @@
 import { Video } from 'expo-av';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
+import * as Permissions from 'expo-permissions';
 import React from 'react';
-import { Image, Text, TextInput, View } from 'react-native';
+import { Image, Platform, Text, TextInput, View } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { FlatList, Switch, TouchableOpacity } from 'react-native-gesture-handler';
-import * as DocumentPicker from 'expo-document-picker';
-import * as ImagePicker from 'expo-image-picker';
 import debounce from 'lodash/debounce';
 
 import { scale } from './SharedFunctions';
@@ -123,7 +126,31 @@ export const FilePicker = (props) =>
         }
       } catch (error) {
         console.log(error);
-        props.snackbar(`Currently only .pdf files allowed`)
+        props.snackbar('Currently only .pdf files allowed')
+      }
+    }} />
+  </View>;
+
+// Button triggering file download
+export const FileDownload = (props) =>
+  <View style={{ marginTop: -15 }}>
+    <Button {...props} text={props.text} onPress={async () => {
+      try {
+        // Reference: https://www.farhansayshi.com/post/how-to-save-files-to-a-device-folder-using-expo-and-react-native/
+        if (Platform.OS === 'web') return props.snackbar('File download not supported on web');
+        props.snackbar(`${props.destination} downloading`);
+        let result = await FileSystem.downloadAsync(props.source,
+          `${FileSystem.documentDirectory}/${props.destination}`);
+        const perm = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+        if (perm.status != 'granted') return;
+        const asset = await MediaLibrary.createAssetAsync(result.uri);
+        const album = await MediaLibrary.getAlbumAsync('Download');
+        if (album == null) await MediaLibrary.createAlbumAsync('Download', asset, false);
+        else await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+        props.snackbar(`${props.destination} downloaded`)
+      } catch (error) {
+        console.error(error);
+        props.snackbar('Download failed')
       }
     }} />
   </View>;
@@ -191,6 +218,8 @@ export const Content = (props) =>
     </>
   } ListFooterComponent={
     <>
+      {/* Display extra content if exists */}
+      {props.extraContent}
       {/* Display bottom image if exists */}
       {props.imageBottom &&
         <Media image={props.imageBottom} scale={{ image: props.imageBottom, maxHeight: props.maxImageHeight }}
