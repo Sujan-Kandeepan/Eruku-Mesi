@@ -12,7 +12,7 @@ describe('Messages', () => {
       [
         {
           _id: '5ffb521eee35744495bf5905',
-          from: '5ffb4dbeee35744495bf58fc',
+          sender: '5ffb4dbeee35744495bf58fc',
           sentAt: '2021-01-10T19:20:03.960Z',
           message: 'SAMPLE MESSAGE BY ADMIN USER.'
         }
@@ -23,7 +23,8 @@ describe('Messages', () => {
         account: {
           _id: '5ffb4dbeee35744495bf58fc',
           firstName: 'Ji Who',
-          lastName: 'Choi'
+          lastName: 'Choi',
+          username: 'jiwhochoi'
         }
       }
     ));
@@ -42,8 +43,8 @@ describe('Messages', () => {
         expect(messages.length).toBe(1);
         expect(messages[0]).toMatchObject({
           id: '5ffb521eee35744495bf5905',
-          sender: 'Ji Who Choi',
-          content: 'SAMPLE MESSAGE BY ADMIN USER.'
+          sender: 'Ji Who Choi (@jiwhochoi)',
+          message: 'SAMPLE MESSAGE BY ADMIN USER.'
         });
         done();
       } catch (error) {
@@ -68,8 +69,15 @@ describe('Messages', () => {
   });
 
   test('Posts new message', done => {
-    let message = '';
-    let props = { snackbar: value => message = value };
+    let props = {
+      snackbar: () => { },
+      user: {
+        _id: '5ffb4dbeee35744495bf58fc',
+        firstName: 'Ji Who',
+        lastName: 'Choi',
+        username: 'jiwhochoi'
+      }
+    };
     let messages = [];
     let setMessages = value => messages = value;
     let newMessage = 'SAMPLE MESSAGE BY ADMIN USER.';
