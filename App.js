@@ -190,8 +190,8 @@ export default function App() {
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
-      <NavigationContainer theme={theme}>
-        {user ? // Drawer nav containing all app pages if authenticated
+      {user ? // Drawer nav containing all app pages if authenticated
+        <NavigationContainer theme={theme}>
           <Drawer.Navigator initialRouteName={pages.newsFeed}
             drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
             drawerContent={props => <CustomDrawerContent {...props} theme={theme} user={user} />}>
@@ -209,9 +209,9 @@ export default function App() {
               children={(props) => <SettingsPage {...props} {...sharedProps} {...settingsProps} />} />
             <Drawer.Screen name={pages.feedback}
               children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
-          </Drawer.Navigator> : // Authentication form if not authenticated
-          <AuthenticationForm {...sharedProps} {...settingsProps} />}
-        </NavigationContainer>
+          </Drawer.Navigator>
+        </NavigationContainer> : // Authentication form if not authenticated
+        <AuthenticationForm {...sharedProps} {...settingsProps} />}
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
       {Platform.OS === 'ios' ? snackbarView :
