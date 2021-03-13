@@ -9,7 +9,7 @@ export const fetchInformation = (props, setPages, setData, callback) => {
           ({ id: item._id, title: item.title, content: paragraphs(item.content),
             imageTop: null, imageBottom: null })));
       })
-    .catch(() => props.snackbar('Unable to fetch information'))
+    .catch(error => console.error(error) && props.snackbar('Unable to fetch information'))
     .finally(callback);
 };
 
@@ -31,7 +31,8 @@ export const addInfoSection = (props, pages, setPages, data, setData,
       });
     })
     // Display message if failed
-    .catch(() => {
+    .catch(error => {
+      console.error(error);
       props.snackbar('Failed to update database');
       callback && callback();
     });
@@ -55,7 +56,8 @@ export const editInfoSection = (props, pages, setPages, data, setData,
       });
     })
     // Display message if failed
-    .catch(() => {
+    .catch(error => {
+      console.error(error);
       props.snackbar('Failed to update database');
       callback && callback();
     });
@@ -70,7 +72,8 @@ export const deleteInfoSection = (props, pages, setPages, data, setData, item, c
       fetchInformation(props, setPages, setData, callback);
     })
     // Display message if failed
-    .catch(() => {
+    .catch(error => {
+      console.error(error);
       props.snackbar('Failed to update database');
       callback && callback();
     });

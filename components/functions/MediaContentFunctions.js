@@ -8,7 +8,7 @@ export const fetchMediaContent = (props, setPosts, callback) => {
         ({ id: item._id, title: item.title, description: paragraphs(item.description || ''),
           metadata: { ...item.metadata, name: item.metadata ? item.metadata.name : item.url.replace(/.*\//g, '') },
           type: item.type, url: item.url }))))
-    .catch(() => props.snackbar('Unable to fetch posts'))
+    .catch(error => console.error(error) && props.snackbar('Unable to fetch posts'))
     .finally(callback);
 };
 
@@ -38,7 +38,7 @@ export const submitMediaContent = (props, title, description, image, file, setSa
       props.navigation.pop();
     })
     // Display message if failed
-    .catch(() => props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
     .finally(() => setSaving(false));
 };
 
@@ -46,5 +46,5 @@ export const submitMediaContent = (props, title, description, image, file, setSa
 export const deleteMediaContent = (props, post, setPosts, setFetched, callback) =>
   del(`${props.baseURL}/mediaContent/${post.id}`)
     .then(() => fetchMediaContent(props, setPosts, () => setFetched(true)))
-    .catch(() => props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
     .finally(callback);

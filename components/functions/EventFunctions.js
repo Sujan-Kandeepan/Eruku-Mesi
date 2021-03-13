@@ -7,7 +7,7 @@ export const fetchEvents = (props, setEvents, callback) => {
       setEvents(response.map(item =>
         ({ id: item._id, title: item.title, description: paragraphs(item.description),
           date: new Date(item.date), location: item.location }))))
-    .catch(() => props.snackbar('Unable to fetch events'))
+    .catch(error => console.error(error) && props.snackbar('Unable to fetch events'))
     .finally(callback);
 };
 
@@ -36,7 +36,7 @@ export const submitEvent = (props, title, date, location, description, setSaving
       props.navigation.pop();
     })
     // Display message if failed
-    .catch(() => props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
     .finally(() => setSaving(false));
 };
 
@@ -44,5 +44,5 @@ export const submitEvent = (props, title, date, location, description, setSaving
 export const deleteEvent = (props, event, setEvents, setFetched, callback) => 
   del(`${props.baseURL}/events/${event.id}`)
     .then(() => fetchEvents(props, setEvents, () => setFetched(true)))
-    .catch(() => props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
     .finally(callback);

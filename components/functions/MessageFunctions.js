@@ -24,7 +24,8 @@ export const fetchMessages = (props, setMessages, callback) => {
         }))))
         .finally(callback);
     })
-    .catch(() => {
+    .catch(error => {
+      console.error(error);
       props.snackbar('Unable to fetch messages');
       callback();
     });
@@ -43,6 +44,6 @@ export const sendMessage = (props, setMessages, newMessage, setNewMessage, list,
       setTimeout(() => list.scrollToEnd({ animated: true }), 250);
     })
     // Display message if failed
-    .catch(() => props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
     .finally(() => fetchMessages(props, setMessages, callback));
 }
