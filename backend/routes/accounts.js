@@ -102,88 +102,96 @@ router.delete("/:id", async function (req, res) {
 });
 
 // User signup api 
-router.post('/signup', (req, res, next) => { 
+router.post('/signup', (req, res, next) => {
 
 
 // Creating empty user object 
-    let newUser = new Account(); 
+    let newUser = new Account();
 
     // Initialize newUser object with request data 
-    newUser.firstName = req.body.firstName, 
-    newUser.username = req.body.username, 
-    newUser.phone = req.body.phone, 
-    newUser.email = req.body.email,
-    newUser.lastName = req.body.lastName,
+    newUser.firstName = req.body.firstName
+    newUser.username = req.body.username
+    newUser.phone = req.body.phone
+    newUser.email = req.body.email
+    newUser.lastName = req.body.lastName
 
 
     // Call setPassword function to hash password 
-    newUser.setPassword(req.body.password); 
+    newUser.setPassword(req.body.password);
 
     // Save newUser object to database 
-    newUser.save((err, User) => { 
-        if (err) { 
+    newUser.save((err, User) => {
+        if (err) {
           console.log(err)
-            return res.status(400).send({ 
+            return res.status(400).send({
                 message : "Failed to add user."
-            }); 
-        } 
-        else { 
-            return res.status(201).send({ 
+            });
+        }
+        else {
+            return res.status(201).send({
                 message : "User added successfully."
-            }); 
-        } 
-    }); 
-}); 
+            });
+        }
+    });
+});
 
 
 // User login api 
-router.post('/login', (req, res) => { 
+router.post('/login', (req, res) => {
     if (req.body.username != null)
     {
       // Find user with requested username 
-        Account.findOne({'username': req.body.username}, function(err, user) { 
-        if (user === null) { 
-            return res.status(400).send({ 
-                message : "User not found."
-            }); 
-        } 
-        else { 
-            if (user.validPassword(req.body.password)) { 
-                return res.status(201).send({ 
-                    message : "User Logged In", 
-                }) 
-            } 
-            else { 
-                return res.status(400).send({ 
+        Account.findOne({'username': req.body.username}, function(err, user) {
+        if (user === null) {
+            return res.status(400).send({
+                message : "Username not found."
+            });
+        }
+        else {
+            if (user.validPassword(req.body.password)) {
+                return res.status(201).send({
+                    message : "User Logged In",
+                    user : user
+                })
+            }
+            else {
+                return res.status(400).send({
                     message : "Wrong Password"
-                }); 
-            } 
-        } 
-        }); 
+                });
+            }
+        }
+        });
+    }
+    else if (req.body.email != null)
+    {
+      // Find user with requested email 
+      Account.findOne({'email': req.body.email}, function(err, user) {
+          if (user === null) {
+              return res.status(400).send({
+                  message : "Email not found."
+              });
+          }
+          else {
+              if (user.validPassword(req.body.password)) {
+                  return res.status(201).send({
+                      message : "User Logged In",
+                      user: user
+                  })
+              }
+              else {
+                  return res.status(400).send({
+                      message : "Wrong Password"
+                  });
+              }
+          }
+      });
     }
     else
     {
-      // Find user with requested email 
-      Account.findOne({'email': req.body.email}, function(err, user) { 
-          if (user === null) { 
-              return res.status(400).send({ 
-                  message : "User not found."
-              }); 
-          } 
-          else { 
-              if (user.validPassword(req.body.password)) { 
-                  return res.status(201).send({ 
-                      message : "User Logged In", 
-                  }) 
-              } 
-              else { 
-                  return res.status(400).send({ 
-                      message : "Wrong Password"
-                  }); 
-              } 
-          } 
+      return res.status(400).send({
+          message : "No Email or USername Entered"
       });
-    } 
-}); 
+    }
+});
 
 module.exports = router;
