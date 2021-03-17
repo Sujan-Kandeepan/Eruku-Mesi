@@ -128,7 +128,7 @@ router.post('/signup', (req, res, next) => {
             });
         }
         else {
-            return res.status(201).send({
+            return res.status(200).send({
                 message : "User added successfully."
             });
         }
@@ -140,58 +140,52 @@ router.post('/signup', (req, res, next) => {
 router.post('/login', (req, res) => {
     if (req.body.username != null)
     {
-      // Find user with requested username 
-        Account.findOne({'username': req.body.username}, function(err, user) {
-        if (user === null) {
-            return res.status(400).send({
-                message : "Username not found."
-            });
-        }
-        else {
-            if (user.validPassword(req.body.password)) {
-                return res.status(201).send({
-                    message : "User Logged In",
-                    user : user
-                })
-            }
-            else {
-                return res.status(400).send({
-                    message : "Wrong Password"
-                });
-            }
-        }
-        });
+      var lookup  = {'username': req.body.username}
     }
     else if (req.body.email != null)
     {
-      // Find user with requested email 
-      Account.findOne({'email': req.body.email}, function(err, user) {
-          if (user === null) {
-              return res.status(400).send({
-                  message : "Email not found."
-              });
-          }
-          else {
-              if (user.validPassword(req.body.password)) {
-                  return res.status(201).send({
-                      message : "User Logged In",
-                      user: user
-                  })
-              }
-              else {
-                  return res.status(400).send({
-                      message : "Wrong Password"
-                  });
-              }
-          }
-      });
+      var lookup  = {'email': req.body.email}
     }
     else
     {
       return res.status(400).send({
-          message : "No Email or USername Entered"
+          message : "No Email or Username Entered"
       });
     }
+      // Find user with requested field 
+    Account.findOne(lookup, function(err, user) {
+    if (user === null) { 
+        return res.status(400).send({
+            message : "User not found."
+        });
+    }
+    else {
+        if (user.validPassword(req.body.password)) {
+          var account = {
+                      "username" : user.username,
+                      "phoneVerified" : user.phoneVerified,
+                      "passwordResetToken" : user.passwordResetToken,
+                      "accountType" : user.accountType,
+                      "_id" : user._id,
+                      "createdAt" : user.createdAt,
+                      "firstName" : user.firstName,
+                      "username" : user.username,
+                      "phone" : user.phone,
+                      "email" : user.email,
+                      "lastName" : user.lastname
+                    }
+            return res.status(200).send({
+                message : "User Logged In",
+                account : account
+            })
+        }
+        else {
+            return res.status(400).send({
+                message : "Wrong Password"
+            });
+        }
+    }
+    });
 });
 
 module.exports = router;
