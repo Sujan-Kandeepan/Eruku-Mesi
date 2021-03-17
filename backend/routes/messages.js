@@ -70,6 +70,35 @@ router.get("/", async function (req, res) {
 });
 
 /**
+ * Type is an integer. Type is either 1 or 0.
+ * If it is 1, then it wants 15 documents before that objectID
+ * If it is 2, then it wants all the documents after that objectID
+ */
+router.get("/:type/:id", async function(req, res) {
+  let id = req.params.id;
+  let type = Number.parseInt(req.params.type, 10);
+  const number = 15;
+
+  if (type == 1) {
+    try {
+      const messages = await Message.find({ '_id': { $lt: id } }).limit(number);
+      return res.status(200).json({ messages: messages });
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  } else {
+    try {
+      const messages = await Message.find({ '_id': { $gt: id } });
+      return res.status(200).json({ messages: messages });
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  }
+ 
+
+});
+
+/**
  * Get the information of a specific message (given the message id)
  */
 router.get("/:id", async function (req, res) {
