@@ -101,14 +101,14 @@ router.delete("/:id", async function (req, res) {
   }
 });
 
-// User signup api 
+// User signup api
 router.post('/signup', (req, res, next) => {
 
 
-// Creating empty user object 
+// Creating empty user object
     let newUser = new Account();
 
-    // Initialize newUser object with request data 
+    // Initialize newUser object with request data
     newUser.firstName = req.body.firstName
     newUser.username = req.body.username
     newUser.phone = req.body.phone
@@ -116,10 +116,10 @@ router.post('/signup', (req, res, next) => {
     newUser.lastName = req.body.lastName
 
 
-    // Call setPassword function to hash password 
+    // Call setPassword function to hash password
     newUser.setPassword(req.body.password);
 
-    // Save newUser object to database 
+    // Save newUser object to database
     newUser.save((err, User) => {
         if (err) {
           console.log(err)
@@ -136,7 +136,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 
-// User login api 
+// User login api
 router.post('/login', (req, res) => {
     if (req.body.username != null)
     {
@@ -152,9 +152,9 @@ router.post('/login', (req, res) => {
           message : "No Email or Username Entered"
       });
     }
-      // Find user with requested field 
+      // Find user with requested field
     Account.findOne(lookup, function(err, user) {
-    if (user === null) { 
+    if (user === null) {
         return res.status(400).send({
             message : "User not found."
         });
