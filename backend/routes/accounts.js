@@ -26,9 +26,7 @@ router.post("/add", async function (req, res) {
   try {
     const account = new Account(req.body);
     await account.save();
-    return res
-      .status(200)
-      .json({ message: "account successfully added", account: account });
+    return res.status(200).json({ message: "account successfully added" });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -42,7 +40,23 @@ router.post("/add", async function (req, res) {
  */
 router.get("/", async function (req, res) {
   try {
-    const accounts = await Account.find({});
+    const accounts = await Account.find(
+      {},
+      {
+        username: 1,
+        firstName: 1,
+        lastName: 1,
+        phone: 1,
+        email: 1,
+        phoneVerified: 1,
+        passwordResetToken: 1,
+        resetTokenExpiredAt: 1,
+        location: 1,
+        accountType: 1,
+        createdAt: 1,
+        settings: 1,
+      }
+    );
     return res.status(200).json(accounts);
   } catch (e) {
     return res.status(500).json(e);
@@ -64,10 +78,8 @@ router.post("/edit/:id", async function (req, res) {
   }
 
   try {
-    const account = await Account.updateOne(query, accountBody);
-    return res
-      .status(200)
-      .json({ msg: "account successfully updated", account: account });
+    await Account.updateOne(query, accountBody);
+    return res.status(200).json({ msg: "account successfully updated" });
   } catch (e) {
     return res.status(500).json(e);
   }
@@ -80,7 +92,20 @@ router.get("/:id", async function (req, res) {
   let id = req.params.id;
 
   try {
-    const account = await Account.findById(id);
+    const account = await Account.findById(id).select({
+      username: 1,
+      firstName: 1,
+      lastName: 1,
+      phone: 1,
+      email: 1,
+      phoneVerified: 1,
+      passwordResetToken: 1,
+      resetTokenExpiredAt: 1,
+      location: 1,
+      accountType: 1,
+      createdAt: 1,
+      settings: 1,
+    });
     return res.status(200).json({ account: account });
   } catch (e) {
     return res.status(500).json({ message: "account not found" });
