@@ -34,7 +34,7 @@ export default function PersonalInformationForm(props) {
       post(`${props.baseURL}/accounts/edit/${props.user._id}`, info)
         .then(() => {
           setEditInfoError('');
-          props.setUser({ ...props.user, ...info });
+          props.updateUser(info);
           navigation.pop();
         })
         .catch(error => setEditInfoError(error.message));
