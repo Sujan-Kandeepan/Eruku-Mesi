@@ -78,7 +78,7 @@ router.get("/", async function (req, res) {
 router.get("/:type/:id", async function(req, res) {
   let id = req.params.id;
   let type = Number.parseInt(req.params.type, 10);
-  const number = 5;
+  const number = 15;
 
   if (type == 1) {
     try {
