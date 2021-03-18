@@ -126,4 +126,91 @@ router.delete("/:id", async function (req, res) {
   }
 });
 
+// User signup api
+router.post('/signup', (req, res, next) => {
+
+
+// Creating empty user object
+    let newUser = new Account();
+
+    // Initialize newUser object with request data
+    newUser.firstName = req.body.firstName
+    newUser.username = req.body.username
+    newUser.phone = req.body.phone
+    newUser.email = req.body.email
+    newUser.lastName = req.body.lastName
+
+
+    // Call setPassword function to hash password
+    newUser.setPassword(req.body.password);
+
+    // Save newUser object to database
+    newUser.save((err, User) => {
+        if (err) {
+          console.log(err)
+            return res.status(400).send({
+                message : "Failed to add user."
+            });
+        }
+        else {
+            return res.status(200).send({
+                message : "User added successfully."
+            });
+        }
+    });
+});
+
+
+// User login api
+router.post('/login', (req, res) => {
+    if (req.body.username != null)
+    {
+      var lookup  = {'username': req.body.username}
+    }
+    else if (req.body.email != null)
+    {
+      var lookup  = {'email': req.body.email}
+    }
+    else
+    {
+      return res.status(400).send({
+          message : "No Email or Username Entered"
+      });
+    }
+      // Find user with requested field
+    Account.findOne(lookup, function(err, user) {
+    if (user === null) {
+        return res.status(400).send({
+            message : "User not found."
+        });
+    }
+    else {
+        if (user.validPassword(req.body.password)) {
+          var account = {
+                      "username" : user.username,
+                      "phoneVerified" : user.phoneVerified,
+                      "passwordResetToken" : user.passwordResetToken,
+                      "accountType" : user.accountType,
+                      "_id" : user._id,
+                      "createdAt" : user.createdAt,
+                      "firstName" : user.firstName,
+                      "username" : user.username,
+                      "phone" : user.phone,
+                      "email" : user.email,
+                      "lastName" : user.lastname
+                    }
+            return res.status(200).send({
+                message : "User Logged In",
+                account : account
+            })
+        }
+        else {
+            return res.status(400).send({
+                message : "Wrong Password"
+            });
+        }
+    }
+    });
+});
+
 module.exports = router;
