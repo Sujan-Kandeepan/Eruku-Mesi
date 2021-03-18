@@ -5,14 +5,17 @@ import dayjs from 'dayjs';
 // Shared logic for HTTP requests in functions to export
 // Reference: https://reactnative.dev/docs/network
 const request = async (url, params) => {
+  let response, message;
   try {
-    const response = await fetch(url, params);
+    response = await fetch(url, params);
     const json = await response.json();
-    if (!response.ok)
-      throw Error(`Returned ${response.status} with message: ${json.message}`);
+    if (!response.ok) {
+      message = json.message;
+      throw Error(json.message || 'An error occurred.');
+    }
     return json;
   } catch (error) {
-    console.error(error);
+    console.error(response ? `Returned ${response.status} with message: ${message}` : error);
     throw error;
   }
 };

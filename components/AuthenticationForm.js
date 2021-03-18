@@ -5,29 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
 import { Button, Header, SimpleInput, ToggleWithoutCard } from '../shared/SharedComponents';
-import { validEmail, validPassword, validPhone } from '../shared/SharedFunctions';
+import { post, validEmail, validPassword, validPhone } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize tab navigator
 const Tab = createBottomTabNavigator();
-
-// Info for temporary fake user
-const fakeUser = {
-  "phoneVerified": false,
-  "passwordResetToken": null,
-  "resetTokenExpiredAt": null,
-  "accountType": "admin",
-  "_id": "603dcf2497c3c4522cfba1c0",
-  "username": "testuser",
-  "firstName": "Test",
-  "lastName": "User",
-  "phone": "1234567890",
-  "email": "testuser@domain.com",
-  "hash": "1234567890",
-  "salt": "1234567890",
-  "createdAt": "2021-03-02T05:37:40.838Z",
-  "__v": 0
-};
 
 // Shared logic for both tabs on authentication form
 const AuthTab = (props) =>
@@ -57,24 +39,25 @@ export default function AuthenticationForm(props) {
   const [email, setEmail] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
   const [signupError, setSignupError] = React.useState('');
-  // Form validation and fake authentication for login
-  const fakeLogin = () => {
-    if ([fakeUser.username, fakeUser.email].includes(username) && password == 'Test123!') {
-      setLoginError('');
-      props.setUser(fakeUser);
-      props.setAdmin(fakeUser.accountType == 'admin');
-    } else if (username.trim() == '') {
+  // Form validation and API call for login
+  const login = () => {
+    if (username.trim() == '') {
       setLoginError('Email or username required.');
     } else if (password.trim() == '') {
       setLoginError('Password required.');
-    } else if (username == fakeUser.username) {
-      setLoginError('Incorrect password.');
     } else {
-      setLoginError('Email or username not found.');
+      post(`${props.baseURL}/accounts/login`,
+        { ...(validEmail(username) ? { email: username } : { username }), password })
+        .then(response => {
+          setLoginError('');
+          props.setUser(response.account);
+          props.setAdmin(response.account.accountType == 'admin');
+        })
+        .catch(error => setLoginError(error.message));
     }
   };
-  // Form validation and fake availability checks for signup
-  const fakeSignup = () => {
+  // Form validation and API call for signup
+  const signup = () => {
     if (newUsername.trim() == '') {
       setSignupError('Please specify a username.');
     } else if (newPassword == '') {
@@ -95,16 +78,18 @@ export default function AuthenticationForm(props) {
       setSignupError('Please enter a valid email address.');
     } else if (!validPassword(newPassword, setPasswordError)) {
       setSignupError(passwordError);
-    } else if (newUsername.trim() == fakeUser.username.trim()) {
-      setSignupError('A user with this username already exists.');
-    } else if (phone.trim() == fakeUser.phone.trim()) {
-      setSignupError('A user with this phone number already exists.');
-    } else if (email.trim() == fakeUser.email.trim()) {
-      setSignupError('A user with this email address already exists.');
     } else {
-      setSignupError('');
-      props.setUser({ ...fakeUser, username: newUsername, firstName, lastName, phone, email });
-      props.setAdmin(fakeUser.accountType == 'admin');
+      post(`${props.baseURL}/accounts/signup`,
+        { username: newUsername, password: newPassword, firstName, lastName, phone, email })
+        .then(() =>
+          post(`${props.baseURL}/accounts/login`, { username: newUsername, password: newPassword })
+            .then(response => {
+              setSignupError('');
+              props.setUser(response.account);
+              props.setAdmin(response.account.accountType == 'admin');
+            })
+            .catch(() => setSignupError('Unable to log in')))
+        .catch(error => setSignupError(error.message));
     }
   };
   return (
@@ -132,7 +117,7 @@ export default function AuthenticationForm(props) {
               <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>
                 {loginError}
               </Text>
-              <Button {...props} {...localProps} color='accent' text='Log In' onPress={fakeLogin} />
+              <Button {...props} {...localProps} color='accent' text='Log In' onPress={login} />
             </View>} />} />
         {/* Signup form with complete form for new user */}
         <Tab.Screen name={'Sign Up'} children={(localProps) =>
@@ -162,7 +147,7 @@ export default function AuthenticationForm(props) {
               <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>
                 {signupError}
               </Text>
-              <Button {...props} {...localProps} color='accent' text='Sign Up' onPress={fakeSignup} />
+              <Button {...props} {...localProps} color='accent' text='Sign Up' onPress={signup} />
               <View style={{ height: 30 }} />
             </View>} />} />
       </Tab.Navigator>
