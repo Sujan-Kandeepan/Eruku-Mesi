@@ -78,18 +78,21 @@ router.get("/", async function (req, res) {
 router.get("/:type/:id", async function(req, res) {
   let id = req.params.id;
   let type = Number.parseInt(req.params.type, 10);
-  const number = 15;
+  const number = 5;
 
   if (type == 1) {
     try {
-      const messages = await Message.find({ '_id': { $lt: id } }).limit(number);
+      const messages = await Message.find({ '_id': { $lt: id } }).sort({ _id: -1 }).limit(number);
+      messages.reverse()
       return res.status(200).json({ messages: messages });
     } catch (e) {
       return res.status(500).json(e);
     }
   } else if (type == 2) {
+    //https://stackoverflow.com/questions/10811887/how-to-get-all-count-of-mongoose-model
+    const messageCount = await Message.countDocuments({}).exec();
     try {
-      const messages = await Message.find({}).limit(number);
+      const messages = await Message.find({}).skip(messageCount - number);
       return res.status(200).json({ messages: messages });
     } catch (e) {
       return res.status(500).json(e);
