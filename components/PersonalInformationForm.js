@@ -30,14 +30,9 @@ export default function PersonalInformationForm(props) {
     } else if (!validEmail(email)) {
       setEditInfoError('Please enter a valid email address.');
     } else {
-      const info = { profilePicture, username, firstName, lastName, phone, email };
-      post(`${props.baseURL}/accounts/edit/${props.user._id}`, info)
-        .then(() => {
-          setEditInfoError('');
-          props.updateUser(info);
-          navigation.pop();
-        })
-        .catch(error => setEditInfoError(error.message));
+      props.updateUser({ profilePicture, username, firstName, lastName, phone, email },
+        () => { setEditInfoError(''); navigation.pop(); },
+        error => setEditInfoError(error.message));
     }
   };
   return (

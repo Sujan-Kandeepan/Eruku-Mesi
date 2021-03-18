@@ -18,7 +18,7 @@ import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 import FeedbackForm from './components/FeedbackForm';
 import AuthenticationForm from './components/AuthenticationForm';
-import { get } from './shared/SharedFunctions';
+import { get, post } from './shared/SharedFunctions';
 
 // Base URL for API wherever hosted (computer's IP for now)
 // Reference: https://stackoverflow.com/a/56943681
@@ -139,7 +139,12 @@ export default function App() {
   // User data as object and admin status
   let [user, setUser] = React.useState(null);
   let [admin, setAdmin] = React.useState(false);
-  const updateUser = data => setUser({ ...user, ...data });
+  const updateUser = (data, thenCallback, catchCallback) => {
+    setUser({ ...user, ...data });
+    post(`${baseURL}/accounts/edit/${user._id}`, data)
+      .then(thenCallback)
+      .catch(catchCallback);
+  }
   React.useEffect(() => {
     if (user) {
       setAdmin(user.accountType === 'admin');
@@ -153,12 +158,18 @@ export default function App() {
   const toggleNotifications = () => {
     snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
     setReceiveNotifications(!receiveNotifications);
+    updateUser({ receiveNotifications: !receiveNotifications }, () => {},
+      () => snackbar('Failed to update database'));
   }
 
   // Set and toggle between light/dark themes defined globally using state
   // Reference: https://callstack.github.io/react-native-paper/theming-with-react-navigation.html
   let [theme, setTheme] = React.useState(lightTheme);
-  const toggleTheme = () => setTheme(theme === darkTheme ? lightTheme : darkTheme);
+  const toggleTheme = () => {
+    const newTheme = theme === darkTheme ? lightTheme : darkTheme;
+    setTheme(newTheme);
+    updateUser({ theme: newTheme }, () => { }, () => snackbar('Failed to update database'));
+  }
 
   // Props to expose to nested child components, extra for settings
   const sharedProps = { admin, baseURL, setAdmin, snackbar, theme, user };
