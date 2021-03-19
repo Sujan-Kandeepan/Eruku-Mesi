@@ -54,7 +54,8 @@ router.get("/", async function (req, res) {
         location: 1,
         accountType: 1,
         createdAt: 1,
-        settings: 1,
+        receiveNotifications: 1,
+        theme: 1
       }
     );
     return res.status(200).json(accounts);
@@ -104,7 +105,8 @@ router.get("/:id", async function (req, res) {
       location: 1,
       accountType: 1,
       createdAt: 1,
-      settings: 1,
+      receiveNotifications: 1,
+      theme: 1
     });
     return res.status(200).json({ account: account });
   } catch (e) {

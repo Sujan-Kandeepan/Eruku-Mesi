@@ -54,10 +54,19 @@ let Account = new Schema({
     type: Date,
     default: Date.now,
   },
-  settings: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Settings",
+  receiveNotifications: {
+    type: Boolean,
+    default: false,
   },
+  preferredTheme: {
+    type: String,
+    enum: ["light", "dark"],
+    default: "light",
+  },
+  expoToken: {
+    type: String,
+    default: null
+  }
 });
 
 
