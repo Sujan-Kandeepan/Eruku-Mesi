@@ -73,7 +73,12 @@ export default function MessagesPage(props) {
               borderColor: props.theme.colors.border, borderWidth: 1,
               color: props.theme.colors.text, flex: 1, padding: 10
             }} placeholder='Enter your message' placeholderTextColor={props.theme.colors.placeholder}
-            value={newMessage} onChangeText={value => setNewMessage(value)}
+            value={newMessage} onChangeText={value => {
+              const maxMessageLength = 1000;
+              if (value.length > maxMessageLength)
+                props.snackbar('Message is too long');
+              setNewMessage(value.substring(0, maxMessageLength));
+            }}
             onBlur={Keyboard.dismiss} />
           {/* Submit button with logic to add new message */}
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
