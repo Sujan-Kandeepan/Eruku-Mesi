@@ -41,6 +41,10 @@ export const addInfoSection = (props, pages, setPages, data, setData,
 // Edit information section name and update interface upon success
 export const editInfoSection = (props, pages, setPages, data, setData,
   originalText, setOriginalText, editText, setEditText, callback) => {
+  if (editText.trim() === '') {
+    props.snackbar('Section name cannot be blank');
+    return;
+  }
   if (pages.includes(editText) && originalText !== editText) {
     props.snackbar('Duplicate sections not allowed');
     return;
