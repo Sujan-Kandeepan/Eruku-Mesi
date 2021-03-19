@@ -8,8 +8,8 @@ describe('Messages', () => {
   });
 
   const mockMessages = () => {
-    fetch.mockResponseOnce(JSON.stringify(
-      [
+    fetch.mockResponseOnce(JSON.stringify({
+      messages: [
         {
           _id: '5ffb521eee35744495bf5905',
           sender: '5ffb4dbeee35744495bf58fc',
@@ -17,7 +17,7 @@ describe('Messages', () => {
           message: 'SAMPLE MESSAGE BY ADMIN USER.'
         }
       ]
-    ));
+    }));
     fetch.mockResponseOnce(JSON.stringify(
       {
         account: {
@@ -86,13 +86,17 @@ describe('Messages', () => {
     fetch.mockResponseOnce(JSON.stringify({}));
     mockMessages();
     sendMessage(props, messages, setMessages, newMessage, setNewMessage, list, () => {
-      expect(fetch.mock.calls.length).toEqual(3);
-      expect(fetch.mock.calls[0][0]).toContain('messages/add');
-      expect(fetch.mock.calls[1][0]).toContain('messages');
-      expect(fetch.mock.calls[2][0]).toContain('accounts/5ffb4dbeee35744495bf58fc');
-      expect(messages.length).toEqual(1);
-      expect(newMessage).toEqual('');
-      done();
+      try {
+        expect(fetch.mock.calls.length).toEqual(3);
+        expect(fetch.mock.calls[0][0]).toContain('messages/add');
+        expect(fetch.mock.calls[1][0]).toContain('messages');
+        expect(fetch.mock.calls[2][0]).toContain('accounts/5ffb4dbeee35744495bf58fc');
+        expect(messages.length).toEqual(1);
+        expect(newMessage).toEqual('');
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
   });
 });
