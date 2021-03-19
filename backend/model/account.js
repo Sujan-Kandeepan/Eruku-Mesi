@@ -58,7 +58,7 @@ let Account = new Schema({
     type: Boolean,
     default: false,
   },
-  preferredTheme: {
+  theme: {
     type: String,
     enum: ["light", "dark"],
     default: "light",
