@@ -55,8 +55,10 @@ export default function InformationPage(props) {
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   {props.admin &&
                     <Text style={{ marginLeft: 5, marginRight: -15 }}>
-                      <IconButton style={SharedStyles.icon} onLongPress={drag}
+                      <IconButton style={SharedStyles.icon}
                         onPress={() => props.snackbar('Hold and drag to reorder list')}
+                        onLongPress={() => originalText === ''
+                          ? drag() : props.snackbar('Save changes before reordering')}
                         name='unfold-more' type='material' color={props.theme.colors.placeholder} />
                     </Text>}
                   {/* Inline edit interface for section name */}
