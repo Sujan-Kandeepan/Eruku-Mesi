@@ -1,11 +1,16 @@
 import { get, post } from '../../shared/SharedFunctions';
 
 // Fetch messages and populate component state array
-export const fetchMessages = (props, setMessages, callback) => {
-  get(`${props.baseURL}/messages`)
+export const fetchMessages = (props, messages, setMessages, prepend, callback) => {
+  const endpoint = messages.length
+    ? (prepend
+      ? `1/${messages[0].id}`
+      : `3/${messages[messages.length - 1].id}`)
+    : '2/initial';
+  get(`${props.baseURL}/messages/${endpoint}`)
     .then(response => {
       let names = {};
-      Promise.all(response.map(item =>
+      Promise.all(response.messages.map(item =>
         get(`${props.baseURL}/accounts/${item.sender}`)
           .then(account =>
             names[item.sender] =
@@ -14,25 +19,29 @@ export const fetchMessages = (props, setMessages, callback) => {
                 : 'Unknown User')
           .catch(() => names[item.sender] = 'Unknown User')
         ))
-        .then(() => setMessages(response.map(item => ({
-          id: item._id,
-          sender: names[item.sender],
-          message: item.message,
-          sentAt: item.sentAt,
-          profilePicture: item.profilePicture
-            || 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
-        }))))
+        .then(() => setMessages([
+          ...(prepend ? [] : messages),
+          ...response.messages.map(item => ({
+            id: item._id,
+            sender: names[item.sender],
+            message: item.message,
+            sentAt: item.sentAt,
+            profilePicture: item.profilePicture
+              || 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
+          })),
+          ...(prepend ? messages : [])
+        ]))
         .finally(callback);
     })
     .catch(error => {
       console.error(error);
       props.snackbar('Unable to fetch messages');
-      callback();
+      callback && callback();
     });
 };
 
 // Handle submit action to send a new message
-export const sendMessage = (props, setMessages, newMessage, setNewMessage, list, callback) => {
+export const sendMessage = (props, messages, setMessages, newMessage, setNewMessage, list, callback) => {
   if (newMessage.trim() === '') {
     props.snackbar('Message is empty');
     return;
@@ -45,5 +54,5 @@ export const sendMessage = (props, setMessages, newMessage, setNewMessage, list,
     })
     // Display message if failed
     .catch(error => console.error(error) && props.snackbar('Failed to update database'))
-    .finally(() => fetchMessages(props, setMessages, callback));
+    .finally(() => fetchMessages(props, messages, setMessages, false, callback));
 }

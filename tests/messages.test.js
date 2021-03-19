@@ -35,7 +35,7 @@ describe('Messages', () => {
     let messages = [];
     let setMessages = value => messages = value;
     mockMessages();
-    fetchMessages(props, setMessages, () => {
+    fetchMessages(props, messages, setMessages, false, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(2);
         expect(fetch.mock.calls[0][0]).toContain('messages');
@@ -61,7 +61,7 @@ describe('Messages', () => {
     let newMessage = '';
     let setNewMessage = value => newMessage = value;
     let list = { scrollToEnd: () => { } };
-    sendMessage(props, setMessages, newMessage, setNewMessage, list);
+    sendMessage(props, messages, setMessages, newMessage, setNewMessage, list);
     expect(fetch.mock.calls.length).toEqual(0);
     expect(messages.length).toEqual(0);
     expect(newMessage).toEqual('');
@@ -85,7 +85,7 @@ describe('Messages', () => {
     let list = { scrollToEnd: () => { } };
     fetch.mockResponseOnce(JSON.stringify({}));
     mockMessages();
-    sendMessage(props, setMessages, newMessage, setNewMessage, list, () => {
+    sendMessage(props, messages, setMessages, newMessage, setNewMessage, list, () => {
       expect(fetch.mock.calls.length).toEqual(3);
       expect(fetch.mock.calls[0][0]).toContain('messages/add');
       expect(fetch.mock.calls[1][0]).toContain('messages');

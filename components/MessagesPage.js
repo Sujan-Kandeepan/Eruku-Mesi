@@ -21,7 +21,7 @@ export default function MessagesPage(props) {
   const [needsToScroll, setNeedsToScroll] = React.useState(true);
   const scroll = () => needsToScroll && list.scrollToEnd({ animated: true });
   const stopScroll = () => setTimeout(() => setNeedsToScroll(false), 1000);
-  periodic(() => fetchMessages(props, setMessages, () => setFetched(true)));
+  periodic(() => fetchMessages(props, messages, setMessages, false, () => setFetched(true)));
   return (
     <AppPage {...props}>
       {/* Reference: https://stackoverflow.com/a/61980218 */}
@@ -37,9 +37,9 @@ export default function MessagesPage(props) {
             <View style={{
               borderColor: props.theme.colors.border, borderBottomWidth: 1,
               backgroundColor: props.theme.colors.background,
-              flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 5
+              flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10
             }}>
-              <Avatar.Image size={50} style={{ alignSelf: 'center' }}
+              <Avatar.Image size={50} style={{ alignSelf: 'flex-start' }}
                 source={props.user.profilePicture
                   ? { uri: props.user.profilePicture.uri }
                   : require('../assets/default-user.png')} />
@@ -71,7 +71,7 @@ export default function MessagesPage(props) {
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <IconButton {...props} style={{ marginLeft: 15 }} name='send' type='material'
               color={props.theme.colors.accent}
-              onPress={() => sendMessage(props, setMessages, newMessage, setNewMessage, list)} />
+              onPress={() => sendMessage(props, messages, setMessages, newMessage, setNewMessage, list)} />
           </View>
         </View>
       </View>
