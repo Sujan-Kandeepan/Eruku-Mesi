@@ -54,6 +54,14 @@ export default function MessagesPage(props) {
                 </Text>
               </View>
             </View>} keyExtractor={(item, index) => `${item ? item.id : index} ${index}`} extraData={fetched}
+            // Load more messages upon scroll to top of messages list
+            // Reference: https://stackoverflow.com/a/54928134
+            onScroll={event => {
+              if (event.nativeEvent.contentOffset.y == 0) {
+                setFetched(false);
+                fetchMessages(props, messages, setMessages, true, () => setFetched(true));
+              }
+            }}
             // Set reference and automatically scroll to bottom when list populates
             ref={ref => setList(ref)} onContentSizeChange={scroll} onLayout={scroll} onEndReached={stopScroll} />
         </View>
