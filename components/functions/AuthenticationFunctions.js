@@ -24,8 +24,8 @@ export const login = (props, username, password, setLoginError, callback) => {
 };
 
 // Form validation and API call for signup
-export const signup = (props, newUsername, newPassword, confirmPassword, firstName, lastName,
-  phone, email, passwordError, setPasswordError, setSignupError, callback) => {
+export const signup = (props, newUsername, newPassword, confirmPassword,
+  firstName, lastName, phone, email, setSignupError, callback) => {
   let valid = false;
   if (newUsername.trim() == '') {
     setSignupError('Please specify a username.');
@@ -45,9 +45,7 @@ export const signup = (props, newUsername, newPassword, confirmPassword, firstNa
     setSignupError('Please enter a valid phone number.');
   } else if (!validEmail(email)) {
     setSignupError('Please enter a valid email address.');
-  } else if (!validPassword(newPassword, setPasswordError)) {
-    setSignupError(passwordError);
-  } else {
+  } else if (validPassword(newPassword, setSignupError)) {
     valid = true;
     post(`${props.baseURL}/accounts/signup`,
       { username: newUsername, password: newPassword, firstName, lastName, phone, email })

@@ -37,7 +37,6 @@ export default function AuthenticationForm(props) {
   const [lastName, setLastName] = React.useState('');
   const [phone, setPhone] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
   const [signupError, setSignupError] = React.useState('');
   return (
     // Tab navigation to switch between login and signup
@@ -96,8 +95,8 @@ export default function AuthenticationForm(props) {
                 {signupError}
               </Text>
               <Button {...props} {...localProps} color='accent' text='Sign Up'
-                onPress={() => signup(props, newUsername, newPassword, confirmPassword, firstName, lastName,
-                  phone, email, passwordError, setPasswordError, setSignupError)} />
+                onPress={() => signup(props, newUsername, newPassword, confirmPassword,
+                  firstName, lastName, phone, email, setSignupError)} />
               <View style={{ height: 30 }} />
             </View>} />} />
       </Tab.Navigator>
