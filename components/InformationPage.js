@@ -43,7 +43,7 @@ export default function InformationPage(props) {
                 </Text>}
               {/* Draggable version of FlatList displaying individual sections with options */}
               {/* Reference: https://github.com/computerjazz/react-native-draggable-flatlist */}
-              <DraggableFlatList data={pages} renderItem={({ drag, item }) =>
+              <DraggableFlatList data={pages} removeClippedSubviews={false} renderItem={({ drag, item }) =>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   {props.admin &&
                     <Text style={{ marginLeft: 5, marginRight: -15 }}>

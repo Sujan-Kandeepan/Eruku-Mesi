@@ -33,7 +33,7 @@ export default function MessagesPage(props) {
               Loading messages...
             </Text>}
           {/* List of messages displayed chronologically */}
-          <FlatList data={messages} renderItem={({ item }) =>
+          <FlatList data={messages} removeClippedSubviews={false} renderItem={({ item }) =>
             <View style={{
               borderColor: props.theme.colors.border, borderBottomWidth: 1,
               backgroundColor: props.theme.colors.background,
@@ -44,12 +44,11 @@ export default function MessagesPage(props) {
                   ? { uri: props.user.profilePicture.uri }
                   : require('../assets/default-user.png')} />
               <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0 }}>
-                {/* Basic layout for now, might enhance later */}
-                <Text style={{ color: props.theme.colors.text, flexDirection: 'row', fontWeight: 'bold' }}>
+                <Text selectable style={{ color: props.theme.colors.text, flexDirection: 'row', fontWeight: 'bold' }}>
                   {item.sender}
                 </Text>
-                <Text style={{ fontSize: 10 }}>{showDate(item.sentAt)} at {showTime(item.sentAt)}</Text>
-                <Text style={{ color: props.theme.colors.text, marginVertical: 5 }}>
+                <Text selectable style={{ fontSize: 10 }}>{showDate(item.sentAt)} at {showTime(item.sentAt)}</Text>
+                <Text selectable style={{ color: props.theme.colors.text, marginVertical: 5 }}>
                   {item.message}
                 </Text>
               </View>

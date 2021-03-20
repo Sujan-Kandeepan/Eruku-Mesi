@@ -189,13 +189,13 @@ export const Feed = (props) =>
 
 // Component to display expanded content for individual item
 export const Content = (props) =>
-  <FlatList data={props.content} renderItem={({ item }) =>
+  <FlatList data={props.content} removeClippedSubviews={false} renderItem={({ item }) =>
     // Supports only text paragraphs for now, will add more functionality later
-    <Text style={{ color: props.theme.colors.text, margin: 15, marginTop: 0 }}>{item}</Text>
+    <Text selectable style={{ color: props.theme.colors.text, margin: 15, marginTop: 0 }}>{item}</Text>
   } keyExtractor={item => item} ListHeaderComponent={
     <>
       {/* Display title above rest of content */}
-      {props.title && <Text style={{
+      {props.title && <Text selectable style={{
         color: props.theme.colors.text,
         fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10,
         textAlign: 'center', textDecorationLine: 'underline'
@@ -208,7 +208,7 @@ export const Content = (props) =>
           style={{ alignSelf: 'center', marginBottom: 15 }} />}
       {/* Display subtitle below title, line by line */}
       {props.subtitle && props.subtitle.split('\n').map((line, index) =>
-      <Text key={index} style={{
+      <Text selectable key={index} style={{
         color: props.theme.colors.text,
         fontSize: 14, marginBottom: 10,
         textAlign: 'center'
