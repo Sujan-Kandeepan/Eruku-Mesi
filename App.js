@@ -151,6 +151,7 @@ export default function App() {
       setAdmin(user.accountType === 'admin');
       setReceiveNotifications(user.receiveNotifications);
       setTheme(user.theme === 'light' ? lightTheme : darkTheme);
+      if (!user.theme) updateUser({ theme: theme.dark ? 'dark' : 'light' })
       if (Platform.OS !== 'web')
         SecureStore.setItemAsync('user', user._id);
     }
