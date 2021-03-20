@@ -2,8 +2,8 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import AppPage from './AppPage';
+import { editInfo } from './functions/SettingsFunctions';
 import { Button, Header, Media, MediaPicker, SimpleInput } from '../shared/SharedComponents';
-import { post, validEmail, validPhone } from '../shared/SharedFunctions';
 
 // Form for editing user info in separate component to reset state on exit
 export default function PersonalInformationForm(props) {
@@ -15,26 +15,6 @@ export default function PersonalInformationForm(props) {
   const [phone, setPhone] = React.useState(props.user.phone);
   const [email, setEmail] = React.useState(props.user.email);
   const [editInfoError, setEditInfoError] = React.useState('');
-  // Form validation and API call for editing personal info
-  const editInfo = (navigation) => {
-    if (username.trim() == '') {
-      setEditInfoError('Please specify a username.');
-    } else if (firstName.trim() == '' || lastName.trim() == '') {
-      setEditInfoError('Please enter your first and last name.');
-    } else if (phone.trim() == '') {
-      setEditInfoError('Please enter your phone number.');
-    } else if (email.trim() == '') {
-      setEditInfoError('Please enter your email address.');
-    } else if (!validPhone(phone)) {
-      setEditInfoError('Please enter a valid phone number.');
-    } else if (!validEmail(email)) {
-      setEditInfoError('Please enter a valid email address.');
-    } else {
-      props.updateUser({ profilePicture, username, firstName, lastName, phone, email },
-        () => { setEditInfoError(''); navigation.pop(); },
-        error => setEditInfoError(error.message));
-    }
-  };
   return (
     <AppPage {...props} nested cancel scroll>
       <Header {...props} label text={'Profile Picture'} />
@@ -69,7 +49,8 @@ export default function PersonalInformationForm(props) {
         {editInfoError}
       </Text>
       <Button {...props} color='accent' text='Submit'
-        onPress={() => editInfo(props.navigation)} />
+        onPress={() => editInfo(props, profilePicture, username,
+          firstName, lastName, phone, email, setEditInfoError)} />
       <View style={{ height: 15 }} />
     </AppPage>
   );
