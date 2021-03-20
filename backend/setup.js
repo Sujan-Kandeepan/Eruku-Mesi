@@ -53,7 +53,6 @@ const information = require("./routes/information");
 const messages = require("./routes/messages");
 const newsStories = require("./routes/newsStories");
 const notifications = require("./routes/notifications");
-const settings = require("./routes/settings");
 const mediaContent = require("./routes/mediaContent");
 
 /**
@@ -67,7 +66,6 @@ app.use("/information", information);
 app.use("/messages", messages);
 app.use("/newsStories", newsStories);
 app.use("/notifications", notifications);
-app.use("/settings", settings);
 app.use("/mediaContent", mediaContent)
 
 // app.listen(PORT, function () {

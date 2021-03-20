@@ -13,9 +13,11 @@ let Event = new Schema({
   },
   location: {
     type: String,
+    required: true,
   },
   description: {
     type: String,
+    required: true,
   },
   createdAt: {
     type: Date,
