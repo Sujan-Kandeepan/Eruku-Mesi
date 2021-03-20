@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
+import { login, signup } from './functions/AuthenticationFunctions';
 import { Button, Header, SimpleInput, ToggleWithoutCard } from '../shared/SharedComponents';
-import { post, validEmail, validPassword, validPhone } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize tab navigator
@@ -39,59 +39,6 @@ export default function AuthenticationForm(props) {
   const [email, setEmail] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
   const [signupError, setSignupError] = React.useState('');
-  // Form validation and API call for login
-  const login = () => {
-    if (username.trim() == '') {
-      setLoginError('Email or username required.');
-    } else if (password.trim() == '') {
-      setLoginError('Password required.');
-    } else {
-      post(`${props.baseURL}/accounts/login`,
-        { ...(validEmail(username) ? { email: username } : { username }), password })
-        .then(response => {
-          setLoginError('');
-          props.setUser(response.account);
-          props.setAdmin(response.account.accountType == 'admin');
-        })
-        .catch(error => setLoginError(error.message));
-    }
-  };
-  // Form validation and API call for signup
-  const signup = () => {
-    if (newUsername.trim() == '') {
-      setSignupError('Please specify a username.');
-    } else if (newPassword == '') {
-      setSignupError('Please specify a password.');
-    } else if (confirmPassword == '') {
-      setSignupError('Please re-enter your password.');
-    } else if (firstName.trim() == '' || lastName.trim() == '') {
-      setSignupError('Please enter your first and last name.');
-    } else if (phone.trim() == '') {
-      setSignupError('Please enter your phone number.');
-    } else if (email.trim() == '') {
-      setSignupError('Please enter your email address.');
-    } else if (newPassword !== confirmPassword) {
-      setSignupError('Entered passwords do not match.');
-    } else if (!validPhone(phone)) {
-      setSignupError('Please enter a valid phone number.');
-    } else if (!validEmail(email)) {
-      setSignupError('Please enter a valid email address.');
-    } else if (!validPassword(newPassword, setPasswordError)) {
-      setSignupError(passwordError);
-    } else {
-      post(`${props.baseURL}/accounts/signup`,
-        { username: newUsername, password: newPassword, firstName, lastName, phone, email })
-        .then(() =>
-          post(`${props.baseURL}/accounts/login`, { username: newUsername, password: newPassword })
-            .then(response => {
-              setSignupError('');
-              props.setUser(response.account);
-              props.setAdmin(response.account.accountType == 'admin');
-            })
-            .catch(() => setSignupError('Unable to log in')))
-        .catch(error => setSignupError(error.message));
-    }
-  };
   return (
     // Tab navigation to switch between login and signup
     <NavigationContainer theme={props.theme} independent>
@@ -117,7 +64,8 @@ export default function AuthenticationForm(props) {
               <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>
                 {loginError}
               </Text>
-              <Button {...props} {...localProps} color='accent' text='Log In' onPress={login} />
+              <Button {...props} {...localProps} color='accent' text='Log In'
+                onPress={() => login(props, username, password, setLoginError)} />
             </View>} />} />
         {/* Signup form with complete form for new user */}
         <Tab.Screen name={'Sign Up'} children={(localProps) =>
@@ -147,7 +95,9 @@ export default function AuthenticationForm(props) {
               <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>
                 {signupError}
               </Text>
-              <Button {...props} {...localProps} color='accent' text='Sign Up' onPress={signup} />
+              <Button {...props} {...localProps} color='accent' text='Sign Up'
+                onPress={() => signup(props, newUsername, newPassword, confirmPassword, firstName, lastName,
+                  phone, email, passwordError, setPasswordError, setSignupError)} />
               <View style={{ height: 30 }} />
             </View>} />} />
       </Tab.Navigator>
