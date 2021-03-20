@@ -48,7 +48,7 @@ export const del = async (url, body) =>
 // Call function both initially and at an interval (periodic data refresh)
 // Reference: https://upmostly.com/tutorials/setinterval-in-react-components-using-hooks
 export const periodic = (f, delay) => {
-  React.useEffect(() => {
+  return React.useEffect(() => {
     f();
     const interval = setInterval(f, delay || 60000);
     return () => clearInterval(interval);

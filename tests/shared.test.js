@@ -1,5 +1,6 @@
 import { Dimensions } from 'react-native';
-import { currentDate, del, get, paragraphs, post, scale, showDate, showTime, text, truncate }
+import React from 'react';
+import { currentDate, del, get, paragraphs, periodic, post, scale, showDate, showTime, text, truncate }
   from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
@@ -35,6 +36,27 @@ describe('Shared Functions', () => {
   describe('post - HTTP POST request', () => testRequests(post));
 
   describe('del - HTTP DELETE request', () => testRequests(del));
+
+  describe('periodic - run function periodically', () => {
+    test('Runs the given function immediately', () => {
+      React.useEffect = jest.fn(f => f());
+      let count = 0;
+      const reset = periodic(() => count++);
+      reset();
+      expect(count).toEqual(1);
+    });
+
+    test('Runs the given function at specified interval', done => {
+      React.useEffect = jest.fn(f => f());
+      let count = 0;
+      const reset = periodic(() => count++, 50);
+      setTimeout(() => {
+        reset();
+        expect(count).toEqual(2);
+        done();
+      }, 75);
+    });
+  });
 
   describe('truncate - truncate string for display', () => {
     test('Truncates string with too many words', () => {
