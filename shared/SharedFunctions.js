@@ -98,8 +98,8 @@ export const text = paragraphs => paragraphs.join('\n\n');
 // Phone number validation logic
 export const validPhone = (phone) => phone.split('').filter(c => c.match(/[0-9]/g)).length >= 10;
 
-// Email validation logic
-export const validEmail = (email) => email.match(/[A-Za-z0-9\.\-]+@([A-Za-z0-9\-]+\.)+[A-Za-z0-9]+/g);
+// Email address validation logic
+export const validEmail = (email) => !!email.match(/^[A-Za-z0-9\.\-]+@([A-Za-z0-9\-]+\.)+[A-Za-z0-9]+$/g);
 
 // Password validation logic
 export const validPassword = (password, setError) => {
