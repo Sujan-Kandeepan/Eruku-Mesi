@@ -196,9 +196,8 @@ export const Content = (props) =>
     <>
       {/* Display title above rest of content */}
       {props.title && <Text selectable style={{
-        color: props.theme.colors.text,
-        fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10,
-        textAlign: 'center', textDecorationLine: 'underline'
+        color: props.theme.colors.text, fontSize: 24, fontWeight: 'bold',
+        marginTop: 20, marginBottom: 10, textAlign: 'center'
       }}>
         {props.title}
       </Text>}
@@ -210,7 +209,7 @@ export const Content = (props) =>
       {props.subtitle && props.subtitle.split('\n').map((line, index) =>
       <Text selectable key={index} style={{
         color: props.theme.colors.text,
-        fontSize: 14, marginBottom: 10,
+        fontSize: 16, marginBottom: 10,
         textAlign: 'center'
       }}>
         {line}
