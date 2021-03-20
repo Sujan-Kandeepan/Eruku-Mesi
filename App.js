@@ -140,6 +140,7 @@ export default function App() {
   let [user, setUser] = React.useState(null);
   let [admin, setAdmin] = React.useState(false);
   const updateUser = (data, thenCallback, catchCallback) => {
+    if (!user) return;
     setUser({ ...user, ...data });
     post(`${baseURL}/accounts/edit/${user._id}`, data)
       .then(thenCallback)
