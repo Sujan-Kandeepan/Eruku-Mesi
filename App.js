@@ -150,7 +150,7 @@ export default function App() {
     if (user) {
       setAdmin(user.accountType === 'admin');
       setReceiveNotifications(user.receiveNotifications);
-      setTheme(user.theme === 'light' ? lightTheme : darkTheme);
+      setTheme(user.theme === 'dark' ? darkTheme : lightTheme);
       if (!user.theme) updateUser({ theme: theme.dark ? 'dark' : 'light' })
       if (Platform.OS !== 'web')
         SecureStore.setItemAsync('user', user._id);
@@ -199,7 +199,7 @@ export default function App() {
               .then(res => {
                 setUser(res.account);
                 setReceiveNotifications(res.account.receiveNotifications);
-                setTheme(res.account.theme === 'light' ? lightTheme : darkTheme);
+                setTheme(res.account.theme === 'dark' ? darkTheme : lightTheme);
               })
               .finally(SplashScreen.hideAsync)
           : SplashScreen.hideAsync());
