@@ -1,7 +1,7 @@
 import React from 'react';
-import { Keyboard, Text, View, YellowBox } from 'react-native';
+import { Dimensions, Keyboard, Platform, Text, View } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -30,28 +30,20 @@ export default function InformationPage(props) {
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
   periodic(() => fetchInformation(props, setPages, setData, () => setFetched(true)));
-  // Ignore warnings about nested ScrollViews (small list, not to worry) and YellowBox itself
-  React.useEffect(() => YellowBox.ignoreWarnings([
-    'VirtualizedLists should never be nested',
-    'YellowBox has been replaced with LogBox'
-  ]), []);
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={props.route.name} children={(localProps) =>
-            // Without scroll view, bug exists where mobile keyboard closes if input field is too low
-            // Ideally no nested scroll views (performance hit), but for small lists this is fine
-            // Implementation with no warnings (bug persists which is fixed by nested scroll views):
-            // https://nyxo.app/fixing-virtualizedlists-should-never-be-nested-inside-plain-scrollviews
-            <ScrollView>
+            <View style={{ height: Platform.OS !== 'web' && originalText.length
+              ? Dimensions.get('window').height / 2 : '100%' }}>
               {!fetched &&
                 <Text style={{ color: props.theme.colors.text, marginTop: 15, textAlign: 'center' }}>
                   Loading information...
                 </Text>}
               {/* Draggable version of FlatList displaying individual sections with options */}
               {/* Reference: https://github.com/computerjazz/react-native-draggable-flatlist */}
-              <DraggableFlatList scrollEnabled={false} data={pages} renderItem={({ drag, item }) =>
+              <DraggableFlatList data={pages} renderItem={({ drag, item }) =>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   {props.admin &&
                     <Text style={{ marginLeft: 5, marginRight: -15 }}>
@@ -117,7 +109,7 @@ export default function InformationPage(props) {
                       onPress={() => addInfoSection(props, pages, setPages,
                         data, setData, setOriginalText, setEditText, newSection)} />
                     </View>}
-              </ScrollView>} />
+            </View>} />
           {/* Generated page routes for viewing info sections */}
           {pages.map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
