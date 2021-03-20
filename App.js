@@ -148,6 +148,8 @@ export default function App() {
   React.useEffect(() => {
     if (user) {
       setAdmin(user.accountType === 'admin');
+      setReceiveNotifications(user.receiveNotifications);
+      setTheme(user.theme === 'light' ? lightTheme : darkTheme);
       if (Platform.OS !== 'web')
         SecureStore.setItemAsync('user', user._id);
     }
@@ -166,9 +168,9 @@ export default function App() {
   // Reference: https://callstack.github.io/react-native-paper/theming-with-react-navigation.html
   let [theme, setTheme] = React.useState(lightTheme);
   const toggleTheme = () => {
-    const newTheme = theme === darkTheme ? lightTheme : darkTheme;
-    setTheme(newTheme);
-    updateUser({ theme: newTheme }, () => { }, () => snackbar('Failed to update database'));
+    setTheme(theme === darkTheme ? lightTheme : darkTheme);
+    updateUser({ theme: theme === darkTheme ? 'light' : 'dark' },
+      () => { }, () => snackbar('Failed to update database'));
   }
 
   // Props to expose to nested child components, extra for settings
@@ -192,7 +194,11 @@ export default function App() {
       SecureStore.getItemAsync('user')
         .then(item => item
           ? get(`${baseURL}/accounts/${item}`)
-              .then(res => setUser(res.account))
+              .then(res => {
+                setUser(res.account);
+                setReceiveNotifications(res.account.receiveNotifications);
+                setTheme(res.account.theme === 'light' ? lightTheme : darkTheme);
+              })
               .finally(SplashScreen.hideAsync)
           : SplashScreen.hideAsync());
     }
