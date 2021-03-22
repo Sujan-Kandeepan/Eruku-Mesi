@@ -1,4 +1,4 @@
-import { fetchMessages, sendMessage } from '../components/functions/MessageFunctions';
+import { deleteMessage, fetchMessages, sendMessage } from '../components/functions/MessageFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
@@ -89,10 +89,40 @@ describe('Messages', () => {
       try {
         expect(fetch.mock.calls.length).toEqual(3);
         expect(fetch.mock.calls[0][0]).toContain('messages/add');
+        expect(fetch.mock.calls[0][1].method).toBe('POST');
         expect(fetch.mock.calls[1][0]).toContain('messages');
         expect(fetch.mock.calls[2][0]).toContain('accounts/5ffb4dbeee35744495bf58fc');
         expect(messages.length).toEqual(1);
         expect(newMessage).toEqual('');
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
+
+  test('Deletes message', done => {
+    let props = { snackbar: () => { } };
+    let message = {
+      id: '5ffb521eee35744495bf5905',
+      sender: '5ffb4dbeee35744495bf58fc',
+      sentAt: '2021-01-10T19:20:03.960Z',
+      message: 'SAMPLE MESSAGE BY ADMIN USER.'
+    };
+    let messages = [{
+      id: '5ffb521eee35744495bf5905',
+      sender: '5ffb4dbeee35744495bf58fc',
+      sentAt: '2021-01-10T19:20:03.960Z',
+      message: 'SAMPLE MESSAGE BY ADMIN USER.'
+    }];
+    let setMessages = value => messages = value;
+    fetch.mockResponseOnce(JSON.stringify({}));
+    deleteMessage(props, message, messages, setMessages, () => {
+      try {
+        expect(fetch.mock.calls.length).toEqual(1);
+        expect(fetch.mock.calls[0][0]).toContain('messages');
+        expect(fetch.mock.calls[0][1].method).toBe('DELETE');
+        expect(messages.length).toEqual(0);
         done();
       } catch (error) {
         done(error);

@@ -4,9 +4,10 @@ import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { Avatar } from 'react-native-paper';
 
 import AppPage from './AppPage';
-import { fetchMessages, sendMessage } from './functions/MessageFunctions';
-import { periodic, showDate, showTime } from '../shared/SharedFunctions';
+import { deleteMessage, fetchMessages, sendMessage } from './functions/MessageFunctions';
 import { IconButton } from '../shared/SharedComponents';
+import { periodic, showDate, showTime } from '../shared/SharedFunctions';
+import SharedStyles from '../shared/SharedStyles';
 
 // Page for common messages forum (chat interface)
 export default function MessagesPage(props) {
@@ -21,7 +22,7 @@ export default function MessagesPage(props) {
   const [needsToScroll, setNeedsToScroll] = React.useState(true);
   const scroll = () => needsToScroll && list.scrollToEnd({ animated: true });
   const stopScroll = () => setTimeout(() => setNeedsToScroll(false), 1000);
-  periodic(() => fetchMessages(props, messages, setMessages, false, () => setFetched(true)));
+  periodic(() => fetchMessages(props, messages, setMessages, false, () => setFetched(true)), 5000);
   return (
     <AppPage {...props}>
       {/* Reference: https://stackoverflow.com/a/61980218 */}
@@ -47,11 +48,19 @@ export default function MessagesPage(props) {
                 <Text selectable style={{ color: props.theme.colors.text, flexDirection: 'row', fontWeight: 'bold' }}>
                   {item.sender}
                 </Text>
-                <Text selectable style={{ fontSize: 10 }}>{showDate(item.sentAt)} at {showTime(item.sentAt)}</Text>
+                <Text selectable style={{ color: props.theme.colors.text, fontSize: 10 }}>
+                  {showDate(item.sentAt)} at {showTime(item.sentAt)}
+                </Text>
                 <Text selectable style={{ color: props.theme.colors.text, marginVertical: 5 }}>
                   {item.message}
                 </Text>
               </View>
+              <View style={{ flex: 1 }} />
+              {props.admin &&
+                <IconButton style={{ ...SharedStyles.icon, alignSelf: 'flex-end', justifyContent: 'flex-start' }}
+                  onPress={() => props.snackbar('Press and hold to delete')} delayLongPress={3000}
+                  onLongPress={() => deleteMessage(props, item, messages, setMessages)}
+                  name='delete' type='material' color={props.theme.colors.danger} />}
             </View>} keyExtractor={(item, index) => `${item ? item.id : index} ${index}`} extraData={fetched}
             // Load more messages upon scroll to top of messages list
             // Reference: https://stackoverflow.com/a/54928134

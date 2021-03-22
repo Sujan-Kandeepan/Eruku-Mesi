@@ -1,4 +1,4 @@
-import { get, post } from '../../shared/SharedFunctions';
+import { del, get, post } from '../../shared/SharedFunctions';
 
 // Fetch messages and populate component state array
 export const fetchMessages = (props, messages, setMessages, prepend, callback) => {
@@ -53,4 +53,18 @@ export const sendMessage = (props, messages, setMessages, newMessage, setNewMess
     // Display message if failed
     .catch(error => console.error(error) && props.snackbar('Failed to update database'))
     .finally(() => fetchMessages(props, messages, setMessages, false, callback));
-}
+};
+
+// Handle submit action to delete a message
+export const deleteMessage = (props, message, messages, setMessages, callback) => {
+  del(`${props.baseURL}/messages/${message.id}`)
+    .then(() => {
+      setMessages(messages.filter(m => m.id !== message.id));
+      callback && callback();
+    })
+    .catch(error => {
+      console.error(error);
+      props.snackbar('Unable to delete message');
+      callback && callback();
+    });
+};
