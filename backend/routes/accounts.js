@@ -65,6 +65,7 @@ router.get("/", async function (req, res) {
  * Edit the information of a specific user (given the user id)
  */
 router.post("/edit/:id", async function (req, res) {
+
   let accountBody = req.body;
   let query = { _id: req.params.id };
 
@@ -93,9 +94,9 @@ router.get("/:id", async function (req, res) {
 
   try {
     const account = await Account.findById(id);
-    var user = JSON.parse(JSON.stringify(user));
-          delete user.hash;
-          delete user.salt;
+    var user = JSON.parse(JSON.stringify(account));
+    delete user.hash;
+    delete user.salt;
     return res.status(200).json({ user: user });
   } catch (e) {
     return res.status(500).json({ message: "account not found" });
@@ -118,17 +119,30 @@ router.delete("/:id", async function (req, res) {
 
 // User signup api 
 router.post('/signup', (req, res, next) => {
+  req.assert("username", "Account: username must be set").notEmpty();
+  req.assert("firstName", "Account: firstName must have content").notEmpty();
+  req.assert("lastName", "Account: lastname must be set").notEmpty();
+  req.assert("phone", "Account: phone must have content").notEmpty();
+  req.assert("email", "Account: email must be set").notEmpty();
+  req.assert("password", "Account: password must be set").notEmpty();
 
+  let errors = req.validationErrors();
+  if (errors) {
+    return res.status(400).json({
+      status: "error",
+      message: "Mandatory field is not set",
+    });
+  }
 
 // Creating empty user object 
     let newUser = new Account();
 
     // Initialize newUser object with request data 
     newUser.firstName = req.body.firstName
-    newUser.username = req.body.username
-    newUser.phone = req.body.phone
-    newUser.email = req.body.email
-    newUser.lastName = req.body.lastName
+    newUser.username  = req.body.username
+    newUser.phone     = req.body.phone
+    newUser.email     = req.body.email
+    newUser.lastName  = req.body.lastName
     Account.findOne(
     {
       $or: [
@@ -191,6 +205,13 @@ router.post('/login', (req, res) => {
           message : "No Email or Username Entered"
       });
     }
+
+    if (req.body.password == null){
+        return res.status(400).send({
+          message : "No Password Entered."
+        });
+    }
+
       // Find user with requested field 
     Account.findOne(lookup, function(err, user) {
     if (user === null) { 
