@@ -43,7 +43,19 @@ router.post("/add", async function (req, res) {
 router.get("/", async function (req, res) {
   try {
     const accounts = await Account.find({});
-    return res.status(200).json(accounts);
+    console.log(accounts[0])
+    var modifiedAccount;
+    var newAccounts = [] ;
+    for (i = 0; i < accounts.length; i++){
+      modifiedAccount = JSON.parse(JSON.stringify(accounts[i]));
+      delete modifiedAccount.hash;
+      delete modifiedAccount.salt;
+      console.log(modifiedAccount)
+      newAccounts.push(modifiedAccount);
+    }
+    // console.log(accounts.length)
+    // console.log(accounts)
+    return res.status(200).json(newAccounts);
   } catch (e) {
     return res.status(500).json(e);
   }
@@ -81,7 +93,10 @@ router.get("/:id", async function (req, res) {
 
   try {
     const account = await Account.findById(id);
-    return res.status(200).json({ account: account });
+    var user = JSON.parse(JSON.stringify(user));
+          delete user.hash;
+          delete user.salt;
+    return res.status(200).json({ user: user });
   } catch (e) {
     return res.status(500).json({ message: "account not found" });
   }
@@ -114,28 +129,39 @@ router.post('/signup', (req, res, next) => {
     newUser.phone = req.body.phone
     newUser.email = req.body.email
     newUser.lastName = req.body.lastName
+    console.log("hello woel")
+    Account.findOne(
+    {
+      'email': newUser.email
+    }, function(err, user) {
+        if (user != null)
+          return res.status(400).send({
+            message : "Email already taken."
+        })
+        else{
+              // Call setPassword function to hash password 
+          newUser.setPassword(req.body.password);
 
-
-    // Call setPassword function to hash password 
-    newUser.setPassword(req.body.password);
-
-    // Save newUser object to database 
-    newUser.save((err, User) => {
-        if (err) {
-          console.log(err)
-            return res.status(400).send({
-                message : "Failed to add user."
-            });
+          // // Save newUser object to database 
+          newUser.save((err, User) => {
+              if (err) {
+                console.log(err)
+                  return res.status(400).send({
+                      message : "Failed to add user."
+                  });
+              }
+              else {
+                  return res.status(200).send({
+                      message : "User added successfully."
+                  });
+              }
+          });
         }
-        else {
-            return res.status(200).send({
-                message : "User added successfully."
-            });
-        }
-    });
+       }
+    );
 });
 
-
+//Reference used https://www.loginradius.com/blog/async/password-hashing-with-nodejs/?fbclid=IwAR2YYxo6aiI9mkAs9yIUqeqVT4xDf3KGmBeMJHSiFj6CdCQU4sFYLX1XzV4
 // User login api 
 router.post('/login', (req, res) => {
     if (req.body.username != null)
@@ -161,19 +187,9 @@ router.post('/login', (req, res) => {
     }
     else {
         if (user.validPassword(req.body.password)) {
-          var account = {
-                      "username" : user.username,
-                      "phoneVerified" : user.phoneVerified,
-                      "passwordResetToken" : user.passwordResetToken,
-                      "accountType" : user.accountType,
-                      "_id" : user._id,
-                      "createdAt" : user.createdAt,
-                      "firstName" : user.firstName,
-                      "username" : user.username,
-                      "phone" : user.phone,
-                      "email" : user.email,
-                      "lastName" : user.lastname
-                    }
+          var account = JSON.parse(JSON.stringify(user));
+          delete account.hash;
+          delete account.salt;
             return res.status(200).send({
                 message : "User Logged In",
                 account : account

@@ -60,7 +60,7 @@ let Account = new Schema({
   },
 });
 
-
+//Reference used https://www.loginradius.com/blog/async/password-hashing-with-nodejs/?fbclid=IwAR2YYxo6aiI9mkAs9yIUqeqVT4xDf3KGmBeMJHSiFj6CdCQU4sFYLX1XzV4
 // Method to set salt and hash the password for a user
 Account.methods.setPassword = function(password) {
 
