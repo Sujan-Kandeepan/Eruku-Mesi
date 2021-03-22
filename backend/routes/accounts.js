@@ -129,15 +129,29 @@ router.post('/signup', (req, res, next) => {
     newUser.phone = req.body.phone
     newUser.email = req.body.email
     newUser.lastName = req.body.lastName
-    console.log("hello woel")
+
     Account.findOne(
     {
-      'email': newUser.email
+      $or: [
+            {'email': newUser.email},
+            {'phone' : newUser.phone},
+            {'username' : newUser.username}
+          ]
     }, function(err, user) {
-        if (user != null)
-          return res.status(400).send({
-            message : "Email already taken."
-        })
+        if (user != null){
+          if (user.email != null && user.email == newUser.email)
+            return res.status(400).send({
+              message : "Email already taken."
+            })
+          else if (user.phone != null && user.phone == newUser.phone)
+            return res.status(400).send({
+                  message : "Phone already taken."
+             })
+          else if(user.username != null && user.username == newUser.username)
+            return res.status(400).send({
+                  message : "Username already taken."
+             })
+        }
         else{
               // Call setPassword function to hash password 
           newUser.setPassword(req.body.password);
