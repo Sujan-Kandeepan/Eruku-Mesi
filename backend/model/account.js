@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const accountDB = mongoose.connection.useDb("Accounts");
-var crypto = require('crypto'); 
+var crypto = require('crypto');
 
 let Account = new Schema({
   username: {

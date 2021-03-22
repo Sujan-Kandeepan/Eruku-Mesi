@@ -129,7 +129,6 @@ router.post('/signup', (req, res, next) => {
     newUser.phone = req.body.phone
     newUser.email = req.body.email
     newUser.lastName = req.body.lastName
-
     Account.findOne(
     {
       $or: [
