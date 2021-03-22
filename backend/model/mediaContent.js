@@ -10,6 +10,9 @@ let MediaContent = new Schema({
   description: {
     type: String,
   },
+  metadata: {
+    type: String,
+  },
   uploadedAt: {
     type: Date,
     default: Date.now,

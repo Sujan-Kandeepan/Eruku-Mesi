@@ -56,7 +56,8 @@ router.post("/add", async function (req, res) {
 
     req.assert("title", "MediaContent: title must be set").notEmpty();
     req.assert("type", "MediaContent: type must be set").notEmpty();
-
+    req.assert("description", "MediaContent: description must be set").notEmpty();
+    
     let validationErrors = req.validationErrors();
 
     if (validationErrors) {
