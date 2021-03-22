@@ -65,10 +65,23 @@ router.get("/", async function (req, res) {
  * Edit the information of a specific user (given the user id)
  */
 router.post("/edit/:id", async function (req, res) {
-
   let accountBody = req.body;
   let query = { _id: req.params.id };
+  const account = await Account.findById(req.params.id);
 
+  if (accountBody['password'] == null){
+    return res.status(400).send({
+        message : "Must enter password to edit account"
+      });
+  }
+  else{
+    if (!account.validPassword(req.body.password)){
+      return res.status(400).send({
+        message : "Invalid Password. Cannot Edit Account"
+      });
+    }
+  }
+  
   if (Object.keys(accountBody).length === 0) {
     return res.status(400).json({
       status: "error",
