@@ -1,37 +1,86 @@
 const express = require("express");
 const router = express.Router();
 
+const AWS = require('aws-sdk')
+const multer = require('multer')
+const multerS3 = require('multer-s3')
+const config = require("../config/aws.js");
+
 let MediaContent = require("../model/mediaContent.js");
+ 
+const s3 = new AWS.S3({
+  accessKeyId: config.accessKeyId,
+  secretAccessKey: config.secretAccessKey
+});
+
+const fileFilter = (_, file, cb) => {
+  if (file.mimetype === 'application/pdf' || file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+      cb(null, true)
+  } else {
+      cb(new Error('Invalid file type'));
+  }
+}
+
+const fileLimitSizeInMegaBytes = 5;
+//template from: https://github.com/badunk/multer-s3
+const upload = multer({
+  fileFilter,
+  limits: { fileSize: fileLimitSizeInMegaBytes * 1024 * 1024 },
+  storage: multerS3({
+    s3: s3,
+    acl: 'public-read',
+    bucket: 'erukumesi',
+    key: (_, file, cb) => {
+      const typeInString = file.mimetype.split('/')[1];
+      cb(null, Date.now().toString() + "." + typeInString);
+    }
+  })
+})
+
+const multerUpload = upload.single('uploadFile');
 
 /**
  * Upload mediaContent if all required fields are not empty.
+ * Additional reference: https://stackoverflow.com/questions/39265838/express-js-image-upload-and-text-inputs-using-post-method
+ * Must have one body property with key of 'photo'.
  */
 router.post("/add", async function (req, res) {
-  req.assert("title", "MediaContent: title must be set").notEmpty();
-  req.assert("url", "MediaContent: url must be set").notEmpty();
-  req.assert("type", "MediaContent: type must be set").notEmpty();
+  multerUpload(req, res, async function(multerError) {
 
-  let errors = req.validationErrors();
+    if (multerError) {
+      return res.status(500).json({
+        status: "error",
+        message: multerError.message,
+      });
+    }
 
-  if (errors) {
-    return res.status(400).json({
-      status: "error",
-      message: "Mandatory field is not set",
-    });
-  }
+    req.assert("title", "MediaContent: title must be set").notEmpty();
+    req.assert("type", "MediaContent: type must be set").notEmpty();
 
-  try {
-    const mediaContent = new MediaContent(req.body);
-    await mediaContent.save();
-    return res
-      .status(200)
-      .json({ message: "mediaContent successfully added", mediaContent: mediaContent });
-  } catch (error) {
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-    });
-  }
+    let validationErrors = req.validationErrors();
+
+    if (validationErrors) {
+      return res.status(400).json({
+        status: "error",
+        message: "Mandatory field is not set",
+      });
+    }
+
+    try {
+      req.body.url = req.file.location
+      const mediaContent = new MediaContent(req.body);
+      await mediaContent.save();
+      return res
+        .status(200)
+        .json({ message: "mediaContent successfully added", mediaContent: mediaContent });
+    } catch (error) {
+      return res.status(500).json({
+        status: "error",
+        message: "Internal Server Error",
+      });
+    }
+
+  });
 });
 
 /**
