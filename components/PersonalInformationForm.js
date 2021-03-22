@@ -8,7 +8,6 @@ import { Button, Header, Media, MediaPicker, SimpleInput } from '../shared/Share
 // Form for editing user info in separate component to reset state on exit
 export default function PersonalInformationForm(props) {
   // State variables for form fields (two-way data binding)
-  const [profilePicture, setProfilePicture] = React.useState(props.user.profilePicture);
   const [username, setUsername] = React.useState(props.user.username);
   const [firstName, setFirstName] = React.useState(props.user.firstName);
   const [lastName, setLastName] = React.useState(props.user.lastName);
@@ -17,19 +16,6 @@ export default function PersonalInformationForm(props) {
   const [editInfoError, setEditInfoError] = React.useState('');
   return (
     <AppPage {...props} nested cancel scroll>
-      <Header {...props} label text={'Profile Picture'} />
-      <Media image={profilePicture} scale={{ image: profilePicture, maxHeight: 300 }}
-        style={{ alignSelf: 'center', marginTop: 15 }} />
-      <View style={{ flexDirection: 'row', marginBottom: -15, marginTop: 15 }}>
-        <View style={{ flex: 1, marginBottom: 15 }}>
-          <MediaPicker {...props} handleResult={setProfilePicture}
-            text={profilePicture ? 'Replace' : 'Upload'} />
-        </View>
-        {profilePicture &&
-          <View style={{ flex: 1, marginLeft: -15, marginTop: -15 }}>
-            <Button {...props} text='Delete' onPress={() => setProfilePicture(null)} />
-          </View>}
-      </View>
       <Header {...props} label text={'Username'} />
       <SimpleInput {...props} left autoCompleteType='username' autoCapitalize='none'
         value={username} onChangeText={value => setUsername(value)} />
@@ -49,8 +35,7 @@ export default function PersonalInformationForm(props) {
         {editInfoError}
       </Text>
       <Button {...props} color='accent' text='Submit'
-        onPress={() => editInfo(props, profilePicture, username,
-          firstName, lastName, phone, email, setEditInfoError)} />
+        onPress={() => editInfo(props, username, firstName, lastName, phone, email, setEditInfoError)} />
       <View style={{ height: 15 }} />
     </AppPage>
   );

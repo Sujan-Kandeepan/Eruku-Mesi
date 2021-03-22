@@ -25,9 +25,7 @@ export const fetchMessages = (props, messages, setMessages, prepend, callback) =
             id: item._id,
             sender: names[item.sender],
             message: item.message,
-            sentAt: item.sentAt,
-            profilePicture: item.profilePicture
-              || 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
+            sentAt: item.sentAt
           })),
           ...(prepend ? messages : [])
         ]))

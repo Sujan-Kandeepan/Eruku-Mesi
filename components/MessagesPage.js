@@ -39,10 +39,10 @@ export default function MessagesPage(props) {
               backgroundColor: props.theme.colors.background,
               flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10
             }}>
-              <Avatar.Image size={50} style={{ alignSelf: 'flex-start' }}
-                source={props.user.profilePicture
-                  ? { uri: props.user.profilePicture.uri }
-                  : require('../assets/default-user.png')} />
+              <Avatar.Text size={50} style={{ alignSelf: 'flex-start', backgroundColor: props.theme.colors.accent }}
+                // Construct user initials from first and last name in sender string
+                label={item.sender.replace(/\(@.*\)/g, '').split(' ').map(s => s[0]).join('')
+                  .replace(/(.).*(.)/g, (_, c1, c2) => `${c1}${c2}`).toUpperCase()} />
               <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0 }}>
                 <Text selectable style={{ color: props.theme.colors.text, flexDirection: 'row', fontWeight: 'bold' }}>
                   {item.sender}

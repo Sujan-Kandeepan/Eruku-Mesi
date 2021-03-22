@@ -89,10 +89,8 @@ const CustomDrawerContent = (props) =>
   <DrawerContentScrollView {...props}
     contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
     <CustomDrawer.Section style={{ flexDirection: 'row', marginHorizontal: 15, marginVertical: 5 }}>
-      <Avatar.Image size={50} style={{ alignSelf: 'center' }}
-        source={props.user.profilePicture
-          ? { uri: props.user.profilePicture.uri }
-          : require('./assets/default-user.png')} />
+      <Avatar.Text size={50} style={{ alignSelf: 'center', backgroundColor: props.theme.colors.accent }}
+        label={`${props.user.firstName[0]}${props.user.lastName[0]}`.toUpperCase()} />
       <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
         <Title>{props.user.firstName} {props.user.lastName}</Title>
         <Caption>@{props.user.username}</Caption>

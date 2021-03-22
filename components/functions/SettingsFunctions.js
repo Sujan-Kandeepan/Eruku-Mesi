@@ -1,8 +1,7 @@
 import { validEmail, validPhone } from '../../shared/SharedFunctions';
 
 // Form validation and API call for editing personal info
-export const editInfo = (props, profilePicture, username,
-  firstName, lastName, phone, email, setEditInfoError, callback) => {
+export const editInfo = (props, username, firstName, lastName, phone, email, setEditInfoError, callback) => {
   let valid = false;
   if (username.trim() == '') {
     setEditInfoError('Please specify a username.');
@@ -18,7 +17,7 @@ export const editInfo = (props, profilePicture, username,
     setEditInfoError('Please enter a valid email address.');
   } else {
     valid = true;
-    props.updateUser({ profilePicture, username, firstName, lastName, phone, email },
+    props.updateUser({ username, firstName, lastName, phone, email },
       () => { setEditInfoError(''); props.navigation.pop(); },
       error => setEditInfoError(error.message),
       callback);

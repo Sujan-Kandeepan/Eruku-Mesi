@@ -31,25 +31,25 @@ describe('Settings', () => {
     };
     let editInfoError = '';
     let setEditInfoError = value => editInfoError = value;
-    editInfo(props, {}, '', 'Test', 'User', '1234567890', 'testuser@domain.com', setEditInfoError);
+    editInfo(props, '', 'Test', 'User', '1234567890', 'testuser@domain.com', setEditInfoError);
     expect(editInfoError.toLowerCase()).toMatch(/.*(username|specify|field|enter|required).*/);
     expect(user).toMatchObject(initialUser);
-    editInfo(props, {}, 'testuser', '', 'User', '1234567890', 'testuser@domain.com', setEditInfoError);
+    editInfo(props, 'testuser', '', 'User', '1234567890', 'testuser@domain.com', setEditInfoError);
     expect(editInfoError.toLowerCase()).toMatch(/.*(first|name|specify|field|enter|required).*/);
     expect(user).toMatchObject(initialUser);
-    editInfo(props, {}, 'testuser', 'Test', '', '1234567890', 'testuser@domain.com', setEditInfoError);
+    editInfo(props, 'testuser', 'Test', '', '1234567890', 'testuser@domain.com', setEditInfoError);
     expect(editInfoError.toLowerCase()).toMatch(/.*(last|name|specify|field|enter|required).*/);
     expect(user).toMatchObject(initialUser);
-    editInfo(props, {}, 'testuser', 'Test', 'User', '', 'testuser@domain.com', setEditInfoError);
+    editInfo(props, 'testuser', 'Test', 'User', '', 'testuser@domain.com', setEditInfoError);
     expect(editInfoError.toLowerCase()).toMatch(/.*(phone|number|specify|field|enter|required).*/);
     expect(user).toMatchObject(initialUser);
-    editInfo(props, {}, 'testuser', 'Test', 'User', '1234567890', '', setEditInfoError);
+    editInfo(props, 'testuser', 'Test', 'User', '1234567890', '', setEditInfoError);
     expect(editInfoError.toLowerCase()).toMatch(/.*(email|address|specify|field|enter|required).*/);
     expect(user).toMatchObject(initialUser);
-    editInfo(props, {}, 'testuser', 'Test', 'User', 'bad-phone', 'testuser@domain.com', setEditInfoError);
+    editInfo(props, 'testuser', 'Test', 'User', 'bad-phone', 'testuser@domain.com', setEditInfoError);
     expect(editInfoError.toLowerCase()).toMatch(/.*(phone|number|invalid|format).*/);
     expect(user).toMatchObject(initialUser);
-    editInfo(props, {}, 'testuser', 'Test', 'User', '1234567890', 'bad-email', setEditInfoError);
+    editInfo(props, 'testuser', 'Test', 'User', '1234567890', 'bad-email', setEditInfoError);
     expect(editInfoError.toLowerCase()).toMatch(/.*(email|address|invalid|format).*/);
     expect(user).toMatchObject(initialUser);
   });
@@ -91,13 +91,12 @@ describe('Settings', () => {
         email: 'johndoe@domain.com'
       }
     }));
-    editInfo(props, '', 'john_doe', 'John', 'Doe', '4161234567', 'johndoe@domain.com', setEditInfoError, () => {
+    editInfo(props, 'john_doe', 'John', 'Doe', '4161234567', 'johndoe@domain.com', setEditInfoError, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(1);
         expect(fetch.mock.calls[0][0]).toContain('accounts/edit/603dcf2497c3c4522cfba1c0');
         expect(fetch.mock.calls[0][1].method).toBe('POST');
         expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({
-          profilePicture: '',
           username: 'john_doe',
           firstName: 'John',
           lastName: 'Doe',
