@@ -53,7 +53,9 @@ export default function MediaContentPage(props) {
                       <Media image={{ ...item.metadata, uri: item.url }} thumbnail
                         scale={{ image: { ...item.metadata, uri: item.url }, marginHorizontal: 30, maxHeight: 200 }}
                         style={{ alignSelf: 'center', marginTop: 15 }} /> :
-                      <Text>{item.metadata.name}</Text>}
+                      <Text style={{ color: props.theme.colors.text, marginTop: 7.5 }}>
+                        {item.metadata.name}
+                      </Text>}
                   </>} />
             </>} />
           {/* Static page route for posting media content */}

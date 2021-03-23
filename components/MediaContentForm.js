@@ -38,7 +38,10 @@ export default function MediaContentForm(props) {
         {/* Image/video or filename with buttons to open image/video or file picker */}
         <Media image={image} scale={{ image, maxHeight: 300 }}
           style={{ alignSelf: 'center', marginBottom: 15 }} />
-        {file && <Text style={{ paddingBottom: 15, textAlign: 'center' }}>Selected file: {file.name}</Text>}
+        {file &&
+          <Text style={{ color: props.theme.colors.text, paddingBottom: 15, textAlign: 'center' }}>
+            Selected file: {file.name}
+          </Text>}
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1, marginRight: -16 }}>
             <MediaPicker {...props} text='Choose Photo or Video'

@@ -34,6 +34,20 @@ export const post = async (url, body) =>
     body: JSON.stringify(body)
   });
 
+// Perform POST request to provided endpoint URL with FormData containing image/file
+export const upload = async(url, body) => {
+  let fd = new FormData();
+  Object.keys(body).forEach(key => fd.append(key, body[key]));
+  return request(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data'
+    },
+    body: fd
+  });
+}
+
 // Perform DELETE request to provided endpoint URL with body
 export const del = async (url, body) =>
   request(url, {
