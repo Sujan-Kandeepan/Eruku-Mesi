@@ -14,14 +14,19 @@ const s3 = new AWS.S3({
 });
 
 const fileFilter = (_, file, cb) => {
-  if (file.mimetype === 'application/pdf' || file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+  console.log('file', file);
+  if (file.mimetype === 'application/pdf' 
+      || file.mimetype === 'image/png' 
+      || file.mimetype === 'image/jpeg' 
+      || file.mimetype === 'image/gif'
+      || file.mimetype === 'video/mp4') {
       cb(null, true)
   } else {
       cb(new Error('Invalid file type'));
   }
 }
 
-const fileLimitSizeInMegaBytes = 5;
+const fileLimitSizeInMegaBytes = 15;
 //template from: https://github.com/badunk/multer-s3
 const upload = multer({
   fileFilter,
