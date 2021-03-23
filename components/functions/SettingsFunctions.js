@@ -35,9 +35,6 @@ export const changePassword = (props, oldPassword, newPassword, confirmPassword,
     setPasswordError('Please specify a new password.');
   } else if (confirmPassword.trim() == '') {
     setPasswordError('Please re-enter your new password.');
-  } else if (oldPassword !== 'Test123!') {
-    setPasswordError('Old password entered is incorrect.');
-    console.log(oldPassword);
   } else if (newPassword !== confirmPassword) {
     setPasswordError('Entered passwords do not match.');
   } else if (validPassword(newPassword, setPasswordError)) {
