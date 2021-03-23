@@ -69,18 +69,37 @@ router.post("/edit/:id", async function (req, res) {
   let query = { _id: req.params.id };
   const account = await Account.findById(req.params.id);
 
-  if (accountBody['password'] == null){
+  if (accountBody['oldPassword'] == null && accountBody['newPassword'] != null){
     return res.status(400).send({
-        message : "Must enter password to edit account"
+        message : "Must enter old password to reset password."
       });
   }
-  else{
-    if (!account.validPassword(req.body.password)){
+
+  if (accountBody['oldPassword'] != null && accountBody['newPassword'] == null){
+    return res.status(400).send({
+        message : "Must enter New password to reset password."
+      });
+  }
+
+  if (accountBody['oldPassword'] != null && accountBody['newPassword'] != null){
+    if (!account.validPassword(accountBody['oldPassword'])){
       return res.status(400).send({
         message : "Invalid Password. Cannot Edit Account"
       });
     }
-  }
+    else{
+      try{
+          account.setPassword(accountBody['newPassword']);
+          await Account.updateOne(query, {hash: account.hash, salt: account.salt});
+          return res.status(200).send({
+          message : "Password successfully changed."
+      });
+      }catch (e) {
+                  return res.status(400).json({ message: "Error trying to set new password." });
+        }
+    
+    }
+  } 
   
   if (Object.keys(accountBody).length === 0) {
     return res.status(400).json({
