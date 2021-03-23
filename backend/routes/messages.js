@@ -70,6 +70,46 @@ router.get("/", async function (req, res) {
 });
 
 /**
+ * Type is an integer. Type is either 1, 2, or 3.
+ * If it is 1, then it returns 15 documents before that objectID
+ * If it is 2, then it returns the last 15 documents. You can pass in anything into the ID field.
+ * If it is 3, then it returns all the documents after that objectID
+ */
+router.get("/:type/:id", async function(req, res) {
+  let id = req.params.id;
+  let type = Number.parseInt(req.params.type, 10);
+  const number = 15;
+
+  if (type == 1) {
+    try {
+      const messages = await Message.find({ '_id': { $lt: id } }).sort({ _id: -1 }).limit(number);
+      messages.reverse()
+      return res.status(200).json({ messages: messages });
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  } else if (type == 2) {
+    //https://stackoverflow.com/questions/10811887/how-to-get-all-count-of-mongoose-model
+    const messageCount = await Message.countDocuments({}).exec();
+    try {
+      const messages = await Message.find({}).skip(messageCount - number);
+      return res.status(200).json({ messages: messages });
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  } else {
+    try {
+      const messages = await Message.find({ '_id': { $gt: id } });
+      return res.status(200).json({ messages: messages });
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  }
+ 
+
+});
+
+/**
  * Get the information of a specific message (given the message id)
  */
 router.get("/:id", async function (req, res) {

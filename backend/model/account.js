@@ -54,10 +54,19 @@ let Account = new Schema({
     type: Date,
     default: Date.now,
   },
-  settings: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Settings",
+  receiveNotifications: {
+    type: Boolean,
+    default: true,
   },
+  theme: {
+    type: String,
+    enum: ["light", "dark"],
+    default: "light",
+  },
+  expoToken: {
+    type: String,
+    default: null
+  }
 });
 
 //Reference used https://www.loginradius.com/blog/async/password-hashing-with-nodejs/?fbclid=IwAR2YYxo6aiI9mkAs9yIUqeqVT4xDf3KGmBeMJHSiFj6CdCQU4sFYLX1XzV4

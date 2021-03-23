@@ -1,5 +1,4 @@
 const express = require("express");
-const account = require("../model/account.js");
 const router = express.Router();
 
 let Account = require("../model/account.js");
@@ -26,9 +25,7 @@ router.post("/add", async function (req, res) {
   try {
     const account = new Account(req.body);
     await account.save();
-    return res
-      .status(200)
-      .json({ message: "account successfully added", account: account });
+    return res.status(200).json({ message: "account successfully added" });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -43,18 +40,14 @@ router.post("/add", async function (req, res) {
 router.get("/", async function (req, res) {
   try {
     const accounts = await Account.find({});
-    console.log(accounts[0])
     var modifiedAccount;
     var newAccounts = [] ;
     for (i = 0; i < accounts.length; i++){
       modifiedAccount = JSON.parse(JSON.stringify(accounts[i]));
       delete modifiedAccount.hash;
       delete modifiedAccount.salt;
-      console.log(modifiedAccount)
       newAccounts.push(modifiedAccount);
     }
-    // console.log(accounts.length)
-    // console.log(accounts)
     return res.status(200).json(newAccounts);
   } catch (e) {
     return res.status(500).json(e);
@@ -97,9 +90,8 @@ router.post("/edit/:id", async function (req, res) {
       }catch (e) {
                   return res.status(400).json({ message: "Error trying to set new password." });
         }
-    
     }
-  } 
+  }
 
   await Account.findOne(
     {
@@ -174,7 +166,7 @@ router.delete("/:id", async function (req, res) {
   }
 });
 
-// User signup api 
+// User signup api
 router.post('/signup', (req, res, next) => {
   req.assert("username", "Account: username must be set").notEmpty();
   req.assert("firstName", "Account: firstName must have content").notEmpty();
@@ -191,10 +183,10 @@ router.post('/signup', (req, res, next) => {
     });
   }
 
-// Creating empty user object 
+// Creating empty user object
     let newUser = new Account();
 
-    // Initialize newUser object with request data 
+    // Initialize newUser object with request data
     newUser.firstName = req.body.firstName
     newUser.username  = req.body.username
     newUser.phone     = req.body.phone
@@ -223,10 +215,10 @@ router.post('/signup', (req, res, next) => {
              })
         }
         else{
-              // Call setPassword function to hash password 
+              // Call setPassword function to hash password
           newUser.setPassword(req.body.password);
 
-          // // Save newUser object to database 
+          // // Save newUser object to database
           newUser.save((err, User) => {
               if (err) {
                 console.log(err)
@@ -246,7 +238,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 //Reference used https://www.loginradius.com/blog/async/password-hashing-with-nodejs/?fbclid=IwAR2YYxo6aiI9mkAs9yIUqeqVT4xDf3KGmBeMJHSiFj6CdCQU4sFYLX1XzV4
-// User login api 
+// User login api
 router.post('/login', (req, res) => {
     if (req.body.username != null)
     {
@@ -269,9 +261,9 @@ router.post('/login', (req, res) => {
         });
     }
 
-      // Find user with requested field 
+      // Find user with requested field
     Account.findOne(lookup, function(err, user) {
-    if (user === null) { 
+    if (user === null) {
         return res.status(400).send({
             message : "User not found."
         });
