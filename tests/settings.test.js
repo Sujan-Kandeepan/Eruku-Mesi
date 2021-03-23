@@ -8,23 +8,24 @@ describe('Settings', () => {
     fetch.resetMocks()
   });
 
+  const initialUser = {
+    phoneVerified: false,
+    passwordResetToken: null,
+    resetTokenExpiredAt: null,
+    accountType: 'admin',
+    receiveNotifications: true,
+    theme: 'dark',
+    _id: '603dcf2497c3c4522cfba1c0',
+    username: 'testuser',
+    firstName: 'Test',
+    lastName: 'User',
+    phone: '1234567890',
+    createdAt: '2021-03-02T05:37:40.838Z',
+    email: 'testuser@domain.com'
+  };
+
   test('Validates personal information form input', () => {
-    let user = {
-      phoneVerified: false,
-      passwordResetToken: null,
-      resetTokenExpiredAt: null,
-      accountType: 'admin',
-      receiveNotifications: true,
-      theme: 'dark',
-      _id: '603dcf2497c3c4522cfba1c0',
-      username: 'testuser',
-      firstName: 'Test',
-      lastName: 'User',
-      phone: '1234567890',
-      createdAt: '2021-03-02T05:37:40.838Z',
-      email: 'testuser@domain.com'
-    };
-    const initialUser = { ...user };
+    let user = { ...initialUser };
     let props = {
       updateUser: value => user = { ...user, ...value },
       navigation: { pop: () => { } }
@@ -55,22 +56,7 @@ describe('Settings', () => {
   });
 
   test('Makes request to update personal information', done => {
-    let user = {
-      phoneVerified: false,
-      passwordResetToken: null,
-      resetTokenExpiredAt: null,
-      accountType: 'admin',
-      receiveNotifications: true,
-      theme: 'dark',
-      _id: '603dcf2497c3c4522cfba1c0',
-      username: 'testuser',
-      firstName: 'Test',
-      lastName: 'User',
-      phone: '1234567890',
-      createdAt: '2021-03-02T05:37:40.838Z',
-      email: 'testuser@domain.com'
-    };
-    const initialUser = { ...user };
+    let user = { ...initialUser };
     let props = {
       updateUser: (value, _thenCallback, _catchCallback, finallyCallback) => {
         user = { ...user, ...value };
@@ -120,22 +106,7 @@ describe('Settings', () => {
   });
 
   test('Validates change password form input', () => {
-    let user = {
-      phoneVerified: false,
-      passwordResetToken: null,
-      resetTokenExpiredAt: null,
-      accountType: 'admin',
-      receiveNotifications: true,
-      theme: 'dark',
-      _id: '603dcf2497c3c4522cfba1c0',
-      username: 'testuser',
-      firstName: 'Test',
-      lastName: 'User',
-      phone: '1234567890',
-      createdAt: '2021-03-02T05:37:40.838Z',
-      email: 'testuser@domain.com'
-    };
-    const initialUser = { ...user };
+    let user = { ...initialUser };
     let props = {
       updateUser: value => user = { ...user, ...value, oldPassword: undefined, newPassword: undefined },
       navigation: { pop: () => { } }
@@ -157,22 +128,7 @@ describe('Settings', () => {
   });
 
   test('Makes request to update password', done => {
-    let user = {
-      phoneVerified: false,
-      passwordResetToken: null,
-      resetTokenExpiredAt: null,
-      accountType: 'admin',
-      receiveNotifications: true,
-      theme: 'dark',
-      _id: '603dcf2497c3c4522cfba1c0',
-      username: 'testuser',
-      firstName: 'Test',
-      lastName: 'User',
-      phone: '1234567890',
-      createdAt: '2021-03-02T05:37:40.838Z',
-      email: 'testuser@domain.com'
-    };
-    const initialUser = { ...user };
+    let user = { ...initialUser };
     let props = {
       updateUser: (value, _thenCallback, _catchCallback, finallyCallback) => {
         user = { ...user, ...value, oldPassword: undefined, newPassword: undefined };
