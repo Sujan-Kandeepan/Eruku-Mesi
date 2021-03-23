@@ -7,7 +7,7 @@ const multerS3 = require('multer-s3')
 const config = require("../config/aws.js");
 
 let MediaContent = require("../model/mediaContent.js");
- 
+
 const s3 = new AWS.S3({
   accessKeyId: config.accessKeyId,
   secretAccessKey: config.secretAccessKey
@@ -57,7 +57,7 @@ router.post("/add", async function (req, res) {
     req.assert("title", "MediaContent: title must be set").notEmpty();
     req.assert("type", "MediaContent: type must be set").notEmpty();
     req.assert("description", "MediaContent: description must be set").notEmpty();
-    
+
     let validationErrors = req.validationErrors();
 
     if (validationErrors) {
