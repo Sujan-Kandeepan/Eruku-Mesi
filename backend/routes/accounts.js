@@ -103,11 +103,11 @@ router.post("/edit/:id", async function (req, res) {
     }, async function(err, user) {
         if (user != null && user.email != null && user.email == accountBody.email && user.email !== account.email)
           return res.status(400).send({
-            message : "Email already taken."
+            message : "Email address already in use."
           })
         else if (user != null && user.phone != null && user.phone == accountBody.phone && user.phone !== account.phone)
           return res.status(400).send({
-                message : "Phone already taken."
+                message : "Phone number already in use."
             })
         else if (user != null && user.username != null && user.username == accountBody.username && user.username !== account.username)
           return res.status(400).send({
@@ -201,11 +201,11 @@ router.post('/signup', (req, res, next) => {
         if (user != null){
           if (user.email != null && user.email == newUser.email)
             return res.status(400).send({
-              message : "Email already taken."
+              message : "Email address already in use."
             })
           else if (user.phone != null && user.phone == newUser.phone)
             return res.status(400).send({
-                  message : "Phone already taken."
+                  message : "Phone number already in use."
              })
           else if(user.username != null && user.username == newUser.username)
             return res.status(400).send({
