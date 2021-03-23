@@ -1,4 +1,4 @@
-import { validEmail, validPhone } from '../../shared/SharedFunctions';
+import { validEmail, validPassword, validPhone } from '../../shared/SharedFunctions';
 
 // Form validation and API call for editing personal info
 export const editInfo = (props, username, firstName, lastName, phone, email, setEditInfoError, callback) => {
@@ -20,6 +20,31 @@ export const editInfo = (props, username, firstName, lastName, phone, email, set
     props.updateUser({ username, firstName, lastName, phone, email },
       () => { setEditInfoError(''); props.navigation.pop(); },
       error => setEditInfoError(error.message),
+      callback);
+  }
+  if (!valid && callback)
+    callback();
+};
+
+// Form validation checks for password change
+export const changePassword = (props, oldPassword, newPassword, confirmPassword, setPasswordError, callback) => {
+  let valid = false;
+  if (oldPassword.trim() == '') {
+    setPasswordError('Please enter your old password.');
+  } else if (newPassword.trim() == '') {
+    setPasswordError('Please specify a new password.');
+  } else if (confirmPassword.trim() == '') {
+    setPasswordError('Please re-enter your new password.');
+  } else if (oldPassword !== 'Test123!') {
+    setPasswordError('Old password entered is incorrect.');
+    console.log(oldPassword);
+  } else if (newPassword !== confirmPassword) {
+    setPasswordError('Entered passwords do not match.');
+  } else if (validPassword(newPassword, setPasswordError)) {
+    valid = true;
+    props.updateUser({ oldPassword, newPassword },
+      () => { setPasswordError(''); props.navigation.pop(); },
+      error => setPasswordError(error.message),
       callback);
   }
   if (!valid && callback)

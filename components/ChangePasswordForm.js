@@ -2,8 +2,8 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import AppPage from './AppPage';
+import { changePassword } from './functions/SettingsFunctions';
 import { Button, Header, SimpleInput } from '../shared/SharedComponents';
-import { validPassword } from '../shared/SharedFunctions';
 
 // Form for changing password in separate component to reset state on exit
 export default function ChangePasswordForm(props) {
@@ -12,24 +12,6 @@ export default function ChangePasswordForm(props) {
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
-  // Form validation checks for password change
-  const fakePasswordChange = (navigation) => {
-    if (oldPassword.trim() == '') {
-      setPasswordError('Please enter your old password.');
-    } else if (newPassword.trim() == '') {
-      setPasswordError('Please specify a new password.');
-    } else if (confirmPassword.trim() == '') {
-      setPasswordError('Please re-enter your new password.');
-    } else if (oldPassword !== 'Test123!') {
-      setPasswordError('Old password entered is incorrect.');
-      console.log(oldPassword);
-    } else if (newPassword !== confirmPassword) {
-      setPasswordError('Entered passwords do not match.');
-    } else if (validPassword(newPassword, setPasswordError)) {
-      setPasswordError('');
-      navigation.pop();
-    }
-  };
   return (
     <AppPage {...props} nested cancel scroll>
       <Header {...props} label text={'Old Password'} />
@@ -45,7 +27,7 @@ export default function ChangePasswordForm(props) {
         {passwordError}
       </Text>
       <Button {...props} color='accent' text='Submit'
-        onPress={() => fakePasswordChange(props.navigation)} />
+        onPress={() => changePassword(props, oldPassword, newPassword, confirmPassword, setPasswordError)} />
       <View style={{ height: 15 }} />
     </AppPage>
   );
