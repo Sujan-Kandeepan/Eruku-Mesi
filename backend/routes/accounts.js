@@ -101,20 +101,18 @@ router.post("/edit/:id", async function (req, res) {
             {'username' : accountBody.username}
           ]
     }, async function(err, user) {
-        if (user != null){
-          if (user.email != null && user.email == accountBody.email)
-            return res.status(400).send({
-              message : "Email already taken."
+        if (user != null && user.email != null && user.email == accountBody.email && user.email !== account.email)
+          return res.status(400).send({
+            message : "Email already taken."
+          })
+        else if (user != null && user.phone != null && user.phone == accountBody.phone && user.phone !== account.phone)
+          return res.status(400).send({
+                message : "Phone already taken."
             })
-          else if (user.phone != null && user.phone == accountBody.phone)
-            return res.status(400).send({
-                  message : "Phone already taken."
-             })
-          else if(user.username != null && user.username == accountBody.username)
-            return res.status(400).send({
-                  message : "Username already taken."
-             })
-        }
+        else if (user != null && user.username != null && user.username == accountBody.username && user.username !== account.username)
+          return res.status(400).send({
+                message : "Username already taken."
+            })
         else{
             if (Object.keys(accountBody).length === 0) {
               return res.status(400).json({
