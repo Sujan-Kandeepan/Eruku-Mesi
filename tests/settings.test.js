@@ -1,4 +1,4 @@
-import { editInfo } from '../components/functions/SettingsFunctions';
+import { editInfo, changePassword } from '../components/functions/SettingsFunctions';
 import { post } from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
@@ -112,6 +112,89 @@ describe('Settings', () => {
           phone: '4161234567',
           email: 'johndoe@domain.com'
         });
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
+
+  test('Validates change password form input', () => {
+    let user = {
+      phoneVerified: false,
+      passwordResetToken: null,
+      resetTokenExpiredAt: null,
+      accountType: 'admin',
+      receiveNotifications: true,
+      theme: 'dark',
+      _id: '603dcf2497c3c4522cfba1c0',
+      username: 'testuser',
+      firstName: 'Test',
+      lastName: 'User',
+      phone: '1234567890',
+      createdAt: '2021-03-02T05:37:40.838Z',
+      email: 'testuser@domain.com'
+    };
+    const initialUser = { ...user };
+    let props = {
+      updateUser: value => user = { ...user, ...value, oldPassword: undefined, newPassword: undefined },
+      navigation: { pop: () => { } }
+    };
+    let passwordError = '';
+    let setPasswordError = value => passwordError = value;
+    changePassword(props, '', 'NewPassword123!', 'NewPassword123!', setPasswordError);
+    expect(passwordError.toLowerCase()).toMatch(/.*(password|specify|old|field|enter|required).*/);
+    expect(user).toMatchObject(initialUser);
+    changePassword(props, 'OldPassword123!', '', 'NewPassword123!', setPasswordError);
+    expect(passwordError.toLowerCase()).toMatch(/.*(password|specify|new|field|enter|required).*/);
+    expect(user).toMatchObject(initialUser);
+    changePassword(props, 'OldPassword123!', 'NewPassword123!', '', setPasswordError);
+    expect(passwordError.toLowerCase()).toMatch(/.*(password|confirm|re-?enter|new|field|enter|required).*/);
+    expect(user).toMatchObject(initialUser);
+    changePassword(props, 'OldPassword123!', 'SomePassword123!', 'DifferentPassword123!', setPasswordError);
+    expect(passwordError.toLowerCase()).toMatch(/.*(password|match|same|different).*/);
+    expect(user).toMatchObject(initialUser);
+  });
+
+  test('Makes request to update password', done => {
+    let user = {
+      phoneVerified: false,
+      passwordResetToken: null,
+      resetTokenExpiredAt: null,
+      accountType: 'admin',
+      receiveNotifications: true,
+      theme: 'dark',
+      _id: '603dcf2497c3c4522cfba1c0',
+      username: 'testuser',
+      firstName: 'Test',
+      lastName: 'User',
+      phone: '1234567890',
+      createdAt: '2021-03-02T05:37:40.838Z',
+      email: 'testuser@domain.com'
+    };
+    const initialUser = { ...user };
+    let props = {
+      updateUser: (value, _thenCallback, _catchCallback, finallyCallback) => {
+        user = { ...user, ...value, oldPassword: undefined, newPassword: undefined };
+        post(`accounts/edit/${user._id}`, value)
+          .finally(finallyCallback);
+      },
+      navigation: { pop: () => { } }
+    };
+    let passwordError = '';
+    let setPasswordError = value => passwordError = value;
+    fetch.mockResponseOnce(JSON.stringify({}));
+    changePassword(props, 'OldPassword123!', 'NewPassword123!', 'NewPassword123!', setPasswordError, () => {
+      try {
+        expect(fetch.mock.calls.length).toEqual(1);
+        expect(fetch.mock.calls[0][0]).toContain('accounts/edit/603dcf2497c3c4522cfba1c0');
+        expect(fetch.mock.calls[0][1].method).toBe('POST');
+        expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({
+          oldPassword: 'OldPassword123!',
+          newPassword: 'NewPassword123!'
+        });
+        expect(passwordError).toEqual('');
+        expect(user).toMatchObject(initialUser);
         done();
       } catch (error) {
         done(error);
