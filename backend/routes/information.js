@@ -7,7 +7,6 @@ let Information = require("../model/information.js");
  * Add information if the required field is not empty.
  */
 router.post("/add", async function (req, res) {
-  req.assert("title", "Information: title must be set").notEmpty();
   req.assert("content", "Information: content must be set").notEmpty();
 
   let errors = req.validationErrors();
@@ -23,7 +22,10 @@ router.post("/add", async function (req, res) {
     await information.save();
     return res
       .status(200)
-      .json({ message: "information successfully added", information: information });
+      .json({
+        message: "information successfully added",
+        information: information,
+      });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -50,7 +52,10 @@ router.post("/edit/:id", async function (req, res) {
     const information = await Information.updateOne(query, eventBody);
     return res
       .status(200)
-      .json({ msg: "information successfully updated", information: information });
+      .json({
+        msg: "information successfully updated",
+        information: information,
+      });
   } catch (e) {
     return res.status(500).json(e);
   }
@@ -90,10 +95,32 @@ router.delete("/:id", async function (req, res) {
 
   try {
     await Information.deleteOne(query);
-    res.status(200).json({ message: "information deleted successfully!" });
+    return res.status(200).json({ message: "information deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "information was not deleted" });
   }
 });
+
+router.post("/fetch", async function (req, res) {
+  try {
+    const pages = [];
+    const data = [];
+    const information = await Information.find({});
+    information.forEach((i) => {
+      pages.push(i.title);
+      
+      data.push({
+        title: i.title,
+        content: i.content,
+        imageTop: i.imageTop,
+        imageBottom: i.imageBottom,
+      });
+    });
+    return res.status(200).json({pages: pages, data: data})
+  } catch (e) {
+    return res.status(500).json({ message: "information not found" });
+  }
+});
+
 
 module.exports = router;
