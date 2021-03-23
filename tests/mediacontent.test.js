@@ -1,10 +1,13 @@
 import { fetchMediaContent, submitMediaContent, deleteMediaContent } from '../components/functions/MediaContentFunctions';
+import * as SharedFunctions from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
 describe('Media Content', () => {
   beforeEach(() => {
     fetch.resetMocks()
+    // Use post instead of upload since FormData is not defined
+    SharedFunctions.upload = SharedFunctions.post;
   });
 
   test('Fetches media content', done => {
@@ -18,7 +21,7 @@ describe('Media Content', () => {
           title: 'Example Post',
           description: 'Here is a description.',
           url: 'https://image.shutterstock.com/image-vector/sample-stamp-grunge-texture-vector-260nw-1389188336.jpg',
-          metadata: {},
+          metadata: '{}',
           __v: 0
         }
       ]
@@ -77,8 +80,9 @@ describe('Media Content', () => {
     expect(fetch.mock.calls[0][0]).toContain('mediaContent/add');
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body))
-      .toMatchObject({ title: 'title', description: 'description', url: 'https://bit.ly/3sAOAp8',
-        metadata: { cancelled: false, height: 359, type: 'image', width: 640 } });
+      .toMatchObject({ title: 'title', description: 'description', type: 'photo' });
+    expect(JSON.parse(JSON.parse(fetch.mock.calls[0][1].body).metadata))
+      .toMatchObject({ cancelled: false, height: 359, type: 'image', width: 640 });
   });
 
   test('Makes request to update post', () => {
@@ -100,8 +104,9 @@ describe('Media Content', () => {
     expect(fetch.mock.calls[0][0]).toContain('mediaContent/edit/1');
     expect(fetch.mock.calls[0][1].method).toBe('POST');
     expect(JSON.parse(fetch.mock.calls[0][1].body))
-      .toMatchObject({ title: 'title', description: 'description', url: 'https://bit.ly/3sAOAp8',
-        metadata: { cancelled: false, height: 359, type: 'image', width: 640 } });
+      .toMatchObject({ title: 'title', description: 'description', type: 'photo' });
+    expect(JSON.parse(JSON.parse(fetch.mock.calls[0][1].body).metadata))
+      .toMatchObject({ cancelled: false, height: 359, type: 'image', width: 640 });
   });
 
   test('Deletes post', done => {
