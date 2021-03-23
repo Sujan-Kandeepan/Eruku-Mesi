@@ -12,9 +12,9 @@ router.post("/add", async function (req, res) {
   req.assert("lastName", "Account: lastname must be set").notEmpty();
   req.assert("phone", "Account: phone must have content").notEmpty();
   req.assert("email", "Account: email must be set").notEmpty();
-
+  
   let errors = req.validationErrors();
-
+  
   if (errors) {
     return res.status(400).json({
       status: "error",
@@ -22,16 +22,42 @@ router.post("/add", async function (req, res) {
     });
   }
 
-  try {
-    const account = new Account(req.body);
-    await account.save();
-    return res.status(200).json({ message: "account successfully added" });
-  } catch (error) {
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-    });
-  }
+  Account.findOne(
+  {
+    $or: [
+          {'email': req.body.email},
+          {'phone' : req.body.phone},
+          {'username' : req.body.username}
+        ]
+  }, async function(err, user) {
+      if (user != null){
+        if (user.email != null && user.email == req.body.email)
+          return res.status(400).send({
+            message : "Email address already in use."
+          })
+        else if (user.phone != null && user.phone == req.body.phone)
+          return res.status(400).send({
+                message : "Phone number already in use."
+           })
+        else if(user.username != null && user.username == req.body.username)
+          return res.status(400).send({
+                message : "Username already taken."
+           })
+      }
+      else{
+          try {
+            const account = new Account(req.body);
+            await account.save();
+            return res.status(200).json({ message: "account successfully added" });
+          } catch (error) {
+            return res.status(500).json({
+              status: "error",
+              message: "Internal Server Error",
+            });
+          }
+      }
+     }
+  );
 });
 
 /**
