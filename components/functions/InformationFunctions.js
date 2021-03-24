@@ -6,8 +6,9 @@ export const fetchInformation = (props, setPages, setData, callback) => {
     .then(response => {
         setPages(response.map(item => item.title));
         setData(response.map(item =>
-          ({ id: item._id, title: item.title, content: paragraphs(item.content),
-            imageTop: null, imageBottom: null })));
+          ({ id: item._id, title: item.title, content: paragraphs(item.content), imageTop: item.imageTop,
+            metadataImageTop: item.metadataImageTop ? JSON.parse(item.metadataImageTop) : {},
+            type: item.type, url: item.url })));
       })
     .catch(error => console.error(error) && props.snackbar('Unable to fetch information'))
     .finally(callback);
