@@ -82,12 +82,10 @@ export const ToggleWithoutCard = (props) =>
 // Image or video component with given image source and properties
 export const Media = (props) =>
  <>
-    {props.image && (props.image.type === 'image' || props.image.type === 'photo'
-      || props.image.uri.startsWith('data:image') || props.thumbnail) &&
+    {((props.image && props.image.uri && props.image.uri.match(/(jpg|jpeg|png|gif)$/g)) || props.thumbnail) &&
       <Image source={{ uri: props.image.uri }}
         style={{ ...scale(props.scale), ...props.style }} />}
-    {props.image && (props.image.type === 'video'
-      || props.image.uri.startsWith('data:video')) && !props.thumbnail &&
+    {(props.image && props.image.uri && props.image.uri.endsWith('mp4')) && !props.thumbnail &&
       <Video source={{ uri: props.image.uri }} shouldPlay useNativeControls isLooping
         resizeMode={Video.RESIZE_MODE_CONTAIN}
         style={{ ...scale(props.scale), ...props.style }} />}

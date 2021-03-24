@@ -7,7 +7,7 @@ import AppPage from './AppPage';
 import MediaContentForm from './MediaContentForm';
 import { deleteMediaContent, fetchMediaContent } from './functions/MediaContentFunctions';
 import { Button, Content, Feed, FileDownload, Media } from '../shared/SharedComponents';
-import { periodic, truncate } from '../shared/SharedFunctions';
+import { filenameOrDefault, periodic, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -54,7 +54,7 @@ export default function MediaContentPage(props) {
                         scale={{ image: { ...item.metadata, uri: item.url }, marginHorizontal: 30, maxHeight: 200 }}
                         style={{ alignSelf: 'center', marginTop: 15 }} /> :
                       <Text style={{ color: props.theme.colors.text, marginTop: 7.5 }}>
-                        {item.metadata.name}
+                        {filenameOrDefault({ ...item.metadata, uri: item.url })}
                       </Text>}
                   </>} />
             </>} />
@@ -79,8 +79,8 @@ export default function MediaContentPage(props) {
                 <Content {...props} {...localProps} title={post.title}
                   imageBottom={post.type === 'photo' && { ...post.metadata, uri: post.url, type: post.type }}
                   extraContent={post.type === 'file' &&
-                    <FileDownload {...props} text={`Download ${post.metadata && post.metadata.name}`} source={post.url}
-                      destination={post.metadata ? post.metadata.name : post.url.replace(/.*\//g, '')} />}
+                    <FileDownload {...props} text={`Download ${fileNameOrDefault({ ...post.metadata, uri: post.url })}`}
+                      source={post.url} destination={fileNameOrDefault({ ...post.metadata, uri: post.url })} />}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}
