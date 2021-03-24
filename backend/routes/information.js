@@ -1,59 +1,139 @@
 const express = require("express");
 const router = express.Router();
 
+const AWS = require('aws-sdk')
+const multer = require('multer')
+const multerS3 = require('multer-s3')
+const config = require("../config/aws.js");
+
 let Information = require("../model/information.js");
+
+const s3 = new AWS.S3({
+  accessKeyId: config.accessKeyId,
+  secretAccessKey: config.secretAccessKey
+});
+
+const fileFilter = (_, file, cb) => {
+  if (file.mimetype === 'image/png' 
+      || file.mimetype === 'image/jpeg' 
+      || file.mimetype === 'image/gif') {
+      cb(null, true)
+  } else {
+      cb(new Error('Invalid file type'));
+  }
+}
+
+const fileLimitSizeInMegaBytes = 15;
+//template from: https://github.com/badunk/multer-s3
+const upload = multer({
+  fileFilter,
+  limits: { fileSize: fileLimitSizeInMegaBytes * 1024 * 1024 },
+  storage: multerS3({
+    s3: s3,
+    acl: 'public-read',
+    bucket: 'erukumesi',
+    key: (_, file, cb) => {
+      const typeInString = file.mimetype.split('/')[1];
+      cb(null, Date.now().toString() + "." + typeInString);
+    }
+  })
+})
+
+const multerUpload = upload.single('uploadFile');
 
 /**
  * Add information if the required field is not empty.
  */
-router.post("/add", async function (req, res) {
+ router.post("/add", async function (req, res) {
+  
+  multerUpload(req, res, async function(multerError) {
+
+    if (multerError) {
+      return res.status(500).json({
+        status: "error",
+        message: multerError.message,
+      });
+    }
+
   req.assert("title", "Information: title must be set").notEmpty();
   req.assert("content", "Information: content must be set").notEmpty();
 
-  let errors = req.validationErrors();
+    let validationErrors = req.validationErrors();
 
-  if (errors) {
-    return res.status(400).json({
-      status: "error",
-      message: "Mandatory field is not set",
-    });
-  }
-  try {
-    const information = new Information(req.body);
-    await information.save();
-    return res
-      .status(200)
-      .json({ message: "information successfully added", information: information });
-  } catch (error) {
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-    });
-  }
+    if (validationErrors) {
+      return res.status(400).json({
+        status: "error",
+        message: "Mandatory field is not set",
+      });
+    }
+
+    try {
+      req.body.imageTop = req.file.location
+      const information = new Information(req.body);
+      await information.save();
+      return res
+        .status(200)
+        .json({ message: "Information successfully added", information: information});
+    } catch (error) {
+      return res.status(500).json({
+        status: "error",
+        message: "Internal Server Error",
+      });
+    }
+
+  });
 });
 
 /**
  * Edit information of a specific information (given the information id)
  */
 router.post("/edit/:id", async function (req, res) {
-  let eventBody = req.body;
-  let query = { _id: req.params.id };
 
-  if (Object.keys(eventBody).length === 0) {
-    return res.status(400).json({
-      status: "error",
-      message: "No field to update with",
-    });
-  }
+  multerUpload(req, res, async function(multerError) {
+    let query = { _id: req.params.id };
+    if (multerError) {
+      return res.status(500).json({
+        status: "error",
+        message: multerError.message,
+      });
+    }
 
-  try {
-    const information = await Information.updateOne(query, eventBody);
-    return res
-      .status(200)
-      .json({ msg: "information successfully updated", information: information });
-  } catch (e) {
-    return res.status(500).json(e);
-  }
+    if (req.file) {
+      
+      if (multerError) {
+        return res.status(500).json({
+          status: "error",
+          message: multerError.message,
+        });
+      }
+
+      try {
+        req.body.imageTop = req.file.location
+        const information = await Information.updateOne(query, req.body);
+        return res
+          .status(200)
+          .json({ message: "Information successfully updated", information: information });
+      } catch (error) {
+        return res.status(500).json({
+          status: "error",
+          message: "Internal Server Error",
+        });
+      }
+    } else {
+      try {
+        const information = await Information.updateOne(query, req.body);
+        return res
+          .status(200)
+          .json({ message: "Information successfully updated", information: information });
+      } catch (error) {
+        return res.status(500).json({
+          status: "error",
+          message: "Internal Server Error",
+        });
+      }
+    }
+  });
+
 });
 
 /**
