@@ -14,7 +14,6 @@ const s3 = new AWS.S3({
 });
 
 const fileFilter = (_, file, cb) => {
-  console.log('file', file);
   if (file.mimetype === 'application/pdf' 
       || file.mimetype === 'image/png' 
       || file.mimetype === 'image/jpeg' 
@@ -50,6 +49,7 @@ const multerUpload = upload.single('uploadFile');
  * Must have one body property with key of 'photo'.
  */
 router.post("/add", async function (req, res) {
+  
   multerUpload(req, res, async function(multerError) {
 
     if (multerError) {
@@ -93,24 +93,52 @@ router.post("/add", async function (req, res) {
  * Edit the information of a specific mediaContent (given the mediaContent id)
  */
 router.post("/edit/:id", async function (req, res) {
-  let mediaContentBody = req.body;
-  let query = { _id: req.params.id };
+  
+  multerUpload(req, res, async function(multerError) {
+    let query = { _id: req.params.id };
+    if (multerError) {
+      return res.status(500).json({
+        status: "error",
+        message: multerError.message,
+      });
+    }
 
-  if (Object.keys(mediaContentBody).length === 0) {
-    return res.status(400).json({
-      status: "error",
-      message: "No field to update with",
-    });
-  }
+    if (req.file) {
+      
+      if (multerError) {
+        return res.status(500).json({
+          status: "error",
+          message: multerError.message,
+        });
+      }
 
-  try {
-    const mediaContent = await MediaContent.updateOne(query, mediaContentBody);
-    return res
-      .status(200)
-      .json({ msg: "mediaContent successfully updated", mediaContent: mediaContent });
-  } catch (e) {
-    return res.status(500).json(e);
-  }
+      try {
+        req.body.url = req.file.location
+        const mediaContent = await MediaContent.updateOne(query, req.body);
+        return res
+          .status(200)
+          .json({ message: "mediaContent successfully updated", mediaContent: mediaContent });
+      } catch (error) {
+        return res.status(500).json({
+          status: "error",
+          message: "Internal Server Error",
+        });
+      }
+    } else {
+      try {
+        const mediaContent = await MediaContent.updateOne(query, req.body);
+        return res
+          .status(200)
+          .json({ message: "mediaContent successfully updated", mediaContent: mediaContent });
+      } catch (error) {
+        return res.status(500).json({
+          status: "error",
+          message: "Internal Server Error",
+        });
+      }
+    }
+  });
+
 });
 
 /**
