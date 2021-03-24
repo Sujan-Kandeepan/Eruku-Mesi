@@ -20,7 +20,7 @@ describe('Messages', () => {
     }));
     fetch.mockResponseOnce(JSON.stringify(
       {
-        account: {
+        user: {
           _id: '5ffb4dbeee35744495bf58fc',
           firstName: 'Ji Who',
           lastName: 'Choi',

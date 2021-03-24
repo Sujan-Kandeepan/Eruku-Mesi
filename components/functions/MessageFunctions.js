@@ -12,10 +12,10 @@ export const fetchMessages = (props, messages, setMessages, prepend, callback) =
       let names = {};
       Promise.all(response.messages.map(item =>
         get(`${props.baseURL}/accounts/${item.sender}`)
-          .then(account =>
+          .then(user =>
             names[item.sender] =
-              account && account.account
-                ? `${account.account.firstName} ${account.account.lastName} (@${account.account.username})`
+              user && user.user
+                ? `${user.user.firstName} ${user.user.lastName} (@${user.user.username})`
                 : 'Unknown User')
           .catch(() => names[item.sender] = 'Unknown User')
         ))

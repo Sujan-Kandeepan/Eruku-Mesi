@@ -196,9 +196,9 @@ export default function App() {
         .then(item => item
           ? get(`${baseURL}/accounts/${item}`)
               .then(res => {
-                setUser(res.account);
-                setReceiveNotifications(res.account.receiveNotifications);
-                setTheme(res.account.theme === 'dark' ? darkTheme : lightTheme);
+                setUser(res.user);
+                setReceiveNotifications(res.user.receiveNotifications);
+                setTheme(res.user.theme === 'dark' ? darkTheme : lightTheme);
               })
               .finally(SplashScreen.hideAsync)
           : SplashScreen.hideAsync());
