@@ -1,4 +1,4 @@
-import { del, get, paragraphs, post } from '../../shared/SharedFunctions';
+import { del, filenameOrDefault, get, paragraphs, post, upload } from '../../shared/SharedFunctions';
 
 // Fetch information and populate component state array
 export const fetchInformation = (props, setPages, setData, callback) => {
@@ -84,10 +84,13 @@ export const deleteInfoSection = (props, pages, setPages, data, setData, item, c
 };
 
 // Edit information section content and return to content view
-export const editInfoContent = (props, localProps, page, setPages, data, setData,
-  imageTop, imageBottom, editText, setEditText, callback) => {
+export const editInfoContent = (props, localProps, page, setPages,
+  data, setData, imageTop, editText, setEditText, callback) => {
   const found = data.find(entry => page.includes(entry.title));
-  post(`${props.baseURL}/information/edit/${found.id}`, { content: editText, imageTop, imageBottom })
+  const name = filenameOrDefault(imageTop);
+  const uploadFile = { ...imageTop, name,
+    type: name.endsWith('png') ? 'image/png' : (name.endsWith('gif') ? 'image/gif' : 'image/jpeg') };
+  upload(`${props.baseURL}/information/edit/${found.id}`, { content: editText, uploadFile })
     // Update locally within same page
     .then(() => {
       fetchInformation(props, setPages, setData, () => {

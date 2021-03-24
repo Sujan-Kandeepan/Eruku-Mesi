@@ -1,11 +1,14 @@
 import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection, fetchInformation }
   from '../components/functions/InformationFunctions';
+import * as SharedFunctions from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
 describe('Information', () => {
   beforeEach(() => {
     fetch.resetMocks()
+    // Use post instead of upload since FormData is not defined
+    SharedFunctions.upload = SharedFunctions.post;
   });
 
   test('Fetches information', done => {
@@ -231,7 +234,6 @@ describe('Information', () => {
     let data = [{ title: 'General', content: [''], imageTop: null, imageBottom: null }];
     let setData = value => data = value;
     let imageTop = null;
-    let imageBottom = null;
     let editText = 'Edit';
     let setEditText = value => editText = value;
     fetch.mockResponseOnce(JSON.stringify({
@@ -254,19 +256,18 @@ describe('Information', () => {
         }
       ]
     ));
-    editInfoContent(props, localProps, page, setPages, data, setData, imageTop, imageBottom, editText, setEditText, () => {
+    editInfoContent(props, localProps, page, setPages, data, setData, imageTop, editText, setEditText, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(2);
         expect(fetch.mock.calls[0][0]).toContain('information/edit');
         expect(fetch.mock.calls[0][1].method).toBe('POST');
         expect(fetch.mock.calls[1][0]).toContain('information');
         expect(JSON.parse(fetch.mock.calls[0][1].body))
-          .toMatchObject({ content: 'Edit', imageTop: null, imageBottom: null });
+          .toMatchObject({ content: 'Edit' });
         expect(message.toLowerCase()).toEqual('');
         expect(data.length).toEqual(1);
-        expect(data[0]).toMatchObject({ title: 'General', content: ['Edit'], imageTop: null, imageBottom: null });
+        expect(data[0]).toMatchObject({ title: 'General', content: ['Edit'] });
         expect(imageTop).toEqual(null);
-        expect(imageBottom).toEqual(null);
         expect(editText).toEqual('');
         done();
       } catch (error) {

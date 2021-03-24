@@ -23,7 +23,6 @@ export default function InformationPage(props) {
   const [originalText, setOriginalText] = React.useState('');
   const [editText, setEditText] = React.useState('');
   const [imageTop, setImageTop] = React.useState(null);
-  const [imageBottom, setImageBottom] = React.useState(null);
   const [fetched, setFetched] = React.useState(false);
   const newSection = 'New Section';
   // Reference: https://stackoverflow.com/a/59875773
@@ -120,7 +119,6 @@ export default function InformationPage(props) {
                     onPress={() => {
                       setEditText(data.find(entry => entry.title === page).content.join('\n\n'));
                       setImageTop(data.find(entry => entry.title === page).imageTop || null);
-                      setImageBottom(data.find(entry => entry.title === page).imageBottom || null);
                       localProps.navigation.push(`Edit ${page}`);
                     }} />}
                 {/* Display of content for specific information section */}
@@ -135,7 +133,6 @@ export default function InformationPage(props) {
               <AppPage {...props} {...localProps} nested cancel scroll onReturn={() => {
                 setEditText('');
                 setImageTop(null);
-                setImageBottom(null);
               }}>
                 <View style={{ flex: 1 }}>
                   {/* Top image with buttons to open image picker or delete image */}
@@ -146,7 +143,7 @@ export default function InformationPage(props) {
                   <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}>
                       <MediaPicker {...props} handleResult={setImageTop}
-                        text={imageTop ? 'Replace Image' : 'Choose Top Image (Optional)'} />
+                        text={imageTop ? 'Replace Image' : 'Choose Image (Optional)'} />
                     </View>
                     {imageTop &&
                       <View style={{ flex: 1, marginLeft: -15, marginTop: -15 }}>
@@ -158,24 +155,11 @@ export default function InformationPage(props) {
                   <BodyInput {...props} value={editText}
                     onChangeText={(value) => setEditText(value)}
                     width={width} onBlur={Keyboard.dismiss} />
-                  {/* Bottom image with buttons to open image picker or delete image */}
-                  <Media image={imageBottom} scale={{ image: imageBottom, maxHeight: 300 }}
-                    style={{ alignSelf: 'center', marginBottom: 15 }} />
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 1, marginBottom: 15 }}>
-                      <MediaPicker {...props} handleResult={setImageBottom}
-                        text={imageBottom ? 'Replace Image' : 'Choose Bottom Image (Optional)'} />
-                    </View>
-                    {imageBottom &&
-                      <View style={{ flex: 1, marginLeft: -15, marginTop: -15 }}>
-                        <Button {...props} text='Delete Image' onPress={() => setImageBottom(null)} />
-                      </View>}
-                  </View>
                   {/* Submit button with logic to update information section content */}
                   <View style={{ marginBottom: 15, marginTop: -15 }}>
                     <Button {...props} color='accent' text='Save'
-                      onPress={() => editInfoContent(props, localProps, page, setPages, data, setData,
-                        imageTop, imageBottom, editText, setEditText)} />
+                      onPress={() => editInfoContent(props, localProps, page, setPages,
+                        data, setData, imageTop, editText, setEditText)} />
                   </View>
                 </View>
               </AppPage>} />)}

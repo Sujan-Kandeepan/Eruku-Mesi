@@ -82,8 +82,8 @@ export const truncate = (string, num) => {
 export const currentDate = () => new Date(Math.floor((new Date()).getTime() / 60000) * 60000);
 
 // Get or assign default filename for image/file object
-export const filenameOrDefault = (file) => file.name || (file.metadata && file.metadata.name) ||
-  `${(new Date()).valueOf().toString()}.${file.uri ? file.uri.replace(/.*\./g, '') : 'txt'}`;
+export const filenameOrDefault = (file) => (file && (file.name || (file.metadata && file.metadata.name))) ||
+  `${(new Date()).valueOf().toString()}.${file && file.uri ? file.uri.replace(/.*\./g, '') : 'txt'}`;
 
 // Scale image to screen width or to maximum height with customizable horizontal margin
 export const scale = ({ image, marginHorizontal, maxHeight }) => {
