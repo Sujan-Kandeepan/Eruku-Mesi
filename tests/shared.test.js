@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 import React from 'react';
-import { currentDate, del, get, paragraphs, periodic, post, scale,
+import { currentDate, del, get, filenameOrDefault, paragraphs, periodic, post, scale,
   showDate, showTime, text, truncate, validEmail, validPhone, validPassword } from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
@@ -109,6 +109,21 @@ describe('Shared Functions', () => {
       expect(returned.getSeconds()).toEqual(0);
       expect(returned.getMilliseconds()).toEqual(0);
       global.Date = realDate;
+    });
+  });
+
+  describe('filenameOrDefault - get or assign default filename', () => {
+    test('Filename kept if name property is defined', () => {
+      expect(filenameOrDefault({ name: 'test.png' })).toEqual('test.png');
+      expect(filenameOrDefault({ metadata: { name: 'test.png' } })).toEqual('test.png');
+    });
+
+    test('Default filename assigned with extension from URI', () => {
+      expect(filenameOrDefault({ uri: 'https://somewhere.domain.com/test.png' })).toMatch(/.*\.png/g);
+    });
+
+    test('Default filename assigned with default extension', () => {
+      expect(filenameOrDefault({})).toMatch(/.*\.txt/g);
     });
   });
 
