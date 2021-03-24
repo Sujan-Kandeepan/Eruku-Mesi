@@ -24,7 +24,7 @@ describe('Information', () => {
           title: 'General',
           content: 'Here is some general information.',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
@@ -39,7 +39,7 @@ describe('Information', () => {
           title: 'General',
           content: ['Here is some general information.'],
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: {},
         });
         done();
       } catch (error) {
@@ -73,7 +73,7 @@ describe('Information', () => {
       title: 'New Section',
       content: 'Nothing here yet...',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify(
@@ -83,7 +83,7 @@ describe('Information', () => {
           title: 'New Section',
           content: 'Nothing here yet...',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
@@ -95,11 +95,20 @@ describe('Information', () => {
         expect(fetch.mock.calls[0][1].method).toBe('POST');
         expect(fetch.mock.calls[1][0]).toContain('information');
         expect(JSON.parse(fetch.mock.calls[0][1].body))
-          .toMatchObject({ title: 'New Section', content: 'Nothing here yet...', imageTop: null, imageBottom: null });
+          .toMatchObject({
+            title: 'New Section',
+            content: 'Nothing here yet...',
+            imageTop: null,
+          });
         expect(message.toLowerCase()).toEqual('');
         expect(pages).toEqual(['New Section']);
         expect(data.length).toEqual(1);
-        expect(data[0]).toMatchObject({ title: 'New Section', content: ['Nothing here yet...'], imageTop: null, imageBottom: null });
+        expect(data[0]).toMatchObject({
+          title: 'New Section',
+          content: ['Nothing here yet...'],
+          imageTop: null,
+          metadataImageTop: {},
+        });
         expect(originalText).toEqual('New Section');
         expect(editText).toEqual('New Section');
         done();
@@ -137,7 +146,7 @@ describe('Information', () => {
       title: 'Edit',
       content: '',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify(
@@ -147,7 +156,7 @@ describe('Information', () => {
           title: 'First',
           content: '',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         },
         {
@@ -155,7 +164,7 @@ describe('Information', () => {
           title: 'Edit',
           content: '',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         },
         {
@@ -163,7 +172,7 @@ describe('Information', () => {
           title: 'Last',
           content: '',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
@@ -181,7 +190,12 @@ describe('Information', () => {
         expect(pages).toContain('Edit');
         expect(pages).toContain('Last');
         expect(data.length).toEqual(3);
-        expect(data[pages.indexOf('Edit')]).toMatchObject({ title: 'Edit', content: [], imageTop: null, imageBottom: null });
+        expect(data[pages.indexOf('Edit')]).toMatchObject({
+          title: 'Edit',
+          content: [],
+          imageTop: null,
+          metadataImageTop: {},
+        });
         expect(originalText).toEqual('');
         expect(editText).toEqual('');
         done();
@@ -204,7 +218,7 @@ describe('Information', () => {
       title: 'General',
       content: '',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify([]));
@@ -231,7 +245,12 @@ describe('Information', () => {
     let page = 'General';
     let pages = ['General'];
     let setPages = value => pages = value;
-    let data = [{ title: 'General', content: [''], imageTop: null, imageBottom: null }];
+    let data = [{
+      title: 'General',
+      content: [''],
+      imageTop: null,
+      metadataImageTop: {},
+    }];
     let setData = value => data = value;
     let imageTop = null;
     let editText = 'Edit';
@@ -241,7 +260,7 @@ describe('Information', () => {
       title: 'General',
       content: 'Edit',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify(
@@ -251,7 +270,7 @@ describe('Information', () => {
           title: 'General',
           content: 'Edit',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
@@ -266,7 +285,12 @@ describe('Information', () => {
           .toMatchObject({ content: 'Edit' });
         expect(message.toLowerCase()).toEqual('');
         expect(data.length).toEqual(1);
-        expect(data[0]).toMatchObject({ title: 'General', content: ['Edit'] });
+        expect(data[0]).toMatchObject({
+          title: 'General',
+          content: ['Edit'],
+          imageTop: null,
+          metadataImageTop: {},
+        });
         expect(imageTop).toEqual(null);
         expect(editText).toEqual('');
         done();
