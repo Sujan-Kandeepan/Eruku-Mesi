@@ -89,9 +89,12 @@ export const editInfoContent = (props, localProps, page, setPages,
   data, setData, imageTop, editText, setEditText, callback) => {
   const found = data.find(entry => page.includes(entry.title));
   const name = filenameOrDefault(imageTop);
-  const uploadFile = { ...imageTop, name,
-    type: name.endsWith('png') ? 'image/png' : (name.endsWith('gif') ? 'image/gif' : 'image/jpeg') };
-  upload(`${props.baseURL}/information/edit/${found.id}`, { content: editText, uploadFile })
+  const uploadFile = imageTop
+    ? { ...imageTop, name,
+        type: name.endsWith('png') ? 'image/png' : (name.endsWith('gif') ? 'image/gif' : 'image/jpeg') }
+    : null;
+  const metadataImageTop = imageTop ? JSON.stringify({ ...uploadFile, uri: undefined }) : null;
+  upload(`${props.baseURL}/information/edit/${found.id}`, { content: editText, uploadFile, metadataImageTop })
     // Update locally within same page
     .then(() => {
       fetchInformation(props, setPages, setData, () => {

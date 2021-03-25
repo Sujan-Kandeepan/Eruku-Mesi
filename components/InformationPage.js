@@ -118,14 +118,15 @@ export default function InformationPage(props) {
                   <Button {...props} {...localProps} text='Edit'
                     onPress={() => {
                       setEditText(data.find(entry => entry.title === page).content.join('\n\n'));
-                      setImageTop(data.find(entry => entry.title === page).imageTop || null);
+                      setImageTop(data.find(item => item.title === page).imageTop ?
+                        { ...data.find(item => item.title === page).metadataImageTop,
+                        uri: data.find(item => item.title === page).imageTop } : null);
                       localProps.navigation.push(`Edit ${page}`);
                     }} />}
                 {/* Display of content for specific information section */}
                 <Content {...props} {...localProps} title={data.find(item => item.title === page).title}
                   imageTop={{ ...data.find(item => item.title === page).metadataImageTop,
-                    uri: data.find(item => item.title === page).imageTop,
-                    type: data.find(item => item.title === page).type }} maxImageHeight={300}
+                    uri: data.find(item => item.title === page).imageTop }} maxImageHeight={300}
                   content={data.find(entry => entry.title === page).content} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing info sections */}
@@ -146,7 +147,7 @@ export default function InformationPage(props) {
                       <MediaPicker {...props} handleResult={setImageTop}
                         text={imageTop ? 'Replace Image' : 'Choose Image (Optional)'} />
                     </View>
-                    {imageTop &&
+                    {imageTop && imageTop !== {} &&
                       <View style={{ flex: 1, marginLeft: -15, marginTop: -15 }}>
                         <Button {...props} text='Delete Image' onPress={() => setImageTop(null)} />
                       </View>}
