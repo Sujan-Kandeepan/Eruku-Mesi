@@ -53,7 +53,7 @@ router.post("/edit/:id", async function (req, res) {
     const event = await Event.updateOne(query, eventBody);
     return res
       .status(200)
-      .json({ eventBody: eventBody, msg: "event successfully updated" });
+      .json({ msg: "event successfully updated" });
   } catch (e) {
     return res.status(500).json(e);
   }

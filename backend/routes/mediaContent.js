@@ -78,7 +78,7 @@ router.post("/add", async function (req, res) {
       await mediaContent.save();
       return res
         .status(200)
-        .json({ message: "mediaContent successfully added", mediaContent: mediaContent });
+        .json({ message: "mediaContent successfully added" });
     } catch (error) {
       return res.status(500).json({
         status: "error",
@@ -117,7 +117,7 @@ router.post("/edit/:id", async function (req, res) {
         const mediaContent = await MediaContent.updateOne(query, req.body);
         return res
           .status(200)
-          .json({ message: "mediaContent successfully updated", mediaContent: mediaContent });
+          .json({ message: "mediaContent successfully updated" });
       } catch (error) {
         return res.status(500).json({
           status: "error",
@@ -129,7 +129,7 @@ router.post("/edit/:id", async function (req, res) {
         const mediaContent = await MediaContent.updateOne(query, req.body);
         return res
           .status(200)
-          .json({ message: "mediaContent successfully updated", mediaContent: mediaContent });
+          .json({ message: "mediaContent successfully updated" });
       } catch (error) {
         return res.status(500).json({
           status: "error",
