@@ -25,8 +25,7 @@ router.post("/add", async function (req, res) {
     return res
       .status(200)
       .json({
-        message: "newsStories successfully added",
-        newsStories: newsStories,
+        message: "newsStories successfully added"
       });
   } catch (error) {
     return res.status(500).json({
@@ -54,7 +53,7 @@ router.post("/edit/:id", async function (req, res) {
     const newsStory = await NewsStory.updateOne(query, newsStoryBody);
     return res
       .status(200)
-      .json({ message: "newsStory successfully updated", newsStory: newsStory });
+      .json({ message: "newsStory successfully updated" });
   } catch (e) {
     return res.status(500).json(e);
   }
@@ -65,7 +64,9 @@ router.post("/edit/:id", async function (req, res) {
  */
 router.get("/", async function (req, res) {
   try {
-    const newsStories = await NewsStory.find({});
+    const newsStories = await NewsStory.find({}).sort({
+      publishedAt: -1
+    });
     return res.status(200).json(newsStories);
   } catch (e) {
     return res.status(500).json(e);
