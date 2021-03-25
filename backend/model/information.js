@@ -17,5 +17,11 @@ let Information = new Schema({
   imageBottom: {
     type: String,
   },
+  metadataImageTop: {
+    type: String,
+  },
+  metadataImageBottom: {
+    type: String,
+  },
 });
 module.exports = informationDB.model("Information", Information, "Information");
