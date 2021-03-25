@@ -65,7 +65,9 @@ router.post("/edit/:id", async function (req, res) {
  */
 router.get("/", async function (req, res) {
   try {
-    const newsStories = await NewsStory.find({});
+    const newsStories = await NewsStory.find({}).sort({
+      publishedAt: -1
+    });
     return res.status(200).json(newsStories);
   } catch (e) {
     return res.status(500).json(e);
