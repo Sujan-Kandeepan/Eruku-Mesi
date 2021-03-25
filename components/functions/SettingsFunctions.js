@@ -16,9 +16,14 @@ export const editInfo = (props, username, firstName, lastName, phone, email, set
   } else if (!validEmail(email)) {
     setEditInfoError('Please enter a valid email address.');
   } else {
+    props.snackbar('Saving changes');
     valid = true;
     props.updateUser({ username, firstName, lastName, phone, email },
-      () => { setEditInfoError(''); props.navigation.pop(); },
+      () => {
+        props.snackbar('Information updated');
+        setEditInfoError('');
+        props.navigation.pop();
+      },
       error => setEditInfoError(error.message),
       callback);
   }
@@ -38,9 +43,14 @@ export const changePassword = (props, oldPassword, newPassword, confirmPassword,
   } else if (newPassword !== confirmPassword) {
     setPasswordError('Entered passwords do not match.');
   } else if (validPassword(newPassword, setPasswordError)) {
+    props.snackbar('Saving changes');
     valid = true;
     props.updateUser({ oldPassword, newPassword },
-      () => { setPasswordError(''); props.navigation.pop(); },
+      () => {
+        props.snackbar('Password changed');
+        setPasswordError('');
+        props.navigation.pop();
+      },
       error => setPasswordError(error.message),
       callback);
   }

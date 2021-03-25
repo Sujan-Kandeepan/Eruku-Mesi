@@ -34,7 +34,7 @@ export const addInfoSection = (props, pages, setPages, data, setData,
     // Display message if failed
     .catch(error => {
       console.error(error);
-      props.snackbar('Failed to update database');
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };
@@ -63,7 +63,7 @@ export const editInfoSection = (props, pages, setPages, data, setData,
     // Display message if failed
     .catch(error => {
       console.error(error);
-      props.snackbar('Failed to update database');
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };
@@ -79,7 +79,7 @@ export const deleteInfoSection = (props, pages, setPages, data, setData, item, c
     // Display message if failed
     .catch(error => {
       console.error(error);
-      props.snackbar('Failed to update database');
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };
@@ -94,10 +94,12 @@ export const editInfoContent = (props, localProps, page, setPages,
         type: name.endsWith('png') ? 'image/png' : (name.endsWith('gif') ? 'image/gif' : 'image/jpeg') }
     : null;
   const metadataImageTop = imageTop ? JSON.stringify({ ...uploadFile, uri: undefined }) : null;
+  props.snackbar('Saving changes');
   upload(`${props.baseURL}/information/edit/${found.id}`, { content: editText, uploadFile, metadataImageTop })
     // Update locally within same page
     .then(() => {
       fetchInformation(props, setPages, setData, () => {
+        props.snackbar('Changes saved');
         setEditText('');
         localProps.navigation.pop();
         callback && callback();
@@ -106,7 +108,7 @@ export const editInfoContent = (props, localProps, page, setPages,
     // Display message if failed
     .catch((error) => {
       console.log(error);
-      props.snackbar('Failed to update database');
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };

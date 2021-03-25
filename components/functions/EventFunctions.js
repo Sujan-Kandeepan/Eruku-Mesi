@@ -27,16 +27,18 @@ export const submitEvent = (props, title, date, location, description, setSaving
     return;
   }
   // Update database with new or modified record
+  props.snackbar(props.payload ? 'Saving changes' : 'Creating event');
   setSaving(true);
   post(`${props.baseURL}/events/${props.payload ? `edit/${props.payload.id}` : 'add'}`,
     { title, date, location, description })
     // Update locally and return to previous page
     .then(() => {
+      props.snackbar(props.payload ? 'Changes saved' : 'Event created');
       props.update && props.update();
       props.navigation.pop();
     })
     // Display message if failed
-    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
     .finally(() => setSaving(false));
 };
 
@@ -44,5 +46,5 @@ export const submitEvent = (props, title, date, location, description, setSaving
 export const deleteEvent = (props, event, setEvents, setFetched, callback) => 
   del(`${props.baseURL}/events/${event.id}`)
     .then(() => fetchEvents(props, setEvents, () => setFetched(true)))
-    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
     .finally(callback);

@@ -51,7 +51,7 @@ export const sendMessage = (props, messages, setMessages, newMessage, setNewMess
       setTimeout(() => list.scrollToEnd({ animated: true }), 250);
     })
     // Display message if failed
-    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to send message'))
     .finally(() => fetchMessages(props, messages, setMessages, false, callback));
 };
 

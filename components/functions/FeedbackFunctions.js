@@ -20,6 +20,6 @@ export const submitFeedback = (props, text, setText, keyboard, callback) => {
         setText('');
       })
       // Display message if failed
-      .catch(error => console.error(error) && props.snackbar('Failed to update database'))
+      .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
       .finally(callback);
 }

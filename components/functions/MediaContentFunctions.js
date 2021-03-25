@@ -27,6 +27,7 @@ export const submitMediaContent = (props, title, description, image, file, setSa
     return;
   }
   // Update database with new or modified record
+  props.snackbar(props.payload ? 'Saving changes' : 'Uploading file');
   setSaving(true);
   const name = filenameOrDefault({ ...image, ...file });
   const uploadFile = { uri: { ...image, ...file }.uri, name,
@@ -44,11 +45,12 @@ export const submitMediaContent = (props, title, description, image, file, setSa
       metadata: JSON.stringify({ ...image, ...file, name, uri: undefined }) })
     // Update locally and return to previous page
     .then(() => {
+      props.snackbar(props.payload ? 'Changes saved' : 'File uploaded');
       props.update && props.update();
       props.navigation.pop();
     })
     // Display message if failed
-    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
     .finally(() => setSaving(false));
 };
 
@@ -56,5 +58,5 @@ export const submitMediaContent = (props, title, description, image, file, setSa
 export const deleteMediaContent = (props, post, setPosts, setFetched, callback) =>
   del(`${props.baseURL}/mediaContent/${post.id}`)
     .then(() => fetchMediaContent(props, setPosts, () => setFetched(true)))
-    .catch(error => console.error(error) && props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
     .finally(callback);

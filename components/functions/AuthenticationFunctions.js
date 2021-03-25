@@ -9,9 +9,11 @@ export const login = (props, username, password, setLoginError, callback) => {
     setLoginError('Password required.');
   } else {
     valid = true;
+    props.snackbar('Logging in');
     post(`${props.baseURL}/accounts/login`,
       { ...(validEmail(username) ? { email: username } : { username }), password })
       .then(response => {
+        props.snackbar('Logged in');
         setLoginError('');
         props.setUser(response.account);
         props.setAdmin(response.account.accountType == 'admin');
@@ -47,11 +49,13 @@ export const signup = (props, newUsername, newPassword, confirmPassword,
     setSignupError('Please enter a valid email address.');
   } else if (validPassword(newPassword, setSignupError)) {
     valid = true;
+    props.snackbar('Creating account');
     post(`${props.baseURL}/accounts/signup`,
       { username: newUsername, password: newPassword, firstName, lastName, phone, email })
       .then(() =>
         post(`${props.baseURL}/accounts/login`, { username: newUsername, password: newPassword })
           .then(response => {
+            props.snackbar('Logged in');
             setSignupError('');
             props.setUser(response.account);
             props.setAdmin(response.account.accountType == 'admin');
