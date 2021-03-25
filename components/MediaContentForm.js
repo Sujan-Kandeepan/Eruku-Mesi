@@ -36,7 +36,7 @@ export default function MediaContentForm(props) {
         <BodyInput {...props} placeholder='Post Description' value={description}
           onChangeText={(value) => setDescription(value)} width={width} />
         {/* Image/video or filename with buttons to open image/video or file picker */}
-        <Media image={image} scale={{ image, maxHeight: 300 }}
+        <Media {...props} image={image} scale={{ image, maxHeight: 300 }}
           style={{ alignSelf: 'center', marginBottom: 15 }} />
         {file &&
           <Text style={{ color: props.theme.colors.text, paddingBottom: 15, textAlign: 'center' }}>

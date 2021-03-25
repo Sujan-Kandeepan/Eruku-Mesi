@@ -50,7 +50,7 @@ export default function MediaContentPage(props) {
                       {item && truncate(item.description.length ? item.description[0] : "", 10)}
                     </Text>
                     {item.type === 'photo' ?
-                      <Media image={{ ...item.metadata, uri: item.url }} thumbnail
+                      <Media {...props} image={{ ...item.metadata, uri: item.url }} thumbnail
                         scale={{ image: { ...item.metadata, uri: item.url }, marginHorizontal: 30, maxHeight: 200 }}
                         style={{ alignSelf: 'center', marginTop: 15 }} /> :
                       <Text style={{ color: props.theme.colors.text, marginTop: 7.5 }}>

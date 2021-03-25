@@ -10,7 +10,7 @@ import { Card, Icon } from 'react-native-elements';
 import { FlatList, Switch, TouchableOpacity } from 'react-native-gesture-handler';
 import debounce from 'lodash/debounce';
 
-import { scale } from './SharedFunctions';
+import { filenameOrDefault, scale } from './SharedFunctions';
 
 // Function wrapper to prevent multiple triggers
 // Reference: https://stackoverflow.com/a/47229486
@@ -81,15 +81,19 @@ export const ToggleWithoutCard = (props) =>
 
 // Image or video component with given image source and properties
 export const Media = (props) =>
- <>
-    {((props.image && props.image.uri && props.image.uri.match(/(jpg|jpeg|png|gif)$/g)) || props.thumbnail) &&
+  <>
+    {props.image && props.image.uri && props.image.uri.match(/(jpg|jpeg|png|gif)$/g) &&
       <Image source={{ uri: props.image.uri }}
         style={{ ...scale(props.scale), ...props.style }} />}
-    {(props.image && props.image.uri && props.image.uri.endsWith('mp4')) && !props.thumbnail &&
-      <Video source={{ uri: props.image.uri }} shouldPlay useNativeControls isLooping
-        resizeMode={Video.RESIZE_MODE_CONTAIN}
-        style={{ ...scale(props.scale), ...props.style }} />}
- </>;
+    {props.image && props.image.uri && props.image.uri.endsWith('mp4') &&
+      (props.thumbnail
+        ? <Text style={{ color: props.theme.colors.text, marginTop: 7.5 }}>
+            {filenameOrDefault(props.image)}
+          </Text>
+        : <Video source={{ uri: props.image.uri }} shouldPlay useNativeControls isLooping
+            resizeMode={Video.RESIZE_MODE_CONTAIN}
+            style={{ ...scale(props.scale), ...props.style }} />)}
+  </>;
 
 // Image/video picker component exposing system file explorer
 export const MediaPicker = (props) =>

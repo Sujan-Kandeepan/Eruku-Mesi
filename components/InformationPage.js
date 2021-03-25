@@ -139,7 +139,7 @@ export default function InformationPage(props) {
                 <View style={{ flex: 1 }}>
                   {/* Top image with buttons to open image picker or delete image */}
                   <View style={{ marginTop: 15 }}>
-                    <Media image={imageTop} scale={{ image: imageTop, maxHeight: 300 }}
+                    <Media {...props} image={imageTop} scale={{ image: imageTop, maxHeight: 300 }}
                       style={{ alignSelf: 'center', marginBottom: 15 }} />
                   </View>
                   <View style={{ flexDirection: 'row' }}>
