@@ -68,7 +68,7 @@ const multerUpload = upload.single('uploadFile');
     }
 
     try {
-      req.body.imageTop = req.file.location
+      req.body.imageTop = req.file ? req.file.location : null
       const information = new Information(req.body);
       await information.save();
       return res
@@ -121,6 +121,11 @@ router.post("/edit/:id", async function (req, res) {
       }
     } else {
       try {
+        if ((!req.body.uploadFile && req.body.uploadFile !== undefined)
+          || ['null', 'undefined'].includes(req.body.uploadFile)) {
+          req.body.imageTop = null;
+          req.body.metadataImageTop = null;
+        }
         const information = await Information.updateOne(query, req.body);
         return res
           .status(200)
