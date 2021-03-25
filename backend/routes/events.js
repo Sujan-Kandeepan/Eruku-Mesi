@@ -26,7 +26,7 @@ router.post("/add", async function (req, res) {
     await event.save();
     return res
       .status(200)
-      .json({ message: "event successfully added", event: event });
+      .json({ message: "event successfully added" });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -53,7 +53,7 @@ router.post("/edit/:id", async function (req, res) {
     const event = await Event.updateOne(query, eventBody);
     return res
       .status(200)
-      .json({ eventBody: eventBody, msg: "event successfully updated", event: event });
+      .json({ msg: "event successfully updated" });
   } catch (e) {
     return res.status(500).json(e);
   }
@@ -64,7 +64,9 @@ router.post("/edit/:id", async function (req, res) {
  */
 router.get("/", async function (req, res) {
   try {
-    const events = await Event.find({});
+    const events = await Event.find({}).sort({
+      date: -1
+    });
     return res.status(200).json(events);
   } catch (e) {
     return res.status(500).json(e);

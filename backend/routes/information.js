@@ -73,7 +73,7 @@ const multerUpload = upload.single('uploadFile');
       await information.save();
       return res
         .status(200)
-        .json({ message: "Information successfully added", information: information});
+        .json({ message: "Information successfully added"});
     } catch (error) {
       return res.status(500).json({
         status: "error",
@@ -112,7 +112,7 @@ router.post("/edit/:id", async function (req, res) {
         const information = await Information.updateOne(query, req.body);
         return res
           .status(200)
-          .json({ message: "Information successfully updated", information: information });
+          .json({ message: "Information successfully updated" });
       } catch (error) {
         return res.status(500).json({
           status: "error",
@@ -129,7 +129,7 @@ router.post("/edit/:id", async function (req, res) {
         const information = await Information.updateOne(query, req.body);
         return res
           .status(200)
-          .json({ message: "Information successfully updated", information: information });
+          .json({ message: "Information successfully updated" });
       } catch (error) {
         return res.status(500).json({
           status: "error",
