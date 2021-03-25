@@ -12,7 +12,7 @@ describe('Authentication', () => {
     let admin = false;
     let loginError = '';
     let setLoginError = value => loginError = value;
-    let props = { setUser: value => user = value, setAdmin: value => admin = value };
+    let props = { setUser: value => user = value, setAdmin: value => admin = value, snackbar: () => { } };
     login(props, '', 'password', setLoginError);
     expect(loginError.toLowerCase()).toMatch(/.*(username|email|field).*/);
     expect(user).toMatchObject({});
@@ -28,7 +28,7 @@ describe('Authentication', () => {
     let admin = false;
     let loginError = '';
     let setLoginError = value => loginError = value;
-    let props = { setUser: value => user = value, setAdmin: value => admin = value };
+    let props = { setUser: value => user = value, setAdmin: value => admin = value, snackbar: () => { } };
     fetch.mockResponseOnce(JSON.stringify({
       account: {
         phoneVerified: false,
@@ -84,7 +84,7 @@ describe('Authentication', () => {
     let admin = false;
     let loginError = '';
     let setLoginError = value => loginError = value;
-    let props = { setUser: value => user = value, setAdmin: value => admin = value };
+    let props = { setUser: value => user = value, setAdmin: value => admin = value, snackbar: () => { } };
     fetch.mockResponseOnce(JSON.stringify({
       account: {
         phoneVerified: false,
@@ -139,7 +139,7 @@ describe('Authentication', () => {
     let user = {};
     let admin = false;
     let setSignupError = value => signupError = value;
-    let props = { setUser: value => user = value, setAdmin: value => admin = value };
+    let props = { setUser: value => user = value, setAdmin: value => admin = value, snackbar: () => { } };
     signup(props, '', 'Test123!', 'Test123!', 'Test', 'User',
       '1234567890', 'testuser@domain.com', setSignupError);
     expect(signupError.toLowerCase()).toMatch(/.*(username|specify|field|enter|required).*/);
@@ -201,7 +201,7 @@ describe('Authentication', () => {
     let user = {};
     let admin = false;
     let setSignupError = value => signupError = value;
-    let props = { setUser: value => user = value, setAdmin: value => admin = value };
+    let props = { setUser: value => user = value, setAdmin: value => admin = value, snackbar: () => { } };
     fetch.mockResponseOnce(JSON.stringify({}));
     fetch.mockResponseOnce(JSON.stringify({
       account: {

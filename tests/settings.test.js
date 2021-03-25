@@ -28,7 +28,8 @@ describe('Settings', () => {
     let user = { ...initialUser };
     let props = {
       updateUser: value => user = { ...user, ...value },
-      navigation: { pop: () => { } }
+      navigation: { pop: () => { } },
+      snackbar: () => { }
     };
     let editInfoError = '';
     let setEditInfoError = value => editInfoError = value;
@@ -63,7 +64,8 @@ describe('Settings', () => {
         post(`accounts/edit/${user._id}`, value)
           .finally(finallyCallback);
       },
-      navigation: { pop: () => { } }
+      navigation: { pop: () => { } },
+      snackbar: () => { }
     };
     let editInfoError = '';
     let setEditInfoError = value => editInfoError = value;
@@ -109,7 +111,8 @@ describe('Settings', () => {
     let user = { ...initialUser };
     let props = {
       updateUser: value => user = { ...user, ...value, oldPassword: undefined, newPassword: undefined },
-      navigation: { pop: () => { } }
+      navigation: { pop: () => { } },
+      snackbar: () => { }
     };
     let passwordError = '';
     let setPasswordError = value => passwordError = value;
@@ -135,7 +138,8 @@ describe('Settings', () => {
         post(`accounts/edit/${user._id}`, value)
           .finally(finallyCallback);
       },
-      navigation: { pop: () => { } }
+      navigation: { pop: () => { } },
+      snackbar: () => { }
     };
     let passwordError = '';
     let setPasswordError = value => passwordError = value;

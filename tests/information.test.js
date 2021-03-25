@@ -283,7 +283,7 @@ describe('Information', () => {
         expect(fetch.mock.calls[1][0]).toContain('information');
         expect(JSON.parse(fetch.mock.calls[0][1].body))
           .toMatchObject({ content: 'Edit' });
-        expect(message.toLowerCase()).toEqual('');
+        expect(message.toLowerCase()).not.toMatch(/.*(fail).*/);
         expect(data.length).toEqual(1);
         expect(data[0]).toMatchObject({
           title: 'General',
