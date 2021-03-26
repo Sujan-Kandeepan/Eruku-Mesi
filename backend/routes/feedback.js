@@ -22,7 +22,7 @@ router.post("/add", async function (req, res) {
     await feedback.save();
     return res
       .status(200)
-      .json({ message: "feedback successfully added", feedback: feedback });
+      .json({ message: "feedback successfully added" });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -49,7 +49,7 @@ router.post("/edit/:id", async function (req, res) {
     const feedback = await Feedback.updateOne(query, eventBody);
     return res
       .status(200)
-      .json({ msg: "feedback successfully updated", feedback: feedback });
+      .json({ msg: "feedback successfully updated" });
   } catch (e) {
     return res.status(500).json(e);
   }

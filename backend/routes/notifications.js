@@ -24,8 +24,7 @@ router.post("/add", async function (req, res) {
     const notification = new Notification(req.body);
     await notification.save();
     return res.status(200).json({
-      message: "notification successfully added",
-      notification: notification,
+      message: "notification successfully added"
     });
   } catch (error) {
     return res.status(500).json({
@@ -54,8 +53,7 @@ router.post("/edit/:id", async function (req, res) {
     return res
       .status(200)
       .json({
-        message: "notification successfully updated",
-        notification: notification,
+        message: "notification successfully updated"
       });
   } catch (e) {
     

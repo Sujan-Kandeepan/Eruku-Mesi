@@ -24,7 +24,7 @@ router.post("/add", async function (req, res) {
     await message.save();
     return res
       .status(200)
-      .json({ msg: "message successfully added", message: message });
+      .json({ msg: "message successfully added" });
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -51,7 +51,7 @@ router.post("/edit/:id", async function (req, res) {
     const message = await Message.updateOne(query, messageBody);
     return res
       .status(200)
-      .json({ msg: "message successfully updated", message: message });
+      .json({ msg: "message successfully updated" });
   } catch (e) {
     return res.status(500).json(e);
   }
