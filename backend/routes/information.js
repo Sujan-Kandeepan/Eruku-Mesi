@@ -223,7 +223,7 @@ router.post("/fetch", async function (req, res) {
     }
     return res.status(200).json({ message: "pages have been reordered"})
   } catch (e) {
-    return res.status(500).json({ message: "information not found" });
+    return res.status(500).json({ message: "pages could not be reordered" });
   }
 });
 
