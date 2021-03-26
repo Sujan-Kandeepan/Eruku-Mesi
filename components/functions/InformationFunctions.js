@@ -4,7 +4,7 @@ import { del, filenameOrDefault, get, paragraphs, post, upload } from '../../sha
 export const fetchInformation = (props, setPages, setData, callback) => {
   get(`${props.baseURL}/information`)
     .then(response => {
-        setPages(response.map(item => item.title));
+        setPages([...new Set(response.map(item => item.title))]);
         setData(response.map(item =>
           ({ id: item._id, title: item.title, content: paragraphs(item.content), imageTop: item.imageTop,
             metadataImageTop: item.metadataImageTop ? JSON.parse(item.metadataImageTop) : {},
