@@ -18,9 +18,18 @@ let Information = new Schema({
   imageBottom: {
     type: String,
   },
+<<<<<<< HEAD
   order: {
     type: Number
   }
+=======
+  metadataImageTop: {
+    type: String,
+  },
+  metadataImageBottom: {
+    type: String,
+  },
+>>>>>>> master
 });
 Information.plugin(AutoIncrement, {inc_field: 'order'});
 module.exports = informationDB.model("Information", Information, "Information")
