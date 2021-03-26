@@ -112,7 +112,7 @@ router.post("/edit/:id", async function (req, res) {
         const information = await Information.updateOne(query, req.body);
         return res
           .status(200)
-          .json({ message: "Information successfully updated" });
+          .json({ message: "Information successfully updated"});
       } catch (error) {
         return res.status(500).json({
           status: "error",
@@ -146,7 +146,9 @@ router.post("/edit/:id", async function (req, res) {
  */
 router.get("/", async function (req, res) {
   try {
-    const information = await Information.find({});
+    const information = await Information.find({}).sort({
+      order: 1
+    });
     return res.status(200).json(information);
   } catch (e) {
     return res.status(500).json(e);
@@ -175,9 +177,53 @@ router.delete("/:id", async function (req, res) {
 
   try {
     await Information.deleteOne(query);
-    res.status(200).json({ message: "information deleted successfully!" });
+    return res.status(200).json({ message: "information deleted successfully!" });
   } catch (e) {
     return res.status(500).json({ message: "information was not deleted" });
+  }
+});
+
+/**
+ * Fetch the information and organize into an array of pages and data
+ */
+router.post("/fetch", async function (req, res) {
+  try {
+    const pages = [];
+    const data = [];
+    const information = await Information.find({});
+    information.forEach((i) => {
+      pages.push(i.title);
+
+      data.push({
+        title: i.title,
+        content: i.content,
+        imageTop: i.imageTop,
+        imageBottom: i.imageBottom,
+      });
+    });
+    return res.status(200).json({pages: pages, data: data})
+  } catch (e) {
+    return res.status(500).json({ message: "information not found" });
+  }
+});
+
+/**
+ * Reorder the pages by
+ */
+ router.post("/updatePages", async function (req, res) {
+  try {
+
+    const pages = req.body.information;
+    if (pages != null){
+      pages.forEach(async (p, i) => {
+        pid = p._id;
+
+        await Information.updateOne({"_id":pid}, {order: i})
+      })
+    }
+    return res.status(200).json({ message: "pages have been reordered"})
+  } catch (e) {
+    return res.status(500).json({ message: "pages could not be reordered" });
   }
 });
 
