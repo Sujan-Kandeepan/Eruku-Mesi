@@ -84,6 +84,17 @@ export const deleteInfoSection = (props, pages, setPages, data, setData, item, c
     });
 };
 
+// Persist changes to information section reordering
+export const reorderInfoSections = (props, ordering, data, setPages, callback) => {
+  const newPages = [...new Set(ordering.data)];
+  setPages(newPages);
+  const orderedData = newPages.map(page => data.find(item => item.title === page));
+  const information = orderedData.map(item => ({ _id: item.id }));
+  post(`${props.baseURL}/information/updatePages`, { information })
+    .catch(() => props.snackbar('Failed to save changes'))
+    .finally(callback);
+};
+
 // Edit information section content and return to content view
 export const editInfoContent = (props, localProps, page, setPages,
   data, setData, imageTop, editText, setEditText, callback) => {

@@ -1,5 +1,5 @@
-import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection, fetchInformation }
-  from '../components/functions/InformationFunctions';
+import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection,
+  fetchInformation, reorderInfoSections } from '../components/functions/InformationFunctions';
 import * as SharedFunctions from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
@@ -236,6 +236,51 @@ describe('Information', () => {
         done(error);
       }
     });
+  });
+
+  test('Makes request to reorder information sections', done => {
+    let message = '';
+    let props = { snackbar: value => message = value };
+    let pages = ['Section 1', 'Section 2'];
+    let setPages = value => pages = value;
+    let data =
+      [
+        {
+          id: '605e18d3ab5dd7202427a21d',
+          title: 'Section 1',
+          content: [''],
+          imageTop: null,
+          metadataImageTop: {},
+        },
+        {
+          id: '605de1fb457eec87100f11ba',
+          title: 'Section 2',
+          content: [''],
+          imageTop: null,
+          metadataImageTop: {},
+        }
+      ];
+    const ordering = { data: ['Section 2', 'Section 1'] };
+    fetch.mockResponseOnce(JSON.stringify({}));
+    reorderInfoSections(props, ordering, data, setPages, () => {
+      try {
+        expect(fetch.mock.calls.length).toEqual(1);
+        expect(fetch.mock.calls[0][0]).toContain('information/updatePages');
+        expect(fetch.mock.calls[0][1].method).toBe('POST');
+        expect(JSON.parse(fetch.mock.calls[0][1].body))
+          .toEqual({
+            information: [
+              { _id: '605de1fb457eec87100f11ba' },
+              { _id: '605e18d3ab5dd7202427a21d' }
+            ]
+          });
+        expect(message.toLowerCase()).toEqual('');
+        expect(pages).toEqual(['Section 2', 'Section 1']);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    })
   });
 
   test('Edits existing information content', done => {

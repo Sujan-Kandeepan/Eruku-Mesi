@@ -6,8 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import AppPage from './AppPage';
-import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection, fetchInformation }
-  from './functions/InformationFunctions';
+import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection,
+  fetchInformation, reorderInfoSections } from './functions/InformationFunctions';
 import { BodyInput, Button, Content, IconButton, Media, MediaPicker } from '../shared/SharedComponents';
 import { periodic } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
@@ -98,7 +98,7 @@ export default function InformationPage(props) {
                     </>}
                 </View>}
                 keyExtractor={item => `${item} ${item === originalText}`}
-                onDragEnd={({ data }) => setPages([...new Set(data)])}
+                onDragEnd={ordering => reorderInfoSections(props, ordering, data, setPages)}
                 // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
                 extraData={{ originalText, editText }} />
                 {/* Add new section and update state/data */}
