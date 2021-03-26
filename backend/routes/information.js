@@ -207,16 +207,24 @@ router.post("/fetch", async function (req, res) {
   }
 });
 
-// /**
-//  * Reorder the pages by
-//  */
-//  router.post("/updatePages", async function (req, res) {
-//   try {
+/**
+ * Reorder the pages by
+ */
+ router.post("/updatePages", async function (req, res) {
+  try {
 
-//     return res.status(200).json({pages: pages, data: data})
-//   } catch (e) {
-//     return res.status(500).json({ message: "information not found" });
-//   }
-// });
+    const pages = req.body.information;
+    if (pages != null){
+      pages.forEach(async (p, i) => {
+        pid = p._id;
+
+        await Information.updateOne({"_id":pid}, {order: i})
+      })
+    }
+    return res.status(200).json({ message: "pages have been reordered"})
+  } catch (e) {
+    return res.status(500).json({ message: "information not found" });
+  }
+});
 
 module.exports = router;
