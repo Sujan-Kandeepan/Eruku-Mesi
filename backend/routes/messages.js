@@ -92,7 +92,13 @@ router.get("/:type/:id", async function(req, res) {
     //https://stackoverflow.com/questions/10811887/how-to-get-all-count-of-mongoose-model
     const messageCount = await Message.countDocuments({}).exec();
     try {
-      const messages = await Message.find({}).skip(messageCount - number);
+      let messages;
+      if (messageCount > number) {
+        messages = await Message.find({}).skip(messageCount - number);
+      } else {
+        messages = await Message.find({})
+      }
+      // const messages = await Message.find({}).skip(messageCount - number);
       return res.status(200).json({ messages: messages });
     } catch (e) {
       return res.status(500).json(e);
