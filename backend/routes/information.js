@@ -66,7 +66,9 @@ router.post("/edit/:id", async function (req, res) {
  */
 router.get("/", async function (req, res) {
   try {
-    const information = await Information.find({});
+    const information = await Information.find({}).sort({
+      order: 1
+    });
     return res.status(200).json(information);
   } catch (e) {
     return res.status(500).json(e);
@@ -101,53 +103,40 @@ router.delete("/:id", async function (req, res) {
   }
 });
 
-/**
- * Fetch the information and organize into an array of pages and data
- */
-router.post("/fetch", async function (req, res) {
-  try {
-    const pages = [];
-    const data = [];
-    const information = await Information.find({});
-    information.forEach((i) => {
-      pages.push(i.title);
+// /**
+//  * Fetch the information and organize into an array of pages and data
+//  */
+// router.post("/fetch", async function (req, res) {
+//   try {
+//     const pages = [];
+//     const data = [];
+//     const information = await Information.find({});
+//     information.forEach((i) => {
+//       pages.push(i.title);
 
-      data.push({
-        title: i.title,
-        content: i.content,
-        imageTop: i.imageTop,
-        imageBottom: i.imageBottom,
-      });
-    });
-    return res.status(200).json({pages: pages, data: data})
-  } catch (e) {
-    return res.status(500).json({ message: "information not found" });
-  }
-});
+//       data.push({
+//         title: i.title,
+//         content: i.content,
+//         imageTop: i.imageTop,
+//         imageBottom: i.imageBottom,
+//       });
+//     });
+//     return res.status(200).json({pages: pages, data: data})
+//   } catch (e) {
+//     return res.status(500).json({ message: "information not found" });
+//   }
+// });
 
-/**
- * Reorder the pages by
- */
- router.post("/updatePages", async function (req, res) {
-  try {
-    if (req.body.pages){
-      
-    }
-    const information = await Information.find({});
-    information.forEach((i) => {
-      pages.push(i.title);
+// /**
+//  * Reorder the pages by
+//  */
+//  router.post("/updatePages", async function (req, res) {
+//   try {
 
-      data.push({
-        title: i.title,
-        content: i.content,
-        imageTop: i.imageTop,
-        imageBottom: i.imageBottom,
-      });
-    });
-    return res.status(200).json({pages: pages, data: data})
-  } catch (e) {
-    return res.status(500).json({ message: "information not found" });
-  }
-});
+//     return res.status(200).json({pages: pages, data: data})
+//   } catch (e) {
+//     return res.status(500).json({ message: "information not found" });
+//   }
+// });
 
 module.exports = router;
