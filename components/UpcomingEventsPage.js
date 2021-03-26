@@ -10,7 +10,7 @@ import AppPage from './AppPage';
 import EventForm from './EventForm';
 import { deleteEvent, fetchEvents } from './functions/EventFunctions';
 import { Button, Content, Feed, Header } from '../shared/SharedComponents';
-import { paragraphs, showDate, showTime, truncate } from '../shared/SharedFunctions';
+import { periodic, showDate, showTime, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack/tab navigators
@@ -33,7 +33,7 @@ const EventsList = ({ data, fetched, header, localProps, pages, props }) =>
           {item.title}
         </Text>
         <Text style={{ color: props.theme.colors.text, marginBottom: 10 }}>
-          <Text>{showDate(item.date)} @ {showTime(item.date)}</Text>
+          <Text>{showDate(item.date)} at {showTime(item.date)}</Text>
           <Text style={{ color: props.theme.colors.disabled }}> | </Text>
           <Text>{item.location}</Text>
         </Text>
@@ -70,8 +70,7 @@ export default function UpcomingEventsPage(props) {
       { ...newMarkedDates[`${formatDate(selectedDate)}`], selected: true };
     setMarkedDates(newMarkedDates);
   }, [events, selectedDate]);
-  // Initial load of events by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchEvents(props, setEvents, () => setFetched(true)), []);
+  periodic(() => fetchEvents(props, setEvents, () => setFetched(true)));
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
@@ -145,7 +144,7 @@ export default function UpcomingEventsPage(props) {
                     onPress={() => localProps.navigation.push(pages.deleteEvent(event.id))} />}
                 {/* Display for individual event */}
                 <Content {...props} {...localProps} title={event.title}
-                  subtitle={`${showDate(event.date, true)} @ ${showTime(event.date, true)}\n${event.location}`}
+                  subtitle={`${showDate(event.date, true)} at ${showTime(event.date, true)}\n${event.location}`}
                   content={event.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing events */}

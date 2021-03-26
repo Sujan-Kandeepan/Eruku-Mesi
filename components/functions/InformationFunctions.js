@@ -1,15 +1,16 @@
-import { del, get, paragraphs, post } from '../../shared/SharedFunctions';
+import { del, filenameOrDefault, get, paragraphs, post, upload } from '../../shared/SharedFunctions';
 
 // Fetch information and populate component state array
 export const fetchInformation = (props, setPages, setData, callback) => {
   get(`${props.baseURL}/information`)
     .then(response => {
-        setPages(response.map(item => item.title));
+        setPages([...new Set(response.map(item => item.title))]);
         setData(response.map(item =>
-          ({ id: item._id, title: item.title, content: paragraphs(item.content),
-            imageTop: null, imageBottom: null })));
+          ({ id: item._id, title: item.title, content: paragraphs(item.content), imageTop: item.imageTop,
+            metadataImageTop: item.metadataImageTop ? JSON.parse(item.metadataImageTop) : {},
+            type: item.type, url: item.url })));
       })
-    .catch(() => props.snackbar('Unable to fetch information'))
+    .catch(error => console.error(error) && props.snackbar('Unable to fetch information'))
     .finally(callback);
 };
 
@@ -31,8 +32,9 @@ export const addInfoSection = (props, pages, setPages, data, setData,
       });
     })
     // Display message if failed
-    .catch(() => {
-      props.snackbar('Failed to update database');
+    .catch(error => {
+      console.error(error);
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };
@@ -40,6 +42,10 @@ export const addInfoSection = (props, pages, setPages, data, setData,
 // Edit information section name and update interface upon success
 export const editInfoSection = (props, pages, setPages, data, setData,
   originalText, setOriginalText, editText, setEditText, callback) => {
+  if (editText.trim() === '') {
+    props.snackbar('Section name cannot be blank');
+    return;
+  }
   if (pages.includes(editText) && originalText !== editText) {
     props.snackbar('Duplicate sections not allowed');
     return;
@@ -55,8 +61,9 @@ export const editInfoSection = (props, pages, setPages, data, setData,
       });
     })
     // Display message if failed
-    .catch(() => {
-      props.snackbar('Failed to update database');
+    .catch(error => {
+      console.error(error);
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };
@@ -70,20 +77,40 @@ export const deleteInfoSection = (props, pages, setPages, data, setData, item, c
       fetchInformation(props, setPages, setData, callback);
     })
     // Display message if failed
-    .catch(() => {
-      props.snackbar('Failed to update database');
+    .catch(error => {
+      console.error(error);
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };
 
+// Persist changes to information section reordering
+export const reorderInfoSections = (props, ordering, data, setPages, callback) => {
+  const newPages = [...new Set(ordering.data)];
+  setPages(newPages);
+  const orderedData = newPages.map(page => data.find(item => item.title === page));
+  const information = orderedData.map(item => ({ _id: item.id }));
+  post(`${props.baseURL}/information/updatePages`, { information })
+    .catch(() => props.snackbar('Failed to save changes'))
+    .finally(callback);
+};
+
 // Edit information section content and return to content view
-export const editInfoContent = (props, localProps, page, setPages, data, setData,
-  imageTop, imageBottom, editText, setEditText, callback) => {
+export const editInfoContent = (props, localProps, page, setPages,
+  data, setData, imageTop, editText, setEditText, callback) => {
   const found = data.find(entry => page.includes(entry.title));
-  post(`${props.baseURL}/information/edit/${found.id}`, { content: editText, imageTop, imageBottom })
+  const name = filenameOrDefault(imageTop);
+  const uploadFile = imageTop
+    ? { ...imageTop, name,
+        type: name.endsWith('png') ? 'image/png' : (name.endsWith('gif') ? 'image/gif' : 'image/jpeg') }
+    : null;
+  const metadataImageTop = imageTop ? JSON.stringify({ ...uploadFile, uri: undefined }) : null;
+  props.snackbar('Saving changes');
+  upload(`${props.baseURL}/information/edit/${found.id}`, { content: editText, uploadFile, metadataImageTop })
     // Update locally within same page
     .then(() => {
       fetchInformation(props, setPages, setData, () => {
+        props.snackbar('Changes saved');
         setEditText('');
         localProps.navigation.pop();
         callback && callback();
@@ -92,7 +119,7 @@ export const editInfoContent = (props, localProps, page, setPages, data, setData
     // Display message if failed
     .catch((error) => {
       console.log(error);
-      props.snackbar('Failed to update database');
+      props.snackbar('Failed to save changes');
       callback && callback();
     });
 };

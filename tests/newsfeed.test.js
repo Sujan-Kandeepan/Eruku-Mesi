@@ -56,7 +56,10 @@ describe('News Feed', () => {
 
   test('Makes request to create news story', () => {
     let message = '';
-    let props = { snackbar: value => message = value };
+    let props = {
+      navigation: { pop: () => { } },
+      snackbar: value => message = value
+    };
     let saving = false;
     let setSaving = value => saving = value;
     fetch.mockResponseOnce(JSON.stringify({}));
@@ -71,6 +74,7 @@ describe('News Feed', () => {
   test('Makes request to update news story', () => {
     let message = '';
     let props = {
+      navigation: { pop: () => { } },
       snackbar: value => message = value,
       payload: { id: 1, title: 'title', content: ['content'] }
     };

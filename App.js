@@ -1,4 +1,6 @@
 import Constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Platform, Text, View } from 'react-native';
@@ -15,6 +17,8 @@ import MediaContentPage from './components/MediaContentPage';
 import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 import FeedbackForm from './components/FeedbackForm';
+import AuthenticationForm from './components/AuthenticationForm';
+import { get, post } from './shared/SharedFunctions';
 
 // Base URL for API wherever hosted (computer's IP for now)
 // Reference: https://stackoverflow.com/a/56943681
@@ -85,12 +89,11 @@ const CustomDrawerContent = (props) =>
   <DrawerContentScrollView {...props}
     contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
     <CustomDrawer.Section style={{ flexDirection: 'row', marginHorizontal: 15, marginVertical: 5 }}>
-      <Avatar.Image source={{ // For local image: source={require('./assets/image.jpg')}
-        uri: 'https://png.pngitem.com/pimgs/s/4-40070_user-staff-man-profile-user-account-icon-jpg.png'
-      }} size={50} style={{ alignSelf: 'center' }} />
+      <Avatar.Text size={50} style={{ alignSelf: 'center', backgroundColor: props.theme.colors.accent }}
+        label={`${props.user.firstName[0]}${props.user.lastName[0]}`.toUpperCase()} />
       <View style={{ flexDirection: 'column', marginHorizontal: 10, marginVertical: 0, width: 215 }}>
-        <Title>John Smith</Title>
-        <Caption>@username</Caption>
+        <Title>{props.user.firstName} {props.user.lastName}</Title>
+        <Caption>@{props.user.username}</Caption>
       </View>
     </CustomDrawer.Section>
     {/* Add divider above first section by creating empty section */}
@@ -131,24 +134,49 @@ export default function App() {
     setSnackbarVisible(true);
   }
 
-  // Temporary flag for admin vs. standard user
-  let [admin, setAdmin] = React.useState(true);
+  // User data as object and admin status
+  let [user, setUser] = React.useState(null);
+  let [admin, setAdmin] = React.useState(false);
+  const updateUser = (data, thenCallback, catchCallback, finallyCallback) => {
+    if (!user) return;
+    setUser({ ...user, ...data, oldPassword: undefined, newPassword: undefined });
+    post(`${baseURL}/accounts/edit/${user._id}`, data)
+      .then(thenCallback)
+      .catch(catchCallback)
+      .finally(finallyCallback);
+  }
+  React.useEffect(() => {
+    if (user) {
+      setAdmin(user.accountType === 'admin');
+      setReceiveNotifications(user.receiveNotifications);
+      setTheme(user.theme === 'dark' ? darkTheme : lightTheme);
+      if (!user.theme) updateUser({ theme: theme.dark ? 'dark' : 'light' })
+      if (Platform.OS !== 'web')
+        SecureStore.setItemAsync('user', user._id);
+    }
+  }, [user]);
 
   // Toggle event notifications and display snackbar message on change
   let [receiveNotifications, setReceiveNotifications] = React.useState(true);
   const toggleNotifications = () => {
     snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
     setReceiveNotifications(!receiveNotifications);
+    updateUser({ receiveNotifications: !receiveNotifications }, () => {},
+      () => snackbar('Failed to update database'));
   }
 
   // Set and toggle between light/dark themes defined globally using state
   // Reference: https://callstack.github.io/react-native-paper/theming-with-react-navigation.html
   let [theme, setTheme] = React.useState(lightTheme);
-  const toggleTheme = () => setTheme(theme === darkTheme ? lightTheme : darkTheme);
+  const toggleTheme = () => {
+    setTheme(theme === darkTheme ? lightTheme : darkTheme);
+    updateUser({ theme: theme === darkTheme ? 'light' : 'dark' },
+      () => { }, () => snackbar('Failed to update database'));
+  }
 
   // Props to expose to nested child components, extra for settings
-  const sharedProps = { admin, baseURL, snackbar, theme };
-  const settingsProps = { receiveNotifications, toggleNotifications, toggleTheme };
+  const sharedProps = { admin, baseURL, setAdmin, snackbar, theme, user };
+  const settingsProps = { receiveNotifications, setUser, toggleNotifications, toggleTheme, updateUser };
 
   // Refactored variable for duplicate code in platform-specific snackbar below
   const snackbarView =
@@ -158,29 +186,50 @@ export default function App() {
       <Text>{snackbarText}</Text>
     </Snackbar>;
 
+  // Check for secure store 'user' key containing user data to authenticate
+  React.useEffect(() => {
+    // Not supported on web
+    if (Platform.OS !== 'web') {
+      // Stay on splash screen until finished
+      SplashScreen.preventAutoHideAsync();
+      SecureStore.getItemAsync('user')
+        .then(item => item
+          ? get(`${baseURL}/accounts/${item}`)
+              .then(res => {
+                setUser(res.user);
+                setReceiveNotifications(res.user.receiveNotifications);
+                setTheme(res.user.theme === 'dark' ? darkTheme : lightTheme);
+              })
+              .finally(SplashScreen.hideAsync)
+          : SplashScreen.hideAsync());
+    }
+  }, []);
+
   return (
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
-      <NavigationContainer theme={theme}>
-        <Drawer.Navigator initialRouteName={pages.newsFeed}
-          drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
-          drawerContent={props => <CustomDrawerContent {...props} theme={theme} />}>
-          <Drawer.Screen name={pages.newsFeed}
-            children={(props) => <NewsFeedPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.upcomingEvents}
-            children={(props) => <UpcomingEventsPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.messages}
-            children={(props) => <MessagesPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.mediaContent}
-            children={(props) => <MediaContentPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.information}
-            children={(props) => <InformationPage {...props} {...sharedProps} />} />
-          <Drawer.Screen name={pages.settings}
-            children={(props) => <SettingsPage {...props} {...sharedProps} {...settingsProps} />} />
-          <Drawer.Screen name={pages.feedback}
-            children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
-        </Drawer.Navigator>
-      </NavigationContainer>
+      {user ? // Drawer nav containing all app pages if authenticated
+        <NavigationContainer theme={theme}>
+          <Drawer.Navigator initialRouteName={pages.newsFeed}
+            drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
+            drawerContent={props => <CustomDrawerContent {...props} theme={theme} user={user} />}>
+            <Drawer.Screen name={pages.newsFeed}
+              children={(props) => <NewsFeedPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.upcomingEvents}
+              children={(props) => <UpcomingEventsPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.messages}
+              children={(props) => <MessagesPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.mediaContent}
+              children={(props) => <MediaContentPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.information}
+              children={(props) => <InformationPage {...props} {...sharedProps} />} />
+            <Drawer.Screen name={pages.settings}
+              children={(props) => <SettingsPage {...props} {...sharedProps} {...settingsProps} />} />
+            <Drawer.Screen name={pages.feedback}
+              children={(props) => <FeedbackForm {...props} {...sharedProps} />} />
+          </Drawer.Navigator>
+        </NavigationContainer> : // Authentication form if not authenticated
+        <AuthenticationForm {...sharedProps} {...settingsProps} />}
       <StatusBar style={theme.colors.statusBarText}
         backgroundColor={theme.colors.statusBarBackground} />
       {Platform.OS === 'ios' ? snackbarView :

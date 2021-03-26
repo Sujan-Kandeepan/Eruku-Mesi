@@ -1,11 +1,14 @@
-import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection, fetchInformation }
-  from '../components/functions/InformationFunctions';
+import { addInfoSection, deleteInfoSection, editInfoContent, editInfoSection,
+  fetchInformation, reorderInfoSections } from '../components/functions/InformationFunctions';
+import * as SharedFunctions from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
 describe('Information', () => {
   beforeEach(() => {
     fetch.resetMocks()
+    // Use post instead of upload since FormData is not defined
+    SharedFunctions.upload = SharedFunctions.post;
   });
 
   test('Fetches information', done => {
@@ -21,7 +24,7 @@ describe('Information', () => {
           title: 'General',
           content: 'Here is some general information.',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
@@ -36,7 +39,7 @@ describe('Information', () => {
           title: 'General',
           content: ['Here is some general information.'],
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: {},
         });
         done();
       } catch (error) {
@@ -70,7 +73,7 @@ describe('Information', () => {
       title: 'New Section',
       content: 'Nothing here yet...',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify(
@@ -80,7 +83,7 @@ describe('Information', () => {
           title: 'New Section',
           content: 'Nothing here yet...',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
@@ -92,11 +95,20 @@ describe('Information', () => {
         expect(fetch.mock.calls[0][1].method).toBe('POST');
         expect(fetch.mock.calls[1][0]).toContain('information');
         expect(JSON.parse(fetch.mock.calls[0][1].body))
-          .toMatchObject({ title: 'New Section', content: 'Nothing here yet...', imageTop: null, imageBottom: null });
+          .toMatchObject({
+            title: 'New Section',
+            content: 'Nothing here yet...',
+            imageTop: null,
+          });
         expect(message.toLowerCase()).toEqual('');
         expect(pages).toEqual(['New Section']);
         expect(data.length).toEqual(1);
-        expect(data[0]).toMatchObject({ title: 'New Section', content: ['Nothing here yet...'], imageTop: null, imageBottom: null });
+        expect(data[0]).toMatchObject({
+          title: 'New Section',
+          content: ['Nothing here yet...'],
+          imageTop: null,
+          metadataImageTop: {},
+        });
         expect(originalText).toEqual('New Section');
         expect(editText).toEqual('New Section');
         done();
@@ -134,7 +146,7 @@ describe('Information', () => {
       title: 'Edit',
       content: '',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify(
@@ -144,7 +156,7 @@ describe('Information', () => {
           title: 'First',
           content: '',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         },
         {
@@ -152,7 +164,7 @@ describe('Information', () => {
           title: 'Edit',
           content: '',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         },
         {
@@ -160,7 +172,7 @@ describe('Information', () => {
           title: 'Last',
           content: '',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
@@ -178,7 +190,12 @@ describe('Information', () => {
         expect(pages).toContain('Edit');
         expect(pages).toContain('Last');
         expect(data.length).toEqual(3);
-        expect(data[pages.indexOf('Edit')]).toMatchObject({ title: 'Edit', content: [], imageTop: null, imageBottom: null });
+        expect(data[pages.indexOf('Edit')]).toMatchObject({
+          title: 'Edit',
+          content: [],
+          imageTop: null,
+          metadataImageTop: {},
+        });
         expect(originalText).toEqual('');
         expect(editText).toEqual('');
         done();
@@ -201,7 +218,7 @@ describe('Information', () => {
       title: 'General',
       content: '',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify([]));
@@ -221,6 +238,51 @@ describe('Information', () => {
     });
   });
 
+  test('Makes request to reorder information sections', done => {
+    let message = '';
+    let props = { snackbar: value => message = value };
+    let pages = ['Section 1', 'Section 2'];
+    let setPages = value => pages = value;
+    let data =
+      [
+        {
+          id: '605e18d3ab5dd7202427a21d',
+          title: 'Section 1',
+          content: [''],
+          imageTop: null,
+          metadataImageTop: {},
+        },
+        {
+          id: '605de1fb457eec87100f11ba',
+          title: 'Section 2',
+          content: [''],
+          imageTop: null,
+          metadataImageTop: {},
+        }
+      ];
+    const ordering = { data: ['Section 2', 'Section 1'] };
+    fetch.mockResponseOnce(JSON.stringify({}));
+    reorderInfoSections(props, ordering, data, setPages, () => {
+      try {
+        expect(fetch.mock.calls.length).toEqual(1);
+        expect(fetch.mock.calls[0][0]).toContain('information/updatePages');
+        expect(fetch.mock.calls[0][1].method).toBe('POST');
+        expect(JSON.parse(fetch.mock.calls[0][1].body))
+          .toEqual({
+            information: [
+              { _id: '605de1fb457eec87100f11ba' },
+              { _id: '605e18d3ab5dd7202427a21d' }
+            ]
+          });
+        expect(message.toLowerCase()).toEqual('');
+        expect(pages).toEqual(['Section 2', 'Section 1']);
+        done();
+      } catch (error) {
+        done(error);
+      }
+    })
+  });
+
   test('Edits existing information content', done => {
     let message = '';
     let props = { snackbar: value => message = value };
@@ -228,10 +290,14 @@ describe('Information', () => {
     let page = 'General';
     let pages = ['General'];
     let setPages = value => pages = value;
-    let data = [{ title: 'General', content: [''], imageTop: null, imageBottom: null }];
+    let data = [{
+      title: 'General',
+      content: [''],
+      imageTop: null,
+      metadataImageTop: {},
+    }];
     let setData = value => data = value;
     let imageTop = null;
-    let imageBottom = null;
     let editText = 'Edit';
     let setEditText = value => editText = value;
     fetch.mockResponseOnce(JSON.stringify({
@@ -239,7 +305,7 @@ describe('Information', () => {
       title: 'General',
       content: 'Edit',
       imageTop: null,
-      imageBottom: null,
+      metadataImageTop: '',
       __v: 0
     }));
     fetch.mockResponseOnce(JSON.stringify(
@@ -249,24 +315,28 @@ describe('Information', () => {
           title: 'General',
           content: 'Edit',
           imageTop: null,
-          imageBottom: null,
+          metadataImageTop: '',
           __v: 0
         }
       ]
     ));
-    editInfoContent(props, localProps, page, setPages, data, setData, imageTop, imageBottom, editText, setEditText, () => {
+    editInfoContent(props, localProps, page, setPages, data, setData, imageTop, editText, setEditText, () => {
       try {
         expect(fetch.mock.calls.length).toEqual(2);
         expect(fetch.mock.calls[0][0]).toContain('information/edit');
         expect(fetch.mock.calls[0][1].method).toBe('POST');
         expect(fetch.mock.calls[1][0]).toContain('information');
         expect(JSON.parse(fetch.mock.calls[0][1].body))
-          .toMatchObject({ content: 'Edit', imageTop: null, imageBottom: null });
-        expect(message.toLowerCase()).toEqual('');
+          .toMatchObject({ content: 'Edit' });
+        expect(message.toLowerCase()).not.toMatch(/.*(fail).*/);
         expect(data.length).toEqual(1);
-        expect(data[0]).toMatchObject({ title: 'General', content: ['Edit'], imageTop: null, imageBottom: null });
+        expect(data[0]).toMatchObject({
+          title: 'General',
+          content: ['Edit'],
+          imageTop: null,
+          metadataImageTop: {},
+        });
         expect(imageTop).toEqual(null);
-        expect(imageBottom).toEqual(null);
         expect(editText).toEqual('');
         done();
       } catch (error) {

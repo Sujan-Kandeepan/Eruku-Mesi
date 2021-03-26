@@ -24,12 +24,18 @@ export default function FeedbackForm(props) {
         </Text>
         {/* Main feedback input field filling majority of screen */}
         {/* Reference: https://reactnative.dev/docs/textinput */}
-        <TextInput autoFocus multiline editable spellCheck maxLength={maxLength}
+        <TextInput autoFocus multiline editable spellCheck maxLength={maxLength + 1}
           style={{ backgroundColor: props.theme.colors.card,
+            borderColor: props.theme.colors.border, borderWidth: 1,
             color: props.theme.colors.text, flex: 1, marginHorizontal: 25,
             padding: 20, textAlignVertical: 'top', width }}
           onChangeText={value => feedbackTextChanged(props, value, setText, maxLength)}
           value={text} onBlur={Keyboard.dismiss} />
+        {/* Text indicating number of characters left */}
+        <Text style={{ color: props.theme.colors.text, marginBottom: -20, marginTop: 15, textAlign: 'center' }}
+          onPress={Keyboard.dismiss}>
+          {`Input characters remaining: ${maxLength - text.length}/${maxLength}`}
+        </Text>
         {/* Button to validate and submit feedback */}
         <View style={{ marginHorizontal: 10, marginVertical: 25 }}>
           <Button {...props} color='accent' text='Submit'

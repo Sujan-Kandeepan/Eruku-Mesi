@@ -1,7 +1,7 @@
 import { post } from '../../shared/SharedFunctions';
 
 export const feedbackTextChanged = (props, text, setText, maxLength) => {
-  if (text.length >= maxLength)
+  if (text.length > maxLength)
     props.snackbar('Feedback message is too long');
   else
     setText(text);
@@ -20,6 +20,6 @@ export const submitFeedback = (props, text, setText, keyboard, callback) => {
         setText('');
       })
       // Display message if failed
-      .catch(() => props.snackbar('Failed to update database'))
+      .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
       .finally(callback);
 }

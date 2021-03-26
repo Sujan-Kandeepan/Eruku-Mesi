@@ -1,6 +1,7 @@
 import { Dimensions } from 'react-native';
-import { currentDate, del, get, paragraphs, post, scale, showDate, showTime, text, truncate }
-  from '../shared/SharedFunctions';
+import React from 'react';
+import { currentDate, del, get, filenameOrDefault, paragraphs, periodic, post, scale,
+  showDate, showTime, text, truncate, validEmail, validPhone, validPassword } from '../shared/SharedFunctions';
 
 require('jest-fetch-mock').enableMocks();
 
@@ -35,6 +36,27 @@ describe('Shared Functions', () => {
   describe('post - HTTP POST request', () => testRequests(post));
 
   describe('del - HTTP DELETE request', () => testRequests(del));
+
+  describe('periodic - run function periodically', () => {
+    test('Runs the given function immediately', () => {
+      React.useEffect = jest.fn(f => f());
+      let count = 0;
+      const reset = periodic(() => count++);
+      reset();
+      expect(count).toEqual(1);
+    });
+
+    test('Runs the given function at specified interval', done => {
+      React.useEffect = jest.fn(f => f());
+      let count = 0;
+      const reset = periodic(() => count++, 50);
+      setTimeout(() => {
+        reset();
+        expect(count).toEqual(2);
+        done();
+      }, 75);
+    });
+  });
 
   describe('truncate - truncate string for display', () => {
     test('Truncates string with too many words', () => {
@@ -87,6 +109,21 @@ describe('Shared Functions', () => {
       expect(returned.getSeconds()).toEqual(0);
       expect(returned.getMilliseconds()).toEqual(0);
       global.Date = realDate;
+    });
+  });
+
+  describe('filenameOrDefault - get or assign default filename', () => {
+    test('Filename kept if name property is defined', () => {
+      expect(filenameOrDefault({ name: 'test.png' })).toEqual('test.png');
+      expect(filenameOrDefault({ metadata: { name: 'test.png' } })).toEqual('test.png');
+    });
+
+    test('Default filename assigned with extension from URI', () => {
+      expect(filenameOrDefault({ uri: 'https://somewhere.domain.com/test.png' })).toMatch(/.*\.png/g);
+    });
+
+    test('Default filename assigned with default extension', () => {
+      expect(filenameOrDefault({})).toMatch(/.*\.txt/g);
     });
   });
 
@@ -178,6 +215,58 @@ describe('Shared Functions', () => {
     test('Longer list of paragraphs gives multiple lines', () => {
       expect(text(['This is a sentence.', 'This is another sentence.']))
         .toEqual('This is a sentence.\n\nThis is another sentence.');
+    });
+  });
+
+  describe('validPhone - validate phone number', () => {
+    test('Expects at least 10 digits', () => {
+      expect(validPhone('4161234567')).toEqual(true);
+      expect(validPhone('416123456')).toEqual(false);
+      expect(validPhone('416-123-4567')).toEqual(true);
+      expect(validPhone('416-123-456')).toEqual(false);
+      expect(validPhone('(416) 123-4567')).toEqual(true);
+      expect(validPhone('(416) 123-456')).toEqual(false);
+    });
+  });
+
+  describe('validEmail - validate email address', () => {
+    test('Accepts valid email addresses', () => {
+      expect(validEmail('test@domain.com')).toEqual(true);
+      expect(validEmail('hyphen-name@split.domain.com')).toEqual(true);
+      expect(validEmail('Capital.dots.numbers01@testing123.com')).toEqual(true);
+    });
+
+    test('Rejects invalid email addresses', () => {
+      expect(validEmail('bad+character@domain.com')).toEqual(false);
+      expect(validEmail('email@no-dot')).toEqual(false);
+      expect(validEmail('hi')).toEqual(false);
+    });
+  });
+
+  describe('validPassword - validate password', () => {
+    test('Checks for minimum 8 characters', () => {
+      expect(validPassword('Test123!', () => { })).toEqual(true);
+      expect(validPassword('Test12!', () => { })).toEqual(false);
+    });
+
+    test('Checks for at least one uppercase letter', () => {
+      expect(validPassword('Test123!', () => { })).toEqual(true);
+      expect(validPassword('test123!', () => { })).toEqual(false);
+    });
+
+    test('Checks for at least one lowercase letter', () => {
+      expect(validPassword('Test123!', () => { })).toEqual(true);
+      expect(validPassword('TEST123!', () => { })).toEqual(false);
+    });
+
+    test('Checks for at least one numeric digit', () => {
+      expect(validPassword('Test123!', () => { })).toEqual(true);
+      expect(validPassword('Test1234', () => { })).toEqual(false);
+    });
+
+    test('Checks for at least one special character', () => {
+      expect(validPassword('Test123!', () => { })).toEqual(true);
+      expect(validPassword('Testing!', () => { })).toEqual(false);
     });
   });
 });

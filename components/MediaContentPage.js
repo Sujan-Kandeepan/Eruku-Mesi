@@ -6,8 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppPage from './AppPage';
 import MediaContentForm from './MediaContentForm';
 import { deleteMediaContent, fetchMediaContent } from './functions/MediaContentFunctions';
-import { Button, Content, Feed, Media } from '../shared/SharedComponents';
-import { get, truncate } from '../shared/SharedFunctions';
+import { Button, Content, Feed, FileDownload, Media } from '../shared/SharedComponents';
+import { filenameOrDefault, periodic, truncate } from '../shared/SharedFunctions';
 import SharedStyles from '../shared/SharedStyles';
 
 // Initialize stack navigator
@@ -25,8 +25,7 @@ export default function MediaContentPage(props) {
   // State variables for display data and state (two-way data binding)
   const [posts, setPosts] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
-  // Initial load of posts by calling useEffect with [] as second param to run once
-  React.useEffect(() => fetchMediaContent(props, setPosts, () => setFetched(true)), []);
+  periodic(() => fetchMediaContent(props, setPosts, () => setFetched(true)));
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
@@ -50,9 +49,13 @@ export default function MediaContentPage(props) {
                     <Text style={{ color: props.theme.colors.text }}>
                       {item && truncate(item.description.length ? item.description[0] : "", 10)}
                     </Text>
-                    <Media image={item.image} thumbnail
-                      scale={{ image: item.image, marginHorizontal: 30, maxHeight: 200 }}
-                      style={{ alignSelf: 'center', marginTop: 15 }} />
+                    {item.type === 'photo' ?
+                      <Media {...props} image={{ ...item.metadata, uri: item.url }} thumbnail
+                        scale={{ image: { ...item.metadata, uri: item.url }, marginHorizontal: 30, maxHeight: 200 }}
+                        style={{ alignSelf: 'center', marginTop: 15 }} /> :
+                      <Text style={{ color: props.theme.colors.text, marginTop: 7.5 }}>
+                        {filenameOrDefault({ ...item.metadata, uri: item.url })}
+                      </Text>}
                   </>} />
             </>} />
           {/* Static page route for posting media content */}
@@ -73,7 +76,11 @@ export default function MediaContentPage(props) {
                   <Button {...props} {...localProps} text='Delete'
                     onPress={() => localProps.navigation.push(pages.deleteMediaContent(post.id))} />}
                 {/* Display for individual post */}
-                <Content {...props} {...localProps} title={post.title} imageBottom={post.image}
+                <Content {...props} {...localProps} title={post.title}
+                  imageBottom={post.type === 'photo' && { ...post.metadata, uri: post.url, type: post.type }}
+                  extraContent={post.type === 'file' &&
+                    <FileDownload {...props} text={`Download ${fileNameOrDefault({ ...post.metadata, uri: post.url })}`}
+                      source={post.url} destination={fileNameOrDefault({ ...post.metadata, uri: post.url })} />}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}

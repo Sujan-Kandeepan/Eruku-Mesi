@@ -40,7 +40,7 @@ export default function EventForm(props) {
           <View style={{ flex: 1, margin: -15, marginRight: -16, minWidth: 50 }}>
             <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('date'); }} text={
               <View>
-                <Text style={{ flexShrink: 1 }}>
+                <Text style={{ color: props.theme.colors.text, flexShrink: 1 }}>
                   <Text style={{ fontWeight: 'bold' }}>Date:</Text> {showDate(date)}
                 </Text>
               </View>} />
@@ -48,7 +48,7 @@ export default function EventForm(props) {
           <View style={{ flex: 1, margin: -15, marginLeft: -16 }}>
             <Button {...props} style={{ flex: 1 }} onPress={() => { setShow(true); setMode('time'); }} text={
               <View>
-                <Text style={{ flexShrink: 1 }}>
+                <Text style={{ color: props.theme.colors.text, flexShrink: 1 }}>
                   <Text style={{ fontWeight: 'bold' }}>Time:</Text> {showTime(date)}
                 </Text>
               </View>} />

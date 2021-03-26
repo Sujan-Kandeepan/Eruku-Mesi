@@ -6,7 +6,7 @@ export const fetchNewsStories = (props, setStories, callback) => {
     .then(response =>
       setStories(response.map(item =>
         ({ id: item._id, title: item.title, content: paragraphs(item.content) }))))
-    .catch(() => props.snackbar('Unable to fetch news stories'))
+    .catch(error => console.error(error) && props.snackbar('Unable to fetch news stories'))
     .finally(callback);
 };
 
@@ -22,16 +22,18 @@ export const submitNewsStory = (props, title, content, setSaving) => {
     return;
   }
   // Update database with new or modified record
+  props.snackbar(props.payload ? 'Saving changes' : 'Creating news story');
   setSaving(true);
   post(`${props.baseURL}/newsStories/${props.payload ? `edit/${props.payload.id}` : 'add'}`,
     { title, content: text(paragraphs(content)), source: 'admin' })
     // Update locally and return to previous page
     .then(() => {
+      props.snackbar(props.payload ? 'Changes saved' : 'News story created');
       props.update && props.update();
       props.navigation.pop();
     })
     // Display message if failed
-    .catch(() => props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
     .finally(() => setSaving(false));
 };
 
@@ -39,5 +41,5 @@ export const submitNewsStory = (props, title, content, setSaving) => {
 export const deleteNewsStory = (props, story, setStories, setFetched, callback) => 
   del(`${props.baseURL}/newsStories/${story.id}`)
     .then(() => fetchNewsStories(props, setStories, () => setFetched(true)))
-    .catch(() => props.snackbar('Failed to update database'))
+    .catch(error => console.error(error) && props.snackbar('Failed to save changes'))
     .finally(callback);

@@ -1,17 +1,21 @@
+import React from 'react';
 import { Dimensions } from 'react-native';
 import dayjs from 'dayjs';
 
 // Shared logic for HTTP requests in functions to export
 // Reference: https://reactnative.dev/docs/network
 const request = async (url, params) => {
+  let response, message;
   try {
-    const response = await fetch(url, params);
+    response = await fetch(url, params);
     const json = await response.json();
-    if (!response.ok)
-      throw Error(`Returned ${response.status} with message: ${json.message}`);
+    if (!response.ok) {
+      message = json.message;
+      throw Error(json.message || 'An error occurred.');
+    }
     return json;
   } catch (error) {
-    console.error(error);
+    console.error(response ? `Returned ${response.status} with message: ${message}` : error);
     throw error;
   }
 };
@@ -30,6 +34,20 @@ export const post = async (url, body) =>
     body: JSON.stringify(body)
   });
 
+// Perform POST request to provided endpoint URL with FormData containing image/file
+export const upload = async(url, body) => {
+  let fd = new FormData();
+  Object.keys(body).forEach(key => fd.append(key, body[key]));
+  return request(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data'
+    },
+    body: fd
+  });
+}
+
 // Perform DELETE request to provided endpoint URL with body
 export const del = async (url, body) =>
   request(url, {
@@ -40,6 +58,16 @@ export const del = async (url, body) =>
     },
     body: JSON.stringify(body)
   });
+
+// Call function both initially and at an interval (periodic data refresh)
+// Reference: https://upmostly.com/tutorials/setinterval-in-react-components-using-hooks
+export const periodic = (f, delay) => {
+  return React.useEffect(() => {
+    f();
+    const interval = setInterval(f, delay || 60000);
+    return () => clearInterval(interval);
+  }, []);
+}
 
 // Shorten text for compact display purposes
 export const truncate = (string, num) => {
@@ -52,6 +80,10 @@ export const truncate = (string, num) => {
 
 // Round current date to nearest minute; reference: https://stackoverflow.com/a/28037042
 export const currentDate = () => new Date(Math.floor((new Date()).getTime() / 60000) * 60000);
+
+// Get or assign default filename for image/file object
+export const filenameOrDefault = (file) => (file && (file.name || (file.metadata && file.metadata.name))) ||
+  `${(new Date()).valueOf().toString()}.${file && file.uri ? file.uri.replace(/.*\./g, '') : 'txt'}`;
 
 // Scale image to screen width or to maximum height with customizable horizontal margin
 export const scale = ({ image, marginHorizontal, maxHeight }) => {
@@ -80,3 +112,26 @@ export const paragraphs = text => text.split('\n').filter(s => s.trim() !== '').
 
 // Merge list of paragraphs back into single text string
 export const text = paragraphs => paragraphs.join('\n\n');
+
+// Phone number validation logic
+export const validPhone = (phone) => phone.split('').filter(c => c.match(/[0-9]/g)).length >= 10;
+
+// Email address validation logic
+export const validEmail = (email) => !!email.match(/^[A-Za-z0-9\.\-]+@([A-Za-z0-9\-]+\.)+[A-Za-z0-9]+$/g);
+
+// Password validation logic
+export const validPassword = (password, setError) => {
+  let valid = false;
+  if (password.length < 8)
+    setError('Password must be at least 8 characters long.');
+  else if (!password.split('').some(c => c.match(/[A-Z]/g)))
+    setError('Password must contain at least one uppercase letter.');
+  else if (!password.split('').some(c => c.match(/[a-z]/g)))
+    setError('Password must contain at least one lowercase letter.');
+  else if (!password.split('').some(c => c.match(/[0-9]/g)))
+    setError('Password must contain at least one digit.');
+  else if (!password.split('').some(c => !c.match(/[A-Za-z0-9\s]/g)))
+    setError('Password must contain at least one special character.');
+  else valid = true
+  return valid;
+};
