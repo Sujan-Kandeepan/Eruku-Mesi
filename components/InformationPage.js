@@ -98,7 +98,7 @@ export default function InformationPage(props) {
                     </>}
                 </View>}
                 keyExtractor={item => `${item} ${item === originalText}`}
-                onDragEnd={({ data }) => setPages(data)}
+                onDragEnd={({ data }) => setPages([...new Set(data)])}
                 // Reference: https://stackoverflow.com/questions/43397803/how-to-re-render-flatlist
                 extraData={{ originalText, editText }} />
                 {/* Add new section and update state/data */}
