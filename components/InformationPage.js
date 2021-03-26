@@ -110,7 +110,7 @@ export default function InformationPage(props) {
                     </View>}
             </View>} />
           {/* Generated page routes for viewing info sections */}
-          {pages.map(page =>
+          {[...new Set(pages)].map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested>
                 {/* Admin controls */}
@@ -130,7 +130,7 @@ export default function InformationPage(props) {
                   content={data.find(entry => entry.title === page).content} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing info sections */}
-          {props.admin && pages.map(page => `Edit ${page}`).map(page =>
+          {props.admin && [...new Set(pages)].map(page => `Edit ${page}`).map(page =>
             <Stack.Screen key={page} name={page} children={(localProps) =>
               <AppPage {...props} {...localProps} nested cancel scroll onReturn={() => {
                 setEditText('');
