@@ -1,7 +1,7 @@
 import { post } from '../../shared/SharedFunctions';
 
 export const feedbackTextChanged = (props, text, setText, maxLength) => {
-  if (text.length >= maxLength)
+  if (text.length > maxLength)
     props.snackbar('Feedback message is too long');
   else
     setText(text);
