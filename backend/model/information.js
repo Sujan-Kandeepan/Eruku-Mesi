@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const informationDB = mongoose.connection.useDb("Information");
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 let Information = new Schema({
   title: {
@@ -17,6 +18,9 @@ let Information = new Schema({
   imageBottom: {
     type: String,
   },
+  order: {
+    type: Number
+  },
   metadataImageTop: {
     type: String,
   },
@@ -24,4 +28,6 @@ let Information = new Schema({
     type: String,
   },
 });
-module.exports = informationDB.model("Information", Information, "Information");
+
+Information.plugin(AutoIncrement, {inc_field: 'order'});
+module.exports = informationDB.model("Information", Information, "Information")
