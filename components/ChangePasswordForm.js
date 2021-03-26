@@ -19,9 +19,11 @@ export default function ChangePasswordForm(props) {
         value={oldPassword} onChangeText={value => setOldPassword(value)} />
       <Header {...props} label text={'New Password'} />
       <SimpleInput {...props} left autoCompleteType='password' password
+        maxLength={50} maxLengthMessage='Password is too long'
         value={newPassword} onChangeText={value => setNewPassword(value)} />
       <Header {...props} label text={'Confirm Password'} />
       <SimpleInput {...props} left autoCompleteType='password' password
+        maxLength={50} maxLengthMessage='Password is too long'
         value={confirmPassword} onChangeText={value => setConfirmPassword(value)} />
       <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>
         {passwordError}

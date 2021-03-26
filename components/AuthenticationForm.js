@@ -72,24 +72,31 @@ export default function AuthenticationForm(props) {
             <View>
               <Header {...props} {...localProps} label text={'New Username'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='username' autoCapitalize='none'
+                maxLength={50} maxLengthMessage='Username is too long'
                 value={newUsername} onChangeText={value => setNewUsername(value)} />
               <Header {...props} {...localProps} label text={'New Password'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='password' password
+                maxLength={50} maxLengthMessage='Password is too long'
                 value={newPassword} onChangeText={value => setNewPassword(value)} />
               <Header {...props} {...localProps} label text={'Confirm Password'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='password' password
+                maxLength={50} maxLengthMessage='Password is too long'
                 value={confirmPassword} onChangeText={value => setConfirmPassword(value)} />
               <Header {...props} {...localProps} label text={'First Name'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='name'
+                maxLength={50} maxLengthMessage='First name is too long'
                 value={firstName} onChangeText={value => setFirstName(value)} />
               <Header {...props} {...localProps} label text={'Last Name'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='name'
+                maxLength={50} maxLengthMessage='Last name is too long'
                 value={lastName} onChangeText={value => setLastName(value)} />
               <Header {...props} {...localProps} label text={'Phone Number'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='tel' keyboardType='number-pad'
+                maxLength={25} maxLengthMessage='Phone number is too long'
                 value={phone} onChangeText={value => setPhone(value)} />
               <Header {...props} {...localProps} label text={'Email Address'} />
               <SimpleInput {...props} {...localProps} left autoCompleteType='email' autoCapitalize='none'
+                maxLength={50} maxLengthMessage='Email address is too long'
                 value={email} onChangeText={value => setEmail(value)} />
               <Text style={{ color: props.theme.colors.dangerText, paddingTop: 10, textAlign: 'center' }}>
                 {signupError}

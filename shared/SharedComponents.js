@@ -250,7 +250,12 @@ export const SimpleInput = (props) =>
       borderColor: props.theme.colors.border, borderWidth: 1, color: props.theme.colors.text,
       margin: 15, marginBottom: 0, paddingHorizontal: 10, paddingVertical: 5,
       textAlign: props.left ? 'left' : 'center'
-    }} value={props.value} onChangeText={props.onChangeText} />;
+    }} value={props.value} onChangeText={value => {
+      if (props.maxLength && value.length > props.maxLength)
+        props.snackbar && props.snackbar(props.maxLengthMessage || 'Input is too long');
+      else
+        props.onChangeText && props.onChangeText(value);
+    }} />;
 
 // Component to input body field in form
 export const BodyInput = (props) =>
