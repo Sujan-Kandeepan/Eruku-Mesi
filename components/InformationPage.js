@@ -91,7 +91,7 @@ export default function InformationPage(props) {
                           }} name='edit' type='material' color={props.theme.colors.placeholder} />
                           {/* Press and hold for 3 seconds to delete entire section */}
                           <IconButton style={SharedStyles.icon}
-                            onPress={() => props.snackbar('Press and hold to delete')} delayLongPress={3000}
+                            onPress={() => props.snackbar('Press and hold to delete')} delayLongPress={2000}
                             onLongPress={() => deleteInfoSection(props, pages, setPages, data, setData, item)}
                             name='delete' type='material' color={props.theme.colors.danger} />
                         </Text>}

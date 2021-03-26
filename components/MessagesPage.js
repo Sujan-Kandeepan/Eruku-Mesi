@@ -58,7 +58,7 @@ export default function MessagesPage(props) {
               <View style={{ flex: 1 }} />
               {props.admin &&
                 <IconButton style={{ ...SharedStyles.icon, alignSelf: 'flex-end', justifyContent: 'flex-start' }}
-                  onPress={() => props.snackbar('Press and hold to delete')} delayLongPress={3000}
+                  onPress={() => props.snackbar('Press and hold to delete')} delayLongPress={2000}
                   onLongPress={() => deleteMessage(props, item, messages, setMessages)}
                   name='delete' type='material' color={props.theme.colors.danger} />}
             </View>} keyExtractor={(item, index) => `${item ? item.id : index} ${index}`} extraData={fetched}
