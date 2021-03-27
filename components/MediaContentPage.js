@@ -25,7 +25,13 @@ export default function MediaContentPage(props) {
   // State variables for display data and state (two-way data binding)
   const [posts, setPosts] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
-  periodic(() => fetchMediaContent(props, setPosts, () => setFetched(true)));
+  periodic(() => {
+    // Refresh only if drawer nav currently on media content page
+    if (!props.drawerState || !props.pages || !props.drawerVisited
+      || (props.drawerState.current === props.pages.mediaContent)
+      || (!fetched && !props.drawerVisited.current.includes(props.pages.mediaContent)))
+    fetchMediaContent(props, setPosts, () => setFetched(true));
+  });
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>

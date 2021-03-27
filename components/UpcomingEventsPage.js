@@ -70,7 +70,13 @@ export default function UpcomingEventsPage(props) {
       { ...newMarkedDates[`${formatDate(selectedDate)}`], selected: true };
     setMarkedDates(newMarkedDates);
   }, [events, selectedDate]);
-  periodic(() => fetchEvents(props, setEvents, () => setFetched(true)));
+  periodic(() => {
+    // Refresh only if drawer nav currently on upcoming events page
+    if (!props.drawerState || !props.pages || !props.drawerVisited
+      || (props.drawerState.current === props.pages.upcomingEvents)
+      || (!fetched && !props.drawerVisited.current.includes(props.pages.upcomingEvents)))
+    fetchEvents(props, setEvents, () => setFetched(true));
+  });
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>

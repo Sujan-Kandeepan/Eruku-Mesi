@@ -187,8 +187,15 @@ export default function App() {
       () => { }, () => snackbar('Failed to save changes'));
   }
 
+  // Keep reference of drawer nav component, current state, and pages visited
+  // Reference: https://reactnavigation.org/docs/screen-tracking/
+  const drawerNav = React.useRef();
+  const drawerState = React.useRef();
+  const drawerVisited = React.useRef();
+  drawerVisited.current = [];
+
   // Props to expose to nested child components, extra for settings
-  const sharedProps = { admin, baseURL, setAdmin, snackbar, theme, user };
+  const sharedProps = { admin, baseURL, drawerState, drawerVisited, pages, setAdmin, snackbar, theme, user };
   const settingsProps = { receiveNotifications, setUser, toggleNotifications, toggleTheme, updateUser };
 
   // Refactored variable for duplicate code in platform-specific snackbar below
@@ -222,7 +229,17 @@ export default function App() {
     // Reference: https://reactnavigation.org/docs/drawer-based-navigation/
     <Provider theme={theme}>
       {user ? // Drawer nav containing all app pages if authenticated
-        <NavigationContainer theme={theme}>
+        <NavigationContainer ref={drawerNav} theme={theme}
+          onStateChange={() => {
+            const currentRoute = drawerNav.current.getCurrentRoute().name
+            drawerState.current = currentRoute;
+            if (drawerVisited.current instanceof Array) {
+              if (!drawerVisited.current.includes(currentRoute))
+                drawerVisited.current.push(currentRoute);
+            } else {
+              drawerVisited.current = [];
+            }
+          }}>
           <Drawer.Navigator initialRouteName={pages.newsFeed}
             drawerContentOptions={{ labelStyle: { color: theme.colors.text } }}
             drawerContent={props => <CustomDrawerContent {...props} theme={theme} user={user} />}>

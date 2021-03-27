@@ -25,7 +25,13 @@ export default function NewsFeedPage(props) {
   // State variables for display data and state (two-way data binding)
   const [stories, setStories] = React.useState([]);
   const [fetched, setFetched] = React.useState(false);
-  periodic(() => fetchNewsStories(props, setStories, () => setFetched(true)));
+  periodic(() => {
+    // Refresh only if drawer nav currently on news feed page
+    if (!props.drawerState || !props.pages || !props.drawerVisited
+      || (props.drawerState.current === props.pages.newsFeed)
+      || (!fetched && !props.drawerVisited.current.includes(props.pages.newsFeed)))
+      fetchNewsStories(props, setStories, () => setFetched(true));
+  });
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>

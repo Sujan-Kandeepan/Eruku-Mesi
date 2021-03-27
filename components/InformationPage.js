@@ -28,7 +28,13 @@ export default function InformationPage(props) {
   // Reference: https://stackoverflow.com/a/59875773
   const [width, setWidth] = React.useState('99%');
   React.useEffect(() => setWidth('auto'));
-  periodic(() => fetchInformation(props, setPages, setData, () => setFetched(true)));
+  periodic(() => {
+    // Refresh only if drawer nav currently on information page
+    if (!props.drawerState || !props.pages || !props.drawerVisited
+      || (props.drawerState.current === props.pages.information)
+      || (!fetched && !props.drawerVisited.current.includes(props.pages.information)))
+    fetchInformation(props, setPages, setData, () => setFetched(true));
+  });
   return (
     <AppPage {...props}>
       <NavigationContainer style={SharedStyles.container} theme={props.theme} independent>
