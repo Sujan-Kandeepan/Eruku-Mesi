@@ -22,7 +22,12 @@ export default function MessagesPage(props) {
   const [needsToScroll, setNeedsToScroll] = React.useState(true);
   const scroll = () => needsToScroll && list.scrollToEnd({ animated: true });
   const stopScroll = () => setTimeout(() => setNeedsToScroll(false), 1000);
-  periodic(() => fetchMessages(props, messages, setMessages, false, () => setFetched(true)), 5000);
+  periodic(() => {
+    // Refresh only if drawer nav currently on messages page
+    if (!props.drawerState || !props.pages || (props.drawerState.current === props.pages.messages)
+      || (!fetched && !props.drawerVisited.current.includes(props.pages.messages)))
+      fetchMessages(props, messages, setMessages, false, () => setFetched(true));
+  }, 5000);
   return (
     <AppPage {...props}>
       {/* Reference: https://stackoverflow.com/a/61980218 */}
