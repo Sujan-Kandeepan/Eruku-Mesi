@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -18,6 +19,7 @@ import InformationPage from './components/InformationPage';
 import SettingsPage from './components/SettingsPage';
 import FeedbackForm from './components/FeedbackForm';
 import AuthenticationForm from './components/AuthenticationForm';
+import { registerForPushNotifications } from './components/functions/PushNotificationFunctions';
 import { get, post } from './shared/SharedFunctions';
 
 // Base URL for API wherever hosted (computer's IP for now)
@@ -74,6 +76,14 @@ const pages = {
   settings: 'Settings',
   feedback: 'Feedback'
 };
+
+// Set up notification handler
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 // Repeated logic for custom drawer items
 const CustomDrawerItem = ({ action, icon, name, navigation, source, state, theme }) =>
@@ -158,11 +168,14 @@ export default function App() {
 
   // Toggle event notifications and display snackbar message on change
   let [receiveNotifications, setReceiveNotifications] = React.useState(true);
-  const toggleNotifications = () => {
+  const toggleNotifications = async () => {
     snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
     setReceiveNotifications(!receiveNotifications);
-    updateUser({ receiveNotifications: !receiveNotifications }, () => {},
-      () => snackbar('Failed to update database'));
+    const expoToken = receiveNotifications
+      ? null
+      : await registerForPushNotifications({ ...sharedProps, ...settingsProps });
+    updateUser({ receiveNotifications: !receiveNotifications, expoToken }, () => {},
+      () => snackbar('Failed to save changes'));
   }
 
   // Set and toggle between light/dark themes defined globally using state
@@ -171,7 +184,7 @@ export default function App() {
   const toggleTheme = () => {
     setTheme(theme === darkTheme ? lightTheme : darkTheme);
     updateUser({ theme: theme === darkTheme ? 'light' : 'dark' },
-      () => { }, () => snackbar('Failed to update database'));
+      () => { }, () => snackbar('Failed to save changes'));
   }
 
   // Props to expose to nested child components, extra for settings

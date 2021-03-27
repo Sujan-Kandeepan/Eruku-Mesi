@@ -29,6 +29,8 @@ In the project directory, you can run: `npm` and `expo` commands:
 
 2. run `expo start` or `npm start`
 
+To test push notifications, `npm install` and `expo login`.
+
 Additionally, if testing on mobile, the device may need to be within the same LAN as the serving host to access the back-end API.
 
 Reference: <https://codingthesmartway.com/the-mern-stack-tutorial-building-a-react-crud-application-from-start-to-finish-part-1/>
