@@ -66,6 +66,7 @@ router.post("/add", async function (req, res) {
 router.get("/", async function (req, res) {
   try {
     const accounts = await Account.find({});
+    console.log(accounts.length)
     var modifiedAccount;
     var newAccounts = [] ;
     for (i = 0; i < accounts.length; i++){
@@ -86,7 +87,11 @@ router.get("/", async function (req, res) {
 router.post("/edit/:id", async function (req, res) {
   let accountBody = req.body;
   let query = { _id: req.params.id };
-  const account = await Account.findById(req.params.id);
+  try{
+    const account = await Account.findById(req.params.id);
+  }catch(e){
+    return res.status(500).json({message: "Invalid ID"});
+  }
 
   if (accountBody['oldPassword'] == null && accountBody['newPassword'] != null){
     return res.status(400).send({
