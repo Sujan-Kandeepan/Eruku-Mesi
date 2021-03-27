@@ -28,10 +28,13 @@ router.post("/add", async function (req, res) {
       notification: notification,
     });
   } catch (error) {
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-    });
+    if (error.name == "ValidationError")
+      return res.status(400).json({message: "Invalid ID"});
+    else
+      return res.status(500).json({
+        status: "error",
+        message: "Internal Server Error",
+      });
   }
 });
 
