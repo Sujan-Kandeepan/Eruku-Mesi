@@ -43,11 +43,11 @@ export default function MediaContentForm(props) {
             Selected file: {file.name}
           </Text>}
         <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, marginRight: -16 }}>
+          <View style={{ flex: 7, marginRight: -16 }}>
             <MediaPicker {...props} text='Choose Photo or Video'
               allowVideo handleResult={setImage} />
           </View>
-          <View style={{ flex: 1, marginLeft: -16 }}>
+          <View style={{ flex: 5, marginLeft: -16 }}>
             <FilePicker {...props} text='Choose File' handleResult={setFile} />
           </View>
         </View>
