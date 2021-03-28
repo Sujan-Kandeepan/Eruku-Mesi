@@ -58,6 +58,7 @@ Wednesday, November 18, 2020
 
 | Name | Date    | Reason For Changes  | Version   |
 | ---- | ------- | ------------------- | --------- |
+| Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Tuesday, March 30, 2021 | Revisions for Final Submission | 0.3 |
 | Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Wednesday, January 13, 2021 | Revisions for Prototype 2.0 | 0.2 |
 | Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Wednesday, November 18, 2020 | Initial version | 0.1 |
 
@@ -373,6 +374,9 @@ List of modules (functions/class components in camelCase/PascalCase):
   - User feedback input form (FeedbackForm)
     - Display form for user feedback posting (displayFeedbackForm)
     - Input validation for user feedback form (validateFeedbackForm)
+  - Shared components (SharedComponents)
+  - Shared functions (SharedFunctions)
+  - Shared styles (SharedStyles)
   - CRUD options for each of the above
   - Router/navigation between pages
 -->
@@ -529,6 +533,27 @@ List of modules (functions/class components in camelCase/PascalCase):
 | Implementation | Takes form information and calls the FeedbackData CREATE operation |
 | Module secrets |  Requests made to server, front-end components indicate to user that data has been submitted|
 | Rationale | PUC NUM 20; FR 28 |
+
+| SharedComponents | Shared library of custom React Native components |
+| --- | --- |
+| Dependencies | None |
+| Implementation | Based on default React Native components with modifications for specific use cases |
+| Module secrets | Library dependencies and internal implementation of each component |
+| Rationale | Code reuse and consistency |
+
+| SharedFunctions | Shared library of helper functions |
+| --- | --- |
+| Dependencies | None |
+| Implementation | Small helper functions for making API requests or often-used logic |
+| Module secrets | API request format and function implementations |
+| Rationale | Code reuse and consistency |
+
+| SharedStyles | Shared library of common styles |
+| --- | --- |
+| Dependencies | None |
+| Implementation | Specific CSS-like properties passed into component styles prop where needed |
+| Module secrets | Specific style properties for each exported style object |
+| Rationale | Code reuse and consistency |
 
 ## 5. Module Interface
 
