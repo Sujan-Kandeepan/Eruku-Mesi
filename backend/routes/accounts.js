@@ -101,6 +101,12 @@ router.post("/edit/:id", async function (req, res) {
   }catch(e){
     return res.status(500).json({message: "Internal server error."});
   }
+  
+  if (!account){
+    return res.status(400).send({
+        message : "Account does not exist."
+      });
+  }
 
   if (accountBody['oldPassword'] == null && accountBody['newPassword'] != null){
     return res.status(400).send({
