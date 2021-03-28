@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 let Account = require("../model/account.js");
 
@@ -66,7 +67,6 @@ router.post("/add", async function (req, res) {
 router.get("/", async function (req, res) {
   try {
     const accounts = await Account.find({});
-    console.log(accounts.length)
     var modifiedAccount;
     var newAccounts = [] ;
     for (i = 0; i < accounts.length; i++){
@@ -87,10 +87,19 @@ router.get("/", async function (req, res) {
 router.post("/edit/:id", async function (req, res) {
   let accountBody = req.body;
   let query = { _id: req.params.id };
+  
+  var isValid = mongoose.Types.ObjectId.isValid(req.params.id);
+
+  if (!isValid){
+    return res.status(400).send({
+        message : "Invalid Account ID."
+      });
+  }
+  
   try{
-    const account = await Account.findById(req.params.id);
+    account = await Account.findById(req.params.id);
   }catch(e){
-    return res.status(500).json({message: "Invalid ID"});
+    return res.status(500).json({message: "Internal server error."});
   }
 
   if (accountBody['oldPassword'] == null && accountBody['newPassword'] != null){
@@ -153,7 +162,7 @@ router.post("/edit/:id", async function (req, res) {
             }
 
               try {
-                const account = await Account.updateOne(query, accountBody);
+                account = await Account.updateOne(query, accountBody);
                 return res
                   .status(200)
                   .json({ msg: "account successfully updated", account: account });
@@ -250,7 +259,6 @@ router.post('/signup', (req, res, next) => {
           // // Save newUser object to database
           newUser.save((err, User) => {
               if (err) {
-                console.log(err)
                   return res.status(400).send({
                       message : "Failed to add user."
                   });

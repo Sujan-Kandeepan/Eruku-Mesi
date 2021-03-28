@@ -19,7 +19,7 @@ router.post("/add", async function (req, res) {
       message: "Mandatory field is not set",
     });
   }
-
+  
   try {
     const notification = new Notification(req.body);
     await notification.save();
@@ -28,7 +28,8 @@ router.post("/add", async function (req, res) {
       notification: notification,
     });
   } catch (error) {
-    if (error.name == "ValidationError")
+    var isValid = mongoose.Types.ObjectId.isValid(req.receiver); 
+    if (!isValid)
       return res.status(400).json({message: "Invalid ID"});
     else
       return res.status(500).json({
