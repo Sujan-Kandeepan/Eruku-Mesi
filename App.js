@@ -199,6 +199,7 @@ export default function App() {
   drawerVisited.current = [];
 
   // Navigate to events page when notification opened
+  // Reference: https://reactnavigation.org/docs/navigating-without-navigation-prop/
   React.useEffect(() => {
     Notifications.addNotificationResponseReceivedListener(() =>
       drawerNav.current && drawerNav.current.navigate(pages.upcomingEvents));
