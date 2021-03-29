@@ -167,7 +167,7 @@ export default function App() {
   }, [user]);
 
   // Toggle event notifications and display snackbar message on change
-  let [receiveNotifications, setReceiveNotifications] = React.useState(true);
+  let [receiveNotifications, setReceiveNotifications] = React.useState(false);
   const toggleNotifications = async () => {
     snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
     setReceiveNotifications(!receiveNotifications);

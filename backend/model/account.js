@@ -56,7 +56,7 @@ let Account = new Schema({
   },
   receiveNotifications: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   theme: {
     type: String,
