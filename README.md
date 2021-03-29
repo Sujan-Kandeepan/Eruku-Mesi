@@ -6,6 +6,8 @@ Software Requirements Specification: [doc/srs.md](doc/srs.md) ([see revisions](h
 
 Design Document: [doc/design.md](doc/design.md) ([see revisions](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/commits/master/doc/design.md))
 
+Internal Testing Documentation: [doc/Internal Testing Documentation.pdf](doc/Internal Testing Documentation.pdf)
+
 SRS-driven roadmap information given in [3.2 Functional Requirements](doc/srs.md#32-functional-requirements).
 
 Note: only the mandatory features in [2.6 Apportioning of Requirements](https://gitlab.cas.mcmaster.ca/tut/eruku-mesi/-/blob/master/doc/srs.md#26-apportioning-of-requirements) were targeted for the initial release while the rest, while included in the requirements/design documentation, were considered out of scope and deferred to future releases.
@@ -15,6 +17,7 @@ Note: only the mandatory features in [2.6 Apportioning of Requirements](https://
 Create a `.env` file in the `backend` directory and replace `<password>` and `<dbname>` with MongoDB password and database name.
 
 ## Install & Usage
+
 This project uses node, npm, and expo.
 
 In the `backend` directory:
