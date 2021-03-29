@@ -1120,7 +1120,7 @@ Shown here, for quick reference, are the testing methods for each functional req
 | FR-7 (Correct event information shown on details page) | Ensure page loads and correct information is displayed once notification has been opened. |
 | FR-8 (Administrator is able to see all events) | Go onto admin events page and check to see if all events are shown. Also check to see if the events within the database is showing up correctly in the admin events page. |
 | FR-9 (Administrator is able to new create event) | Create an event in the admin page and see if the in-app notification shows up and check to see if event is now stored in database. |
-| FR-10 (Administrator is able to update event) | Click into an event in the admin page. Then edit the event through the form. Check to see if the event is now stored in the database. |
+| FR-10 (Administrator is able to update event) | Click into an event in the admin page. Then edit the event through the form. Check to see if the event is now stored in the database |
 | FR-11 (Administrator is able to delete/cancel event) | Delete an event. Check to see if the event is still stored in the database. |
 | FR-12 (Administrator is able to see all posts) | Go onto admin posts page and check to see if all posts are shown. Also check to see if the posts within the database is showing up correctly in the admin posts page. |
 | FR-13 (Administrator is able to new create post) | Create a post in the admin page and see if the in-app notification shows up and check to see if post is now stored in database. |
@@ -1135,9 +1135,11 @@ Shown here, for quick reference, are the testing methods for each functional req
 | FR-22 (Calendar omits far-away events) | Go onto the Calendar View page with your GPS outside of a specific location within 200km to certain events. Check to see if that event is showing up in the calendar. If it is not showing, the program is working correctly. |
 | FR-23 (Regular user is able to see relevant posts) | Go onto user feed and check to see if all posts are shown. Also check to see if the posts within the database is showing up correctly in the user feed. |
 | FR-24 (Regular user is able to new create post) | Create a post in the user feed and see if the in-app notification shows up and check to see if post is now stored in database. |
-| FR-25 (Regular user is able to update post) | Click into a post in the user page. Then edit the post through the form. Check to see if the post is now stored in the database. |
+| FR-25 (Regular user is able to update post) | Click into a post in the user page. Then edit the post through the form. Check to see if the post is now stored in the database |
 | FR-26 (User is able to delete post) | Delete a post. Check to see if the post is still stored in the database. |
 | FR-27 (User is able to share posts from other users) | Test whether the user can see and copy the sharable link when the "Share" button is clicked. Test whether the generated link is correctly functional. |
-| FR-28 (Modern interface for current website) | Internal and client testing to determine subjective satisfaction from users of website. |
-| FR-29 (Retain or expand existing functionality of current website) | Internal and client testing of website to ensure previous functionality is there and intended improvements have been effective. |
-| FR-30 (User is able to submit feedback) | Submit feedback as regular user and ensure required data is stored in database. |
+| FR-28 (User is able to submit feedback) | Submit feedback as regular user and ensure required data is stored in database. |
+| FR-29 (Administrator is able to see all news stories) | Go onto admin news stories page and check to see if all news stories are shown. Also check to see if the news stories within the database is showing up correctly in the admin news stories page. |
+| FR-30 (Administrator is able to create news story) | Create a news story in the admin page and see if the in-app notification shows up and check to see if news story is now stored in database. |
+| FR-31 (Administrator is able to update news story) | Click into a news story in the admin page. Then edit the news story through the form. Check to see if the news story is now stored in the database |
+| FR-32 (Administrator is able to delete/cancel news story) | Delete a news story. Check to see if the news story is still stored in the database. |
