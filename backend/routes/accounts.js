@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 let Account = require("../model/account.js");
 
@@ -12,9 +13,9 @@ router.post("/add", async function (req, res) {
   req.assert("lastName", "Account: lastname must be set").notEmpty();
   req.assert("phone", "Account: phone must have content").notEmpty();
   req.assert("email", "Account: email must be set").notEmpty();
-
+  
   let errors = req.validationErrors();
-
+  
   if (errors) {
     return res.status(400).json({
       status: "error",
@@ -22,16 +23,42 @@ router.post("/add", async function (req, res) {
     });
   }
 
-  try {
-    const account = new Account(req.body);
-    await account.save();
-    return res.status(200).json({ message: "account successfully added" });
-  } catch (error) {
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-    });
-  }
+  Account.findOne(
+  {
+    $or: [
+          {'email': req.body.email},
+          {'phone' : req.body.phone},
+          {'username' : req.body.username}
+        ]
+  }, async function(err, user) {
+      if (user != null){
+        if (user.email != null && user.email == req.body.email)
+          return res.status(400).send({
+            message : "Email address already in use."
+          })
+        else if (user.phone != null && user.phone == req.body.phone)
+          return res.status(400).send({
+                message : "Phone number already in use."
+           })
+        else if(user.username != null && user.username == req.body.username)
+          return res.status(400).send({
+                message : "Username already taken."
+           })
+      }
+      else{
+          try {
+            const account = new Account(req.body);
+            await account.save();
+            return res.status(200).json({ message: "account successfully added" });
+          } catch (error) {
+            return res.status(500).json({
+              status: "error",
+              message: "Internal Server Error",
+            });
+          }
+      }
+     }
+  );
 });
 
 /**
@@ -60,7 +87,26 @@ router.get("/", async function (req, res) {
 router.post("/edit/:id", async function (req, res) {
   let accountBody = req.body;
   let query = { _id: req.params.id };
-  const account = await Account.findById(req.params.id);
+  
+  var isValid = mongoose.Types.ObjectId.isValid(req.params.id);
+
+  if (!isValid){
+    return res.status(400).send({
+        message : "Invalid Account ID."
+      });
+  }
+  
+  try{
+    account = await Account.findById(req.params.id);
+  }catch(e){
+    return res.status(500).json({message: "Internal server error."});
+  }
+  
+  if (!account){
+    return res.status(400).send({
+        message : "Account does not exist."
+      });
+  }
 
   if (accountBody['oldPassword'] == null && accountBody['newPassword'] != null){
     return res.status(400).send({
@@ -122,7 +168,7 @@ router.post("/edit/:id", async function (req, res) {
             }
 
               try {
-                const account = await Account.updateOne(query, accountBody);
+                account = await Account.updateOne(query, accountBody);
                 return res
                   .status(200)
                   .json({ msg: "account successfully updated", account: account });
@@ -219,7 +265,6 @@ router.post('/signup', (req, res, next) => {
           // // Save newUser object to database
           newUser.save((err, User) => {
               if (err) {
-                console.log(err)
                   return res.status(400).send({
                       message : "Failed to add user."
                   });
