@@ -3,21 +3,32 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 let { Expo } = require("expo-server-sdk");
-let expo = new Expo();
 const cron = require("node-cron");
 const moment = require("moment");
 const expressValidator = require("express-validator");
 require("dotenv").config(); // load environment from .env file automatically
-const config = require("./config/database.js");
+const dbConfig = require("./config/database.js");
+const expoConfig = require("./config/expo.js");
+const appConfig = require("./config/app.js");
 const mongoose = require("mongoose");
-const PORT = config.PORT || 4000;
+const PORT = appConfig.PORT || 4000;
+const pushNotificationSchedule = appConfig.push_notifications_schedule || "0 8 * * *";
+let expo;
+if (expoConfig.access_token != null)
+{
+  expo = new Expo({'Authorization': `Bearer ${expoConfig.access_token}`})
+}
+else {
+  expo = new Expo();
+}
+
 let Event = require("./model/event.js");
 let Account = require("./model/account.js");
 app.PORT = PORT;
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-mongoose.connect(config.database, {
+mongoose.connect(dbConfig.database, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -130,6 +141,7 @@ function createMessages(title, body, data, pushTokens) {
       title: title,
       body,
       data,
+      priority: 'high'
     });
   }
   return messages;
@@ -211,18 +223,17 @@ async function obtainReceipts(receiptIds) {
   }
 }
 // source code: https://medium.com/@steve.mu.dev/implementing-push-notification-with-react-native-and-node-js-fdb06c2cbca8
-
-cron.schedule("0 8 * * *", async function () {
+cron.schedule(pushNotificationSchedule, async function () {
   // cron job schedule every day 8AM 
   var start = ((moment(Date.now()).utcOffset('-0500').format('x')));
   start = new Date(parseInt(start));
   start = moment(start);
   var end = moment(start).add(1, "days");
-
   try {
     const events = await Event.find({
       date: { $gte: start, $lt: end },
     });
+
     if (!events.length) {
       ("No event is scheduled in 24 hours");
     } else {
