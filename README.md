@@ -12,7 +12,10 @@ Note: only the mandatory features in [2.6 Apportioning of Requirements](https://
 
 ## Getting Started with Eruku Mesi App
 
-Create a `.env` file in the `backend` directory and replace `<password>` and `<dbname>` with MongoDB password and database name.
+Make a copy of .env.example and call it `.env` in the `backend` directory. Replace `<password>` and `<dbname>` with MongoDB password and database name. Replace `<aws_access_key_id>` to AWS access key id and `<aws_secret_access_key>` to AWS secret access key.
+
+Optional Configuration:
+In the `.env` file, you can specify the port number for the backend server by setting `APP_PORT=<port number>`. Further, you can specify an expo access token for additional security in sending push notifications by setting `EXPO_ACCESS_TOKEN=<expo_access_token>`. 
 
 ## Install & Usage
 This project uses node, npm, and expo.
@@ -29,7 +32,11 @@ In the project directory, you can run: `npm` and `expo` commands:
 
 2. run `expo start` or `npm start`
 
-To test push notifications, `npm install` and `expo login`.
+### To test push notifications, 
+1. run `npm install`, `expo login`, and `npm start` or `expo start` in the project directory. 
+2. run `npm install` in the `backend` directory. In the `.env` file, include `PUSH_NOTIFICATIONS_SCHEDULE=* * * * *`. This will send the push notifications every minute. Run `npm start` in the `backend` directory. 
+3. On the Settings page in the expo App, set the toggle for "Receive Event Notifications" from 'on' to 'off' and then 'off' to 'on'. 
+4. On the Upcoming Events page in the expo App, create a future event and set the time of the event to an hour ahead from the current time.
 
 Additionally, if testing on mobile, the device may need to be within the same LAN as the serving host to access the back-end API.
 
