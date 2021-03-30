@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 let Event = require("../model/event.js");
 
@@ -49,6 +50,28 @@ router.post("/edit/:id", async function (req, res) {
     });
   }
 
+  var isValid = mongoose.Types.ObjectId.isValid(req.params.id);
+
+  if (!isValid){
+    return res.status(400).send({
+        message : "Invalid Event ID."
+      });
+  }
+  
+  try{
+    getEvent = await Event.findById(req.params.id);
+
+    if (!getEvent){
+    return res.status(400).send({
+        message : "Event does not exist."
+      });
+    }
+
+  }catch(e){
+    return res.status(500).json({message: "Internal server error."});
+  }
+
+
   try {
     const event = await Event.updateOne(query, eventBody);
     return res
@@ -79,6 +102,27 @@ router.get("/", async function (req, res) {
 router.get("/:id", async function (req, res) {
   let id = req.params.id;
 
+  var isValid = mongoose.Types.ObjectId.isValid(id);
+
+  if (!isValid){
+    return res.status(400).send({
+        message : "Invalid Event ID."
+      });
+  }
+  
+  try{
+    getEvent = await Event.findById(id);
+
+    if (!getEvent){
+    return res.status(400).send({
+        message : "Event does not exist."
+      });
+    }
+
+  }catch(e){
+    return res.status(500).json({message: "Internal server error."});
+  }
+
   try {
     const event = await Event.findById(id);
     return res.status(200).json({ event: event });
@@ -92,6 +136,27 @@ router.get("/:id", async function (req, res) {
  */
 router.delete("/:id", async function (req, res) {
   let query = { _id: req.params.id };
+
+  var isValid = mongoose.Types.ObjectId.isValid(req.params.id);
+
+  if (!isValid){
+    return res.status(400).send({
+        message : "Invalid Event ID."
+      });
+  }
+  
+  try{
+    getEvent = await Event.findById(req.params.id);
+
+    if (!getEvent){
+    return res.status(400).send({
+        message : "Event does not exist."
+      });
+    }
+
+  }catch(e){
+    return res.status(500).json({message: "Internal server error."});
+  }
 
   try {
     await Event.deleteOne(query);
