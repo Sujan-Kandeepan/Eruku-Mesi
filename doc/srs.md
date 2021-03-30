@@ -53,6 +53,7 @@ Friday, October 16, 2020
 
 | Name | Date    | Reason For Changes  | Version   |
 | ---- | ------- | ------------------- | --------- |
+| Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Tuesday, March 30, 2021 | Revisions for Final Submission | 0.3 |
 | Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Wednesday, January 13, 2021 | Revisions for Prototype 2.0 | 0.2 |
 | Darren Tu, Immanuel Odisho, Sophia Ji Who Choi and Sujan Kandeepan | Monday, October 19, 2020 | Initial version | 0.1 |
 
@@ -213,21 +214,21 @@ The current website is hosted at the following location: <http://erukumesinortha
 
 Identify requirements that may be delayed until future versions of the system (e.g., blocks and/or increments). -->
 
-As the scope of this application is quite broad and consists of multiple components, there are some features and demands which take higher precedence than others which may be deferred to a future release if targeting the initial release is not feasible.
-The following table details which features are to be prioritized or potentially deferred:
+As the scope of this application is quite broad and consists of multiple components, there are some features and demands that take higher precedence than others &ndash; these were considered out of scope for the initial release and would now be considered potential future items for any later project maintainers.
+The following table details which features were prioritized and deferred:
 
 | Feature | Priority |
 | ----- | ----- |
-| Central feed for news and local events | Mandatory for initial release, high priority |
-| Localized push notifications for events | Mandatory for initial release, high priority |
-| Media content uploaded by administrator | Mandatory for initial release, high priority |
-| Interactive chat function | Mandatory for initial release, high priority |
-| Machine learning integration in chat function | Important but can be deferred, medium/high priority |
-| Event calendar view | Important but can be deferred, medium/high priority |
-| Media content uploaded by regular users | Important but can be deferred, medium/high priority |
-| Revamp current website | Important but can be deferred, medium/high priority |
-| Feedback form for user suggestions | Likely to be deferred, low/medium priority |
-| Search engine optimization for application stores | Likely to be deferred, low/medium priority |
+| Central feed for news and local events | Done for initial release, high priority |
+| Localized push notifications for events | Done for initial release, high priority |
+| Media content uploaded by administrator | Done for initial release, high priority |
+| Interactive chat function | Done for initial release, high priority |
+| Machine learning integration in chat function | Deferred to future releases, medium/high priority |
+| Event calendar view | Done for initial release, medium/high priority |
+| Media content uploaded by regular users | Deferred to future releases, medium/high priority |
+| Revamp current website | Deferred to future releases, medium/high priority |
+| Feedback form for user suggestions | Done for initial release, low/medium priority |
+| Search engine optimization for application stores | Deferred to future releases, low/medium priority |
 
 <!-- Likely need to update this table as we fill remaining sections -->
 
@@ -504,6 +505,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsStoriesData, NewsAndEventsFunctions, NewsFeedPage, UpcomingEventsPage, EventForm, NewsStoryForm |
 | Relevant Code (Front) | NewsFeedPage.js, UpcomingEventsPage.js, MediaContentPage.js |
 | Relevant Code (Back) | server.js, newsStory.js, events.js |
+| Priority | Done for initial release |
 
 | ID: FR-2 | User is notified of all relevant upcoming local events |
 | ----- | ----- |
@@ -517,6 +519,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js, notifications.js |
+| Priority | Done for initial release |
 
 | ID: FR-3 | User is not notified of events outside geographic location |
 | ----- | ----- |
@@ -530,6 +533,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js, notifications.js |
+| Priority | Deferred to future releases |
 
 | ID: FR-4 | User is not notified of past events |
 | ----- | ----- |
@@ -543,6 +547,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js, notifications.js |
+| Priority | Done for initial release |
 
 | ID: FR-5 | User is not notified of events too far into the future |
 | ----- | ----- |
@@ -556,6 +561,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js, notifications.js |
+| Priority | Done for initial release |
 
 | ID: FR-6 | Correct event information shown in notification |
 | ----- | ----- |
@@ -569,6 +575,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, EventNotificationFunctions, EventNotificationFormat, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js, notifications.js |
+| Priority | Done for initial release |
 
 | ID: FR-7 | Correct event information shown on details page |
 | ----- | ----- |
@@ -582,6 +589,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js |
+| Priority | Done for initial release |
 
 | ID: FR-8 | Administrator is able to see all events |
 | ----- | ----- |
@@ -595,6 +603,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js, EventForm.js |
 | Relevant Code (Back) | server.js, events.js |
+| Priority | Done for initial release |
 
 | ID: FR-9 | Administrator is able to new create event |
 | ----- | ----- |
@@ -608,6 +617,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js, EventForm.js |
 | Relevant Code (Back) | server.js, events.js |
+| Priority | Done for initial release |
 
 | ID: FR-10 | Administrator is able to update event |
 | ----- | ----- |
@@ -621,6 +631,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js, EventForm.js |
 | Relevant Code (Back) | server.js, events.js |
+| Priority | Done for initial release |
 
 | ID: FR-11 | Administrator is able to delete/cancel event |
 | ----- | ----- |
@@ -634,7 +645,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage, EventForm |
 | Relevant Code (Front) | UpcomingEventsPage.js, EventForm.js |
 | Relevant Code (Back) | server.js, events.js |
-
+| Priority | Done for initial release |
 
 | ID: FR-12 | Administrator is able to see all posts |
 | ----- | ----- |
@@ -648,6 +659,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code (Front) | MediaContentPage.js, MediaContentForm.js |
 | Relevant Code (Back) | server.js, events.js, newsStory.js |
+| Priority | Done for initial release |
 
 | ID: FR-13 | Administrator is able to new create post |
 | ----- | ----- |
@@ -661,6 +673,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code (Front) | MediaContentPage.js, MediaContentForm.js |
 | Relevant Code (Back) | server.js, events.js, newsStory.js |
+| Priority | Done for initial release |
 
 | ID: FR-14 | Administrator is able to update post |
 | ----- | ----- |
@@ -674,6 +687,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code (Front) | MediaContentPage.js, MediaContentForm.js |
 | Relevant Code (Back) | server.js, events.js, newsStory.js |
+| Priority | Done for initial release |
 
 | ID: FR-15 | Administrator is able to delete post |
 | ----- | ----- |
@@ -687,6 +701,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code (Front) | MediaContentPage.js, MediaContentForm.js |
 | Relevant Code (Back) | server.js, events.js, newsStory.js |
+| Priority | Done for initial release |
 
 | ID: FR-16 | User is able to view messages sent by other users |
 | ----- | ----- |
@@ -700,6 +715,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MessagesData, MessagesFunctions, MessagesPage |
 | Relevant Code (Front) | MessagesPage.js |
 | Relevant Code (Back) | server.js, messages.js |
+| Priority | Done for initial release |
 
 | ID: FR-17 | User is able to send new public message |
 | ----- | ----- |
@@ -713,6 +729,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MessagesData, MessagesFunctions, MessagesPage |
 | Relevant Code (Front) | MessagesPage.js |
 | Relevant Code (Back) | server.js, messages.js |
+| Priority | Done for initial release |
 
 | ID: FR-18 | Automated replies when no other users active |
 | ----- | ----- |
@@ -726,6 +743,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | AccountsData, MessagesData, MessagesFunctions, AuthenticationFunctions, MessagesPage, AuthenticationPage |
 | Relevant Code (Front) | MessagesPage.js |
 | Relevant Code (Back) | server.js, messages.js |
+| Priority | Deferred to future releases |
 
 | ID: FR-19 | User is able to register new account |
 | ----- | ----- |
@@ -739,6 +757,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | AccountsData, AuthenticationFunctions, AuthenticationPage |
 | Relevant Code (Front) | SettingsPage.js |
 | Relevant Code (Back) | server.js, accounts.js |
+| Priority | Done for initial release |
 
 | ID: FR-20 | User is able to sign into application |
 | ----- | ----- |
@@ -752,6 +771,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
 | Relevant Code (Front) | SettingsPage.js |
 | Relevant Code (Back) | server.js, accounts.js |
+| Priority | Done for initial release |
 
 | ID: FR-21 | Calendar contains all nearby upcoming events |
 | ----- | ----- |
@@ -765,6 +785,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js |
+| Priority | Done for initial release |
 
 | ID: FR-22 | Calendar omits far-away events |
 | ----- | ----- |
@@ -778,6 +799,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | EventsData, NewsAndEventsFunctions, UpcomingEventsPage |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js |
+| Priority | Deferred to future releases |
 
 | ID: FR-23 | Regular user is able to see relevant posts |
 | ----- | ----- |
@@ -791,6 +813,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code (Front) | UpcomingEventsPage.js |
 | Relevant Code (Back) | server.js, events.js, newsStories.js |
+| Priority | Done for initial release |
 
 | ID: FR-24 | Regular user is able to new create post |
 | ----- | ----- |
@@ -803,6 +826,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Verification | Create a post in the user feed and see if the in-app notification shows up and check to see if post is now stored in database. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Priority | Deferred to future releases |
 
 | ID: FR-25 | Regular user is able to update post |
 | ----- | ----- |
@@ -815,6 +839,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Verification | Click into a post in the user page. Then edit the post through the form. Check to see if the post is now stored in the database |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Priority | Deferred to future releases |
 
 | ID: FR-26 | User is able to delete post |
 | ----- | ----- |
@@ -827,6 +852,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Verification | Delete a post. Check to see if the post is still stored in the database. |
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code | MediaContentPage.js, MediaContentForm.js |
+| Priority | Deferred to future releases |
 
 | ID: FR-27 | User is able to share posts from other users |
 | ----- | ----- |
@@ -839,6 +865,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | MediaContentData, MediaContentFunctions, MediaContentPage, MediaContentForm |
 | Relevant Code (Front) | MediaContentPage.js, MediaContentForm.js |
 | Relevant Code (back) | server.js, newsStory.js, events.js |
+| Priority | Deferred to future releases |
 
 | ID: FR-28 | User is able to submit feedback |
 | ----- | ----- |
@@ -851,6 +878,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Verification | Submit feedback as regular user and ensure required data is stored in database. |
 | Relevant Design | FeedbackData, FeedbackForm |
 | Relevant Code | FeedbackForm.js |
+| Priority | Done for initial release |
 
 | ID: FR-29 | Administrator is able to see all news stories |
 | ----- | ----- |
@@ -864,6 +892,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | NewsStoryData |
 | Relevant Code (Front) | NewsFeedPage.js, NewsStoryForm.js |
 | Relevant Code (back) | server.js, newsStory.js |
+| Priority | Done for initial release |
 
 | ID: FR-30 | Administrator is able to create news story |
 | ----- | ----- |
@@ -877,6 +906,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | NewsStoryData |
 | Relevant Code (Front) | NewsFeedPage.js, NewsStoryForm.js |
 | Relevant Code (back) | server.js, newsStory.js |
+| Priority | Done for initial release |
 
 | ID: FR-31 | Administrator is able to update news story |
 | ----- | ----- |
@@ -890,6 +920,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | NewsStoryData |
 | Relevant Code (Front) | NewsFeedPage.js, NewsStoryForm.js |
 | Relevant Code (back) | server.js, newsStory.js |
+| Priority | Done for initial release |
 
 | ID: FR-32 | Administrator is able to delete/cancel news story |
 | ----- | ----- |
@@ -903,6 +934,7 @@ Functional requirements will be listed and expanded upon in individual tables wh
 | Relevant Design | NewsStoryData |
 | Relevant Code (Front) | NewsFeedPage.js, NewsStoryForm.js |
 | Relevant Code (back) | server.js, newsStory.js |
+| Priority | Done for initial release |
 
 ### 3.3 Quality of Service
 
