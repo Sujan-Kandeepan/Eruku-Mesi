@@ -12,7 +12,7 @@ Note: only the mandatory features in [2.6 Apportioning of Requirements](https://
 
 ## Getting Started with Eruku Mesi App
 
-Make a copy of .env.example and call it `.env` in the `backend` directory. Replace `<password>` and `<dbname>` with MongoDB password and database name. Replace `<aws_access_key_id>` to AWS access key id and `<aws_secret_access_key>` to AWS secret access key.
+Make a copy of `.env.example` and call it `.env` in the `backend` directory. Replace `<password>` and `<dbname>` with MongoDB password and database name. Replace `<aws_access_key_id>` to AWS access key id and `<aws_secret_access_key>` to AWS secret access key.
 
 Optional Configuration:
 In the `.env` file, you can specify the port number for the backend server by setting `APP_PORT=<port number>`. Further, you can specify an expo access token for additional security in sending push notifications by setting `EXPO_ACCESS_TOKEN=<expo_access_token>`. 
