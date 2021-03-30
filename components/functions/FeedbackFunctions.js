@@ -12,6 +12,7 @@ export const submitFeedback = (props, text, setText, keyboard, callback) => {
   if (text.trim() === '')
     props.snackbar('Feedback message is empty');
   else
+    props.snackbar('Submitting feedback');
     post(`${props.baseURL}/feedback/add`, { text })
       // Reset feedback form and display message
       .then(() => {
