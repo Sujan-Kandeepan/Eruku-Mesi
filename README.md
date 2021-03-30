@@ -34,7 +34,7 @@ In the project directory, you can run: `npm` and `expo` commands:
 
 ### To test push notifications, 
 1. run `npm install`, `expo login`, and `npm start` or `expo start` in the project directory. 
-2. run `npm install` in the `backend` directory. In the `.env` file, include `PUSH_NOTIFICATIONS_SCHEDULE=* * * * *`. This will send the push notifications every minute. Run `npm start` in the `backend` directory. 
+2. run `npm install` in the `backend` directory. In the `.env` file, include `PUSH_NOTIFICATIONS_SCHEDULE=* * * * *`. This will trigger the backend server to send the push notifications every minute. Run `npm start` in the `backend` directory. 
 3. On the Settings page in the expo App, set the toggle for "Receive Event Notifications" from 'on' to 'off' and then 'off' to 'on'. 
 4. On the Upcoming Events page in the expo App, create a future event and set the time of the event to an hour ahead from the current time.
 
