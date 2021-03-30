@@ -74,7 +74,6 @@ router.post("/edit/:id", async function (req, res) {
 
   try {
     const event = await Event.updateOne(query, eventBody);
-    console.log(event)
     return res
       .status(200)
       .json({ msg: "event successfully updated" });
