@@ -72,9 +72,7 @@ it("POST /newsStories/add EXPECT ERROR", async (done) => {
     });
     
     const responseObj = JSON.parse(response.text);
-    expect(responseObj.newsStories.title).toBe("SampleTitle2")
-    expect(responseObj.newsStories.content).toBe("SampleContent2")
-    expect(responseObj.newsStories.description).toBe("TESTdesc2")
+    expect(responseObj.message).toBe("newsStories successfully added")
     done();
 });
 

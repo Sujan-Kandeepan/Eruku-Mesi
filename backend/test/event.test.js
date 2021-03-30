@@ -12,11 +12,13 @@ let documentId;
  * This runs before each test case
  */
 beforeEach(async ()=> {
+    
     const sample = {
         "media": [],
         "title": "2021 Reunion In Maryland",
         "type": "reunion",
-        "desc": "2021 Reunion In Maryland by EPU North America, INC",
+        "description": "2021 Reunion In Maryland by EPU North America, INC",
+        "location": "Maryland, USA",
         "date": "2021-01-10T19:39:21.903Z"
     }
     const event = new Event(sample);
@@ -35,6 +37,7 @@ afterEach(async() => {
  * ACCEPTANCE TEST - checks to see if we are able to GET for the /events endpoint
  */
 it("GET /events", async (done) => {
+    
     const response = await request(app).get('/events');
     expect(response.status).toBe(200);
     const responseArrayLength = response.body.length;
@@ -70,15 +73,14 @@ it("POST /events/add EXPECT ERROR", async (done) => {
  
     const response = await request(app).post('/events/add').send({
         title: "2021 Reunion In Maryland",
-        date: "2021-01-10T19:39:21.903Z"
+        date: "2021-01-10T19:39:21.903Z",
+        description: "2021 Reunion In Maryland by EPU North America, INC",
+        location: "Maryland, USA"
     });
     
     const responseObj = JSON.parse(response.text);
     expect(response.status).toBe(200);
     expect(responseObj.message).toBe("event successfully added")
-    expect(responseObj.event.title).toBe("2021 Reunion In Maryland")
-    expect(responseObj.event.date).toBe("2021-01-10T19:39:21.903Z")
-
     done();
 });
 
@@ -106,7 +108,6 @@ it("EDIT /events/:id", async (done) => {
     });
     const responseObj = JSON.parse(response.text);
     expect(responseObj.msg).toBe('event successfully updated')
-    console.log("responseObj",responseObj)
     done();
 });
 
