@@ -147,6 +147,8 @@ export default function App() {
   // User data as object and admin status
   let [user, setUser] = React.useState(null);
   let [admin, setAdmin] = React.useState(false);
+
+  // Update user in app state and reflect changes into database
   const updateUser = (data, thenCallback, catchCallback, finallyCallback) => {
     if (!user) return;
     setUser({ ...user, ...data, oldPassword: undefined, newPassword: undefined });
@@ -155,6 +157,8 @@ export default function App() {
       .catch(catchCallback)
       .finally(finallyCallback);
   }
+
+  // Monitor updates to user and update dependent state variables
   React.useEffect(() => {
     if (user) {
       setAdmin(user.accountType === 'admin');
@@ -167,7 +171,7 @@ export default function App() {
   }, [user]);
 
   // Toggle event notifications and display snackbar message on change
-  let [receiveNotifications, setReceiveNotifications] = React.useState(true);
+  let [receiveNotifications, setReceiveNotifications] = React.useState(false);
   const toggleNotifications = async () => {
     snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
     setReceiveNotifications(!receiveNotifications);
@@ -193,6 +197,12 @@ export default function App() {
   const drawerState = React.useRef();
   const drawerVisited = React.useRef();
   drawerVisited.current = [];
+
+  // Navigate to events page when notification opened
+  React.useEffect(() => {
+    Notifications.addNotificationResponseReceivedListener(() =>
+      drawerNav.current && drawerNav.current.navigate(pages.upcomingEvents));
+  }, []);
 
   // Props to expose to nested child components, extra for settings
   const sharedProps = { admin, baseURL, drawerState, drawerVisited, pages, setAdmin, snackbar, theme, user };
