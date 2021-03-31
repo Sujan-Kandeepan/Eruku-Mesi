@@ -6,7 +6,6 @@ config:
 scenarios: 
   - flow:
       - get:
-          url: "/settings"
+          url: "/mediaContent/faultyID"
         expect:
-            statusCode: 200
-
+            statusCode: 500

@@ -6,6 +6,6 @@ config:
 scenarios: 
   - flow:
       - delete:
-          url: "http://localhost:4000/files/faultyID"
+          url: "http://localhost:4000/mediaContent/faultyID"
           expect:
             statusCode: 500

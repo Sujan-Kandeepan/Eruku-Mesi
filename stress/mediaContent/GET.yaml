@@ -6,7 +6,7 @@ config:
 scenarios: 
   - flow:
       - get:
-          url: "/files"
+          url: "/mediaContent"
         expect:
             statusCode: 200
 
