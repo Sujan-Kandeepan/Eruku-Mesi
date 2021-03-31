@@ -8,5 +8,5 @@ scenarios:
       - get:
           url: "/accounts/faultyID"
         expect:
-            statusCode: 500
+            statusCode: 400
 

@@ -8,4 +8,4 @@ scenarios:
       - get:
           url: "/events/faultyID"
         expect:
-            statusCode: 500
+            statusCode: 400

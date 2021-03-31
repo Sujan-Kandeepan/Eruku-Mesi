@@ -6,9 +6,9 @@ config:
 scenarios: 
   - flow:
       - post:
-          url: "http://localhost:4000/settings/edit/faultyID"
+          url: "http://localhost:4000/mediaContent/edit/faultyID"
           json:
-              receiveNotifications: false
-              preferredTheme: "dark"
+                title: "This is a test!"
+                description: "Testing with Stress"
           expect:
             statusCode: 500

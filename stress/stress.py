@@ -22,13 +22,10 @@ routes = [
 			"accounts",
 			"events",
 			"feedback",
-			"file",
+			"mediaContent",
 			"information",
 			"message",
 			"newsStory",
-			"notification",
-			"photo",
-			"setting"
 		]
 ext = ".yaml"
 
