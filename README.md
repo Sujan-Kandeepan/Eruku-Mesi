@@ -14,7 +14,10 @@ Note: only the mandatory features in [2.6 Apportioning of Requirements](https://
 
 ## Getting Started with Eruku Mesi App
 
-Create a `.env` file in the `backend` directory and replace `<password>` and `<dbname>` with MongoDB password and database name.
+Make a copy of `.env.example` and call it `.env` in the `backend` directory. Replace `<password>` and `<dbname>` with MongoDB password and database name. Replace `<aws_access_key_id>` with AWS access key id and `<aws_secret_access_key>` with AWS secret access key.
+
+Optional Configuration:
+In the `.env` file, you can specify the port number for the backend server by setting `APP_PORT=<port number>`. Further, you can specify an expo access token for additional security in sending push notifications by setting `EXPO_ACCESS_TOKEN=<expo_access_token>`.
 
 ## Install & Usage
 
@@ -31,8 +34,6 @@ In the project directory, you can run: `npm` and `expo` commands:
 1. run `npm install`
 
 2. run `expo start` or `npm start`
-
-To test push notifications, `npm install` and `expo login`.
 
 Additionally, if testing on mobile, the device may need to be within the same LAN as the serving host to access the back-end API.
 
