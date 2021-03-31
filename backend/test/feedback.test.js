@@ -67,7 +67,6 @@ it("POST /feedback/add EXPECT ERROR", async (done) => {
     const responseObj = JSON.parse(response.text);
     expect(response.status).toBe(200);
     expect(responseObj.message).toBe("feedback successfully added")
-    expect(responseObj.feedback.text).toBe("Added feedback")
     done();
 });
 

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test.watch": "jest --watch"
+    "test": "jest --testEnvironment=node --runInBand --detectOpenHandles --verbose",
+    "test.watch": "jest --testEnvironment=node --runInBand --detectOpenHandles  --verbose --watch"
   },
   "author": "",
   "license": "ISC",

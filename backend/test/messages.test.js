@@ -74,8 +74,6 @@ it("POST /messages/add EXPECT ERROR", async (done) => {
     const responseObj = JSON.parse(response.text);
     expect(response.status).toBe(200);
     expect(responseObj.msg).toBe("message successfully added")
-    expect(responseObj.message.sender).toEqual("507f1f77bcf86cd799439011");
-    expect(responseObj.message.message).toBe("sample message")
 
     done();
 });

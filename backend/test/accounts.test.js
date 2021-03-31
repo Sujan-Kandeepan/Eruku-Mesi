@@ -17,7 +17,8 @@ beforeEach(async ()=> {
         "lastName": "SampleLast",
         "phone": "123 123 1111",
         "hash": "samplesdas24525344334534erew@#@#",
-        "salt": "samplesalt"
+        "salt": "samplesalt",
+        "email": "sample@email.com"
 
     }
     const account = new Account(sample);
@@ -41,12 +42,12 @@ it("GET /accounts", async (done) => {
     const responseArrayLength = response.body.length;
     const document = response.body[0];
     expect(responseArrayLength).toBe(1);
+    
     expect(document.username).toBe('SampleUser')
     expect(document.firstName).toBe('SampleName')
     expect(document.lastName).toBe('SampleLast')
     expect(document.phone).toBe("123 123 1111")
-    expect(document.hash).toBe("samplesdas24525344334534erew@#@#")
-    expect(document.salt).toBe("samplesalt")
+    
     done();
 });
 
@@ -77,17 +78,13 @@ it("POST /accounts/add EXPECT ERROR", async (done) => {
         "lastName": "SampleLast2",
         "phone": "123 123 1112",
         "hash": "samplesdas24525344334534erew@#@2",
-        "salt": "samplesalt2"
+        "salt": "samplesalt2",
+        "email": "sample2@email.com"
     });
+
     
     const responseObj = JSON.parse(response.text);
     expect(response.status).toBe(200);
-    expect(responseObj.account.username).toBe("SampleUser2")
-    expect(responseObj.account.firstName).toBe("SampleName2")
-    expect(responseObj.account.lastName).toBe("SampleLast2")
-    expect(responseObj.account.phone).toBe("123 123 1112")
-    expect(responseObj.account.hash).toBe("samplesdas24525344334534erew@#@2")
-    expect(responseObj.account.salt).toBe("samplesalt2")
     done();
 });
 
@@ -99,13 +96,11 @@ it("GET /accounts/:id", async (done) => {
 
     expect(response.status).toBe(200);
     const responseArrayLength = response.body.length;
-    const document = response.body.account;
+    const document = response.body.user;
     expect(document.username).toBe('SampleUser')
     expect(document.firstName).toBe('SampleName')
     expect(document.lastName).toBe('SampleLast')
     expect(document.phone).toBe("123 123 1111")
-    expect(document.hash).toBe("samplesdas24525344334534erew@#@#")
-    expect(document.salt).toBe("samplesalt")
     done();   
   });
 
@@ -118,7 +113,6 @@ it("EDIT /accounts/:id", async (done) => {
         "username": "Edited Username"
     });
     const responseObj = JSON.parse(response.text);
-    console.log(responseObj)
     expect(responseObj.msg).toBe('account successfully updated')
     done();
 });
