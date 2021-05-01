@@ -56,7 +56,8 @@ export default function MessagesPage(props) {
                 <Text selectable style={{ color: props.theme.colors.text, fontSize: 10 }}>
                   {showDate(item.sentAt)} at {showTime(item.sentAt)}
                 </Text>
-                <Text selectable style={{ color: props.theme.colors.text, marginVertical: 5 }}>
+                <Text selectable style={{ color: props.theme.colors.text, marginVertical: 5,
+                  maxWidth: Dimensions.get('window').width - (props.admin ? 150 : 75) }}>
                   {item.message}
                 </Text>
               </View>

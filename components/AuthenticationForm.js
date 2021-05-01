@@ -46,7 +46,7 @@ export default function AuthenticationForm(props) {
         color: props.theme.colors.text,
         fontSize: 18, padding: 25, paddingTop: 75, textAlign: 'center' 
       }}>
-        Welcome to Erukumesi North America!
+        Welcome to Eruku Mesi North America!
       </Text>
       {/* Reference: https://reactnavigation.org/docs/bottom-tab-navigator */}
       <Tab.Navigator tabBarOptions={{ labelStyle: { fontSize: 14, margin: 15, textAlignVertical: 'center' } }}>

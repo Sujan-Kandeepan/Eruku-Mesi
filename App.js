@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Platform, Text, View } from 'react-native';
+import { LogBox, Platform, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Avatar, Caption, DarkTheme as DarkDrawerTheme, DefaultTheme as LightDrawerTheme,
   Drawer as CustomDrawer, Provider, Snackbar, Title } from 'react-native-paper';
@@ -21,6 +21,9 @@ import FeedbackForm from './components/FeedbackForm';
 import AuthenticationForm from './components/AuthenticationForm';
 import { registerForPushNotifications } from './components/functions/PushNotificationFunctions';
 import { get, post } from './shared/SharedFunctions';
+
+// Uncomment this line to disable all popups for errors/warnings (eg. for demo)
+// LogBox && LogBox.ignoreAllLogs();
 
 // Base URL for API wherever hosted (computer's IP for now)
 // Reference: https://stackoverflow.com/a/56943681
