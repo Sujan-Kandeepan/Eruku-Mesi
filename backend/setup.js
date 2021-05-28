@@ -11,7 +11,7 @@ const dbConfig = require("./config/database.js");
 const expoConfig = require("./config/expo.js");
 const appConfig = require("./config/app.js");
 const mongoose = require("mongoose");
-const PORT = appConfig.PORT || 80;
+const PORT = appConfig.port || 4000;
 const pushNotificationSchedule = appConfig.push_notifications_schedule || "0 8 * * *";
 let expo;
 if (expoConfig.access_token != null)
