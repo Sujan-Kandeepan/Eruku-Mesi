@@ -85,8 +85,8 @@ export default function MediaContentPage(props) {
                 <Content {...props} {...localProps} title={post.title}
                   imageBottom={post.type === 'photo' && { ...post.metadata, uri: post.url, type: post.type }}
                   extraContent={post.type === 'file' &&
-                    <FileDownload {...props} text={`Download ${fileNameOrDefault({ ...post.metadata, uri: post.url })}`}
-                      source={post.url} destination={fileNameOrDefault({ ...post.metadata, uri: post.url })} />}
+                    <FileDownload {...props} text={`Download ${filenameOrDefault({ ...post.metadata, uri: post.url })}`}
+                      source={post.url} destination={filenameOrDefault({ ...post.metadata, uri: post.url })} />}
                   content={post.description} extraData={fetched} />
               </AppPage>} />)}
           {/* Generated page routes for editing media content */}

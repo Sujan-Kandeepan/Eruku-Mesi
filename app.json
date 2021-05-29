@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "eruku-mesi",
+    "name": "Eruku Mesi North America",
     "slug": "eruku-mesi",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,8 +8,10 @@
     "splash": {
       "image": "./assets/logo-padding.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#113311"
     },
+    "backgroundColor": "#113311",
+    "primaryColor": "#226622",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -17,18 +19,29 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.erukumesi",
+      "buildNumber": "1.0.0",
+      "icon": "./assets/logo-ios.png",
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/logo-android.png",
+        "backgroundColor": "#113311"
       },
+      "googleServicesFile": "./google-services.json",
+      "package": "com.erukumesi",
       "permissions": ["ACCESS_FINE_LOCATION"],
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "versionCode": 1
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.png"
+    },
+    "notification": {
+      "color": "#226622",
+      "icon": "./assets/logo-notification.png",
+      "androidMode": "default"
     }
   }
 }

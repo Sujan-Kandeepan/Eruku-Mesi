@@ -2,11 +2,9 @@ import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 
-export const registerForPushNotifications = async (props) => {
+export const registerForPushNotifications = async () => {
   if (Constants.isDevice) {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    );
+    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
     let finalStatus = existingStatus;
     if (existingStatus !== "granted") {
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);

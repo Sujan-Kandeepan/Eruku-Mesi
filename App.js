@@ -25,10 +25,12 @@ import { get, post } from './shared/SharedFunctions';
 // Uncomment this line to disable all popups for errors/warnings (eg. for demo)
 // LogBox && LogBox.ignoreAllLogs();
 
-// Base URL for API wherever hosted (computer's IP for now)
+// Base URL for API where hosted (computer's IP for development, server in prod)
 // Reference: https://stackoverflow.com/a/56943681
-const ip = Platform.OS === 'web' ? 'localhost' : Constants.manifest.debuggerHost.split(':').shift();
-const baseURL = `http://${ip}:${process.env.MONGODB_PORT || 4000}`;
+const ip = Platform.OS === 'web' ? 'localhost' : __DEV__ && Constants.manifest.debuggerHost.split(':').shift();
+const localURL = `http://${ip}:${process.env.MONGODB_PORT || 4000}`;
+const baseURL = __DEV__ ? localURL : 'https://erukumesi.com';
+
 // Initialize drawer navigator
 const Drawer = createDrawerNavigator();
 
@@ -178,11 +180,9 @@ export default function App() {
   const toggleNotifications = async () => {
     snackbar(`${receiveNotifications ? 'No longer' : 'Now'} receiving event notifications`);
     setReceiveNotifications(!receiveNotifications);
-    const expoToken = receiveNotifications
-      ? null
-      : await registerForPushNotifications({ ...sharedProps, ...settingsProps });
-    updateUser({ receiveNotifications: !receiveNotifications, expoToken }, () => {},
-      () => snackbar('Failed to save changes'));
+    const expoToken = receiveNotifications ? null : await registerForPushNotifications();
+    updateUser({ receiveNotifications: !receiveNotifications, expoToken },
+      () => { }, () => snackbar('Failed to save changes'));
   }
 
   // Set and toggle between light/dark themes defined globally using state
@@ -235,7 +235,8 @@ export default function App() {
                 setTheme(res.user.theme === 'dark' ? darkTheme : lightTheme);
               })
               .finally(SplashScreen.hideAsync)
-          : SplashScreen.hideAsync());
+          : SplashScreen.hideAsync())
+        .catch(SplashScreen.hideAsync);
     }
   }, []);
 

@@ -192,7 +192,7 @@ export const Feed = (props) =>
 // Component to display expanded content for individual item
 export const Content = (props) =>
   <FlatList data={props.content} removeClippedSubviews={false} renderItem={({ item }) =>
-    // Supports only text paragraphs for now, will add more functionality later
+    // Supports only text paragraphs currently, can add more functionality later
     <Text selectable style={{ color: props.theme.colors.text, margin: 15, marginTop: 0 }}>{item}</Text>
   } keyExtractor={item => item} ListHeaderComponent={
     <>

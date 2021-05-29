@@ -15,4 +15,6 @@
 
 **/package.json.orig
 
-.env
+**/.env
+
+**/google-services.json
